@@ -41,10 +41,10 @@
           </svg>
         </div>
         <p class="text-sm font-medium" :style="{ color: isDragging ? 'var(--rose-primary)' : 'var(--text-secondary)' }">
-          {{ isDragging ? 'Suelta aqu&iacute;' : 'Clic o arrastra una imagen' }}
+          {{ isDragging ? 'Suelta aquí' : 'Clic o arrastra una imagen' }}
         </p>
         <p class="text-xs mt-1" style="color: var(--text-muted);">{{ hint }}</p>
-        <p class="text-xs mt-0.5" style="color: var(--text-muted); opacity: 0.6;">JPEG, PNG, WEBP &middot; m&aacute;x 5 MB</p>
+        <p class="text-xs mt-0.5" style="color: var(--text-muted); opacity: 0.6;">JPEG, PNG, WEBP · máx 5 MB</p>
       </div>
     </div>
 

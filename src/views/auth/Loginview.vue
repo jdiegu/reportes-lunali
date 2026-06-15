@@ -13,7 +13,7 @@
           </svg>
         </div>
         <h2 class="text-3xl mb-3 font-display">Lunali</h2>
-        <p class="text-base" style="color: var(--text-muted);">Sistema de gesti&oacute;n de reportes para plataformas de streaming.</p>
+        <p class="text-base" style="color: var(--text-muted);">Sistema de gestión de reportes para plataformas de streaming.</p>
         <div class="mt-8 flex items-center justify-center gap-4">
           <div class="w-2 h-2 rounded-full" style="background: var(--rose-300);"></div>
           <div class="w-2 h-2 rounded-full" style="background: var(--rose-400);"></div>
@@ -35,7 +35,7 @@
           {{ activeTab === 'login' ? 'Bienvenido de nuevo' : 'Crear cuenta' }}
         </h2>
         <p class="text-sm mb-8" style="color: var(--text-muted);">
-          {{ activeTab === 'login' ? 'Inicia sesi&oacute;n para continuar' : 'Reg&iacute;strate para empezar' }}
+          {{ activeTab === 'login' ? 'Inicia sesión para continuar' : 'Regístrate para empezar' }}
         </p>
 
         <div class="flex rounded-xl p-0.5 mb-7 border" style="background: var(--bg-surface); border-color: var(--border-color);">
@@ -62,13 +62,13 @@
             </div>
           </div>
           <div>
-            <label class="input-label">Contrase&ntilde;a</label>
+            <label class="input-label">Contraseña</label>
             <div class="relative">
               <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--text-muted);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
               </svg>
               <input v-model="loginForm.password" :type="showPass ? 'text' : 'password'"
-                     placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required class="input-field pl-10 pr-11" />
+                     placeholder="••••••••" required class="input-field pl-10 pr-11" />
               <button type="button" @click="showPass = !showPass"
                       class="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
                       style="color: var(--text-muted);">
@@ -91,7 +91,7 @@
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
             </svg>
             <span v-if="authStore.loading">Ingresando...</span>
-            <span v-else>Iniciar sesi&oacute;n</span>
+            <span v-else>Iniciar sesión</span>
           </button>
         </form>
 
@@ -106,7 +106,7 @@
             </div>
           </div>
           <div>
-            <label class="input-label">Tel&eacute;fono</label>
+            <label class="input-label">Teléfono</label>
             <div class="relative">
               <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--text-muted);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
@@ -115,13 +115,13 @@
             </div>
           </div>
           <div>
-            <label class="input-label">Contrase&ntilde;a</label>
+            <label class="input-label">Contraseña</label>
             <div class="relative">
               <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--text-muted);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
               </svg>
               <input v-model="registerForm.password" :type="showPass ? 'text' : 'password'"
-                     placeholder="M&iacute;nimo 6 caracteres" minlength="6" required class="input-field pl-10 pr-11" />
+                     placeholder="Mínimo 6 caracteres" minlength="6" required class="input-field pl-10 pr-11" />
               <button type="button" @click="showPass = !showPass"
                       class="absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
                       style="color: var(--text-muted);">
@@ -182,7 +182,7 @@ const activeTab = ref(route.query.register === 'true' ? 'register' : 'login')
 const showPass = ref(false)
 const errorMsg = ref('')
 
-const tabs = [{ id: 'login', label: 'Iniciar sesi&oacute;n' }, { id: 'register', label: 'Registrarse' }]
+const tabs = [{ id: 'login', label: 'Iniciar sesión' }, { id: 'register', label: 'Registrarse' }]
 
 const loginForm = reactive({ username: '', password: '' })
 const registerForm = reactive({ username: '', password: '', phone: '' })
@@ -197,7 +197,7 @@ async function handleLogin() {
       errorMsg.value = result.message
     }
   } catch {
-    errorMsg.value = 'Error al iniciar sesi&oacute;n'
+    errorMsg.value = 'Error al iniciar sesión'
   }
 }
 

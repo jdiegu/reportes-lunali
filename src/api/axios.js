@@ -8,9 +8,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("lunali_token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => Promise.reject(error),
@@ -42,7 +40,7 @@ export const reportsApi = {
       headers: { "Content-Type": "multipart/form-data" },
     }),
   update: (id, data) => api.put(`/reports/${id}`, data),
-  resolve: (id, data) => api.patch(`/reports/${id}`, data),
+  resolve: (id, data) => api.put(`/reports/${id}/resolve`, data),
   delete: (id) => api.delete(`/reports/${id}`),
 };
 

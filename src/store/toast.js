@@ -18,8 +18,8 @@ export const useToastStore = defineStore('toast', () => {
   }
 
   const success = (title, msg, d) => add(typeof title === 'object' ? title : { title, message: msg }, 'success', d || 4000)
-  const error   = (title, msg, d) => add(typeof title === 'object' ? title : { title, message: msg }, 'error', d || 4000)
-  const info    = (title, msg, d) => add(typeof title === 'object' ? title : { title, message: msg }, 'info', d || 4000)
+  const error = (title, msg, d) => add(typeof title === 'object' ? title : { title, message: msg }, 'error', d || 4000)
+  const info = (title, msg, d) => add(typeof title === 'object' ? title : { title, message: msg }, 'info', d || 4000)
   const warning = (title, msg, d) => add(typeof title === 'object' ? title : { title, message: msg }, 'warning', d || 4000)
 
   return { toasts, add, remove, success, error, info, warning }

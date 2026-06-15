@@ -20,33 +20,11 @@ const router = createRouter({
       component: () => import("../components/layout/AppLayout.vue"),
       meta: { requiresAuth: true },
       children: [
-        {
-          path: "",
-          name: "Dashboard",
-          component: () => import("../views/admin/DashboardView.vue"),
-        },
-        {
-          path: "reports",
-          name: "Reports",
-          component: () => import("../views/admin/ReportsView.vue"),
-        },
-        {
-          path: "reports/new",
-          name: "NewReport",
-          component: () => import("../views/user/NewReportView.vue"),
-          meta: { userOnly: true },
-        },
-        {
-          path: "reports/:id",
-          name: "ReportDetail",
-          component: () => import("../views/user/ReportDetailView.vue"),
-        },
-        {
-          path: "admin",
-          name: "Admin",
-          component: () => import("../views/admin/AdminView.vue"),
-          meta: { adminOnly: true },
-        },
+        { path: "", name: "Dashboard", component: () => import("../views/admin/DashboardView.vue") },
+        { path: "reports", name: "Reports", component: () => import("../views/admin/ReportsView.vue") },
+        { path: "reports/new", name: "NewReport", component: () => import("../views/user/NewReportView.vue"), meta: { userOnly: true } },
+        { path: "reports/:id", name: "ReportDetail", component: () => import("../views/user/ReportDetailView.vue") },
+        { path: "admin", name: "Admin", component: () => import("../views/admin/AdminView.vue"), meta: { adminOnly: true } },
       ],
     },
     { path: "/:pathMatch(.*)*", redirect: "/" },
@@ -57,7 +35,7 @@ router.beforeEach((to) => {
   const token = localStorage.getItem("lunali_token");
   const user = JSON.parse(localStorage.getItem("lunali_user") || "null");
   const isLoggedIn = !!token && !!user;
-  const isAdmin = ["admin", "superadmin", "boss"].includes(user?.role);
+  const isAdmin = user?.role === "admin" || user?.role === "boss";
 
   if (to.meta.requiresAuth && !isLoggedIn) return "/login";
   if (to.meta.guest && isLoggedIn) return "/app";

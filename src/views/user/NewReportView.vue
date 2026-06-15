@@ -1,59 +1,95 @@
 <template>
-  <div class="max-w-2xl mx-auto p-4 lg:p-6">
+  <div class="max-w-3xl mx-auto p-4 lg:p-6">
     <div class="card p-6 lg:p-8">
-      <div class="flex items-center gap-4 mb-7">
-        <div class="w-11 h-11 rounded-xl flex items-center justify-center"
-             style="background: linear-gradient(135deg, var(--rose-lighter), var(--rose-light)); color: var(--rose-primary);">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0" style="background: var(--rose-gradient);">
+          <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/>
           </svg>
         </div>
         <div>
-          <h1 class="text-xl font-display font-bold" style="color: var(--text-primary);">Nuevo Reporte</h1>
-          <p class="text-sm" style="color: var(--text-muted);">Describe el problema que necesitas resolver</p>
+          <h1 class="text-2xl">Nuevo Reporte</h1>
+          <p class="text-sm mt-0.5" style="color: var(--text-muted);">Registra un problema en una cuenta de streaming</p>
         </div>
       </div>
 
-      <form @submit.prevent="submitReport" class="space-y-5">
-        <div class="grid sm:grid-cols-2 gap-4">
-          <div>
-            <label class="input-label">Plataforma</label>
-            <select v-model="form.platform" required class="input-field">
-              <option value="" disabled>Selecciona</option>
-              <option v-for="p in platforms" :key="p" :value="p">{{ p }}</option>
-            </select>
-          </div>
-          <div>
-            <label class="input-label">Tipo de problema</label>
-            <select v-model="form.problemType" required class="input-field">
-              <option value="" disabled>Selecciona</option>
-              <option v-for="t in problemTypes" :key="t" :value="t">{{ t }}</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label class="input-label">Correo electr&oacute;nico</label>
-          <div class="relative">
-            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--text-muted);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+      <form @submit.prevent="submitReport" class="space-y-6">
+        <div class="rounded-xl p-5 border" style="background: var(--bg-surface); border-color: var(--border-color);">
+          <p class="text-sm font-semibold mb-4 flex items-center gap-2" style="color: var(--text-primary);">
+            <svg class="w-4 h-4" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
             </svg>
-            <input v-model="form.mail" type="email" placeholder="tu@email.com" required class="input-field pl-10" />
+            Información de la cuenta
+          </p>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="input-label">Correo de la cuenta</label>
+              <input v-model="form.mail" type="email" placeholder="cuenta@email.com" required class="input-field" />
+            </div>
+            <div>
+              <label class="input-label">Contraseña de la cuenta</label>
+              <input v-model="form.password" type="text" placeholder="Contraseña del usuario" class="input-field" />
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4 mt-4">
+            <div>
+              <label class="input-label">Plataforma</label>
+              <select v-model="form.platform" required class="input-field">
+                <option value="" disabled>Selecciona</option>
+                <option v-for="p in platforms" :key="p" :value="p">{{ p }}</option>
+              </select>
+            </div>
+            <div>
+              <label class="input-label">Tipo de cuenta</label>
+              <select v-model="form.platform_type" required class="input-field">
+                <option value="account">Cuenta propia</option>
+                <option value="profile">Perfil compartido</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        <div>
-          <label class="input-label">Descripci&oacute;n</label>
-          <textarea v-model="form.description" rows="4" placeholder="Describe el problema detalladamente..." required class="input-field resize-none"></textarea>
+        <div class="rounded-xl p-5 border" style="background: var(--bg-surface); border-color: var(--border-color);">
+          <p class="text-sm font-semibold mb-4 flex items-center gap-2" style="color: var(--text-primary);">
+            <svg class="w-4 h-4" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            Detalles del reporte
+          </p>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="input-label">Fecha de entrega</label>
+              <input v-model="form.delivery_date" type="date" required class="input-field" />
+            </div>
+            <div>
+              <label class="input-label">Tipo de problema</label>
+              <select v-model="form.description" required class="input-field">
+                <option value="" disabled>Selecciona el problema</option>
+                <option v-for="opt in descriptionPresets" :key="opt" :value="opt">{{ opt }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-4">
+            <label class="input-label">Descripción adicional</label>
+            <textarea v-model="form.extraDescription" rows="2" placeholder="Detalles adicionales (opcional)..." class="input-field"></textarea>
+          </div>
         </div>
 
-        <div>
-          <ImageUploader v-model="form.image" label="Captura de pantalla" hint="Opcional, pero ayuda a resolver m&aacute;s r&aacute;pido" />
+        <div class="rounded-xl p-5 border" style="background: var(--bg-surface); border-color: var(--border-color);">
+          <p class="text-sm font-semibold mb-4 flex items-center gap-2" style="color: var(--text-primary);">
+            <svg class="w-4 h-4" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            Evidencias
+          </p>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <ImageUploader v-model="form.fail_evidence" label="Evidencia de falla" hint="Captura del error o problema" />
+            <ImageUploader v-model="form.delivery_evidence" label="Evidencia de entrega" hint="Comprobante de pago o entrega" />
+          </div>
         </div>
 
-        <div v-if="error" class="rounded-lg border px-3 py-2 text-xs"
-             style="border-color: rgba(232,138,138,0.3); background: var(--error-bg); color: var(--error);">
-          {{ error }}
+        <div v-if="errorMsg" class="rounded-lg border px-4 py-3 text-sm" style="border-color: rgba(224,112,112,0.3); background: var(--error-bg); color: var(--error);">
+          {{ errorMsg }}
         </div>
 
         <div class="flex items-center gap-3 pt-2">
@@ -75,43 +111,69 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
+import { useAuthStore } from '../../store/auth'
 import { useReportsStore } from '../../store/reports'
 import { useToastStore } from '../../store/toast'
 import ImageUploader from '../../components/ui/ImageUploader.vue'
 
 const router = useRouter()
+const authStore = useAuthStore()
 const reportsStore = useReportsStore()
 const toast = useToastStore()
 
 const saving = ref(false)
-const error = ref('')
+const errorMsg = ref('')
 
 const form = reactive({
-  platform: '',
   mail: '',
-  problemType: '',
+  password: '',
+  platform: '',
+  platform_type: 'account',
+  delivery_date: '',
   description: '',
-  image: null,
+  extraDescription: '',
+  fail_evidence: null,
+  delivery_evidence: null,
 })
 
 const platforms = ['Netflix', 'Spotify', 'HBO', 'Disney+', 'Prime Video', 'Crunchyroll', 'YouTube Premium', 'Otro']
-const problemTypes = ['Acceso', 'Pago', 'Cambio de contrase&ntilde;a', 'Perfil bloqueado', 'Cuenta compartida', 'Otro']
+
+const descriptionPresets = [
+  'No tiene suscripción activa',
+  'No tiene acceso a la cuenta',
+  'Cuenta bloqueada',
+  'La sacaron de la cuenta',
+  'Mueven sus perfiles sin permiso',
+  'Cambiaron la contraseña',
+  'Error al iniciar sesión',
+  'Problema con el pago',
+  'Otro',
+]
 
 async function submitReport() {
-  error.value = ''
+  errorMsg.value = ''
   saving.value = true
   try {
+    const fullDescription = form.extraDescription
+      ? `${form.description}\n\n${form.extraDescription}`
+      : form.description
+
     const formData = new FormData()
-    formData.append('platform', form.platform)
+    formData.append('user', authStore.user._id)
     formData.append('mail', form.mail)
-    formData.append('problemType', form.problemType)
-    formData.append('description', form.description)
-    if (form.image) formData.append('image', form.image)
+    formData.append('password', form.password)
+    formData.append('platform', form.platform)
+    formData.append('platform_type', form.platform_type)
+    formData.append('delivery_date', form.delivery_date)
+    formData.append('description', fullDescription)
+    if (form.fail_evidence) formData.append('fail_evidence', form.fail_evidence)
+    if (form.delivery_evidence) formData.append('delivery_evidence', form.delivery_evidence)
+
     await reportsStore.createReport(formData)
-    toast.success('Reporte creado', 'Tu reporte ha sido registrado exitosamente')
+    toast.success('Reporte creado', 'Tu reporte se registró correctamente')
     router.push('/app/reports')
   } catch (e) {
-    error.value = e.message || 'Error al crear el reporte'
+    errorMsg.value = e.message || 'Error al crear el reporte'
   } finally {
     saving.value = false
   }

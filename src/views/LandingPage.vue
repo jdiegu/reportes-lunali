@@ -13,8 +13,8 @@
           </RouterLink>
 
           <nav class="hidden md:flex items-center gap-8">
-            <a href="#features" class="text-sm font-medium no-underline transition-colors" style="color: var(--text-muted);">Caracter&iacute;sticas</a>
-            <a href="#how-it-works" class="text-sm font-medium no-underline transition-colors" style="color: var(--text-muted);">C&oacute;mo funciona</a>
+            <a href="#features" class="text-sm font-medium no-underline transition-colors" style="color: var(--text-muted);">Características</a>
+            <a href="#how-it-works" class="text-sm font-medium no-underline transition-colors" style="color: var(--text-muted);">Cómo funciona</a>
             <a href="#cta" class="text-sm font-medium no-underline transition-colors" style="color: var(--text-muted);">Contacto</a>
           </nav>
 
@@ -27,7 +27,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
               </svg>
             </button>
-            <RouterLink to="/login" class="btn-secondary text-sm hidden sm:inline-flex">Iniciar sesi&oacute;n</RouterLink>
+            <RouterLink to="/login" class="btn-secondary text-sm hidden sm:inline-flex">Iniciar sesión</RouterLink>
             <RouterLink to="/login?register=true" class="btn-primary text-sm">Comenzar</RouterLink>
           </div>
         </div>
@@ -45,10 +45,10 @@
             </div>
             <h1 class="text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6" style="color: var(--text-primary);">
               Reportes simples,
-              <span style="color: var(--rose-primary);">soluciones r&aacute;pidas</span>
+              <span style="color: var(--rose-primary);">soluciones rápidas</span>
             </h1>
             <p class="text-base sm:text-lg max-w-lg mb-8" style="color: var(--text-muted);">
-              La forma m&aacute;s f&aacute;cil de reportar y dar seguimiento a problemas en tus plataformas de streaming favoritas.
+              La forma más fácil de reportar y dar seguimiento a problemas en tus plataformas de streaming favoritas.
             </p>
             <div class="flex flex-wrap items-center gap-4">
               <RouterLink to="/login?register=true" class="btn-primary text-base px-6 py-3">
@@ -68,7 +68,7 @@
               </div>
               <div>
                 <p class="text-2xl font-display font-bold" style="color: var(--text-primary);">98%</p>
-                <p class="text-xs" style="color: var(--text-muted);">Satisfacci&oacute;n</p>
+                <p class="text-xs" style="color: var(--text-muted);">Satisfacción</p>
               </div>
               <div>
                 <p class="text-2xl font-display font-bold" style="color: var(--text-primary);">8</p>
@@ -101,10 +101,10 @@
     <section id="features" class="py-20 lg:py-28" style="border-top: 1px solid var(--border-color);">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto mb-16">
-          <p class="text-sm font-semibold tracking-wider uppercase mb-3" style="color: var(--rose-primary);">Caracter&iacute;sticas</p>
+          <p class="text-sm font-semibold tracking-wider uppercase mb-3" style="color: var(--rose-primary);">Características</p>
           <h2 class="text-3xl sm:text-4xl mb-4">Todo lo que necesitas</h2>
           <p class="text-base" style="color: var(--text-muted);">
-            Gestiona tus reportes de forma eficiente con herramientas dise&ntilde;adas para ti y tu equipo.
+            Gestiona tus reportes de forma eficiente con herramientas diseñadas para ti y tu equipo.
           </p>
         </div>
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -125,10 +125,10 @@
     <section id="how-it-works" class="py-20 lg:py-28" style="border-top: 1px solid var(--border-color);">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto mb-16">
-          <p class="text-sm font-semibold tracking-wider uppercase mb-3" style="color: var(--rose-primary);">C&oacute;mo funciona</p>
+          <p class="text-sm font-semibold tracking-wider uppercase mb-3" style="color: var(--rose-primary);">Cómo funciona</p>
           <h2 class="text-3xl sm:text-4xl mb-4">Tres pasos simples</h2>
           <p class="text-base" style="color: var(--text-muted);">
-            Reportar un problema nunca fue tan f&aacute;cil. En minutos puedes crear y dar seguimiento.
+            Reportar un problema nunca fue tan fácil. En minutos puedes crear y dar seguimiento.
           </p>
         </div>
         <div class="grid sm:grid-cols-3 gap-8 lg:gap-12">
@@ -151,9 +151,9 @@
           <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full opacity-20" style="background: var(--rose-primary); filter: blur(60px);"></div>
           <div class="absolute -bottom-24 -left-24 w-64 h-64 rounded-full opacity-20" style="background: var(--rose-400); filter: blur(60px);"></div>
           <div class="relative z-10">
-            <h2 class="text-3xl sm:text-4xl mb-4">&iquest;Listo para empezar?</h2>
+            <h2 class="text-3xl sm:text-4xl mb-4">¿Listo para empezar?</h2>
             <p class="text-base max-w-lg mx-auto mb-8" style="color: var(--text-muted);">
-              &Uacute;nete a cientos de usuarios que ya gestionan sus reportes de forma r&aacute;pida y sencilla.
+              Únete a cientos de usuarios que ya gestionan sus reportes de forma rápida y sencilla.
             </p>
             <RouterLink to="/login?register=true" class="btn-primary text-base px-8 py-3.5">
               Crear cuenta gratis
@@ -181,7 +181,7 @@
             &copy; {{ new Date().getFullYear() }} Lunali Streaming. Todos los derechos reservados.
           </p>
           <div class="flex items-center gap-4">
-            <a href="#" class="text-xs no-underline transition-colors" style="color: var(--text-muted);">T&eacute;rminos</a>
+            <a href="#" class="text-xs no-underline transition-colors" style="color: var(--text-muted);">Términos</a>
             <a href="#" class="text-xs no-underline transition-colors" style="color: var(--text-muted);">Privacidad</a>
             <button @click="toggleTheme" class="btn-icon" :title="isDark ? 'Modo claro' : 'Modo oscuro'">
               <svg v-if="isDark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -206,21 +206,21 @@ const { isDark, toggleTheme } = useTheme()
 
 const features = [
   {
-    title: 'Reportes R&aacute;pidos',
-    description: 'Crea reportes en segundos con nuestra interfaz intuitiva. Adjunta capturas y describe el problema f&aacute;cilmente.',
+    title: 'Reportes Rápidos',
+    description: 'Crea reportes en segundos con nuestra interfaz intuitiva. Adjunta capturas y describe el problema fácilmente.',
     icon: 'M12 4v16m8-8H4',
     bg: 'var(--rose-lighter)',
     color: 'var(--rose-primary)',
   },
   {
     title: 'Seguimiento en Tiempo Real',
-    description: 'Da seguimiento a tus reportes con actualizaciones en tiempo real. Sabr&aacute;s cuando tu problema sea resuelto.',
+    description: 'Da seguimiento a tus reportes con actualizaciones en tiempo real. Sabrás cuando tu problema sea resuelto.',
     icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
     bg: '#e8f5e9',
     color: '#4bb574',
   },
   {
-    title: 'Gesti&oacute;n de Credenciales',
+    title: 'Gestión de Credenciales',
     description: 'Cuando tu cuenta requiera reemplazo, recibe las nuevas credenciales de forma segura y organizada.',
     icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
     bg: '#e3f2fd',
@@ -228,7 +228,7 @@ const features = [
   },
   {
     title: 'Multiplataforma',
-    description: 'Soporte para Netflix, Spotify, HBO, Disney+, Prime Video y m&aacute;s plataformas de streaming.',
+    description: 'Soporte para Netflix, Spotify, HBO, Disney+, Prime Video y más plataformas de streaming.',
     icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z',
     bg: '#f3e5f5',
     color: '#9c27b0',
@@ -242,7 +242,7 @@ const features = [
   },
   {
     title: 'Notificaciones',
-    description: 'Recibe notificaciones instant&aacute;neas cuando tu reporte sea actualizado o resuelto por el equipo.',
+    description: 'Recibe notificaciones instantáneas cuando tu reporte sea actualizado o resuelto por el equipo.',
     icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9',
     bg: '#fce4ec',
     color: '#e91e63',
@@ -256,11 +256,11 @@ const steps = [
   },
   {
     title: 'Seguimiento',
-    description: 'El equipo revisa tu reporte y lo actualiza en tiempo real. Recibir&aacute;s notificaciones de cada cambio.',
+    description: 'El equipo revisa tu reporte y lo actualiza en tiempo real. Recibirás notificaciones de cada cambio.',
   },
   {
-    title: 'Soluci&oacute;n',
-    description: 'Cuando el problema sea resuelto, recibir&aacute;s los detalles y las nuevas credenciales si aplica.',
+    title: 'Solución',
+    description: 'Cuando el problema sea resuelto, recibirás los detalles y las nuevas credenciales si aplica.',
   },
 ]
 </script>
