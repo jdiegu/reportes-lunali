@@ -1,383 +1,158 @@
 <template>
-  <div class="p-4 lg:p-8 max-w-6xl mx-auto">
-    <!-- Header -->
-    <div
-      class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-7"
-    >
+  <div class="p-4 lg:p-6 space-y-6">
+    <div class="flex items-center justify-between">
       <div>
-        <h1 class="page-title">Reportes</h1>
-
-        <p class="page-subtitle">
-          {{ filteredReports.length }} reportes en total
+        <h1 class="text-xl font-display font-bold" style="color: var(--text-primary);">Reportes</h1>
+        <p class="text-sm mt-0.5" style="color: var(--text-muted);">
+          {{ authStore.isAdmin ? 'Todos los reportes del sistema' : 'Tus reportes registrados' }}
         </p>
       </div>
-
-      <RouterLink
-        v-if="!authStore.isAdmin"
-        to="/reports/new"
-        class="btn-primary self-start"
-      >
-        <svg
-          class="w-4 h-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 4v16m8-8H4"
-          />
+      <RouterLink v-if="!authStore.isAdmin" to="/app/reports/new" class="btn-primary text-xs">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
-
         Nuevo reporte
       </RouterLink>
     </div>
 
-    <!-- Stats -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-      <div class="glass-card-light p-4">
-        <p class="text-blush-500 text-sm">Pendientes</p>
-
-        <h2 class="text-2xl font-bold text-yellow-400">
-          {{ pendingReports }}
-        </h2>
-      </div>
-
-      <div class="glass-card-light p-4">
-        <p class="text-blush-500 text-sm">En proceso</p>
-
-        <h2 class="text-2xl font-bold text-blue-400">
-          {{ progressReports }}
-        </h2>
-      </div>
-
-      <div class="glass-card-light p-4">
-        <p class="text-blush-500 text-sm">Resueltos</p>
-
-        <h2 class="text-2xl font-bold text-green-400">
-          {{ resolvedReports }}
-        </h2>
-      </div>
-    </div>
-
-    <!-- Filters -->
-    <div class="glass-card-light p-4 mb-6">
-      <div class="flex flex-col sm:flex-row gap-3">
-        <!-- Search -->
-        <div class="flex-1 relative">
-          <svg
-            class="w-4 h-4 text-blush-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
+    <div class="card p-4">
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="relative flex-1 min-w-[200px]">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--text-muted);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
-
-          <input
-            v-model="search"
-            type="text"
-            class="input-field pl-10"
-            placeholder="Buscar por correo o plataforma..."
-          />
+          <input v-model="filters.search" @input="onSearch" type="text" placeholder="Buscar por correo o plataforma..."
+                 class="input-field pl-9" />
         </div>
-
-        <!-- Status -->
-        <select
-          v-model="selectedStatus"
-          class="input-field sm:w-44"
-        >
+        <select v-model="filters.status" @change="onFilterChange" class="input-field w-auto">
           <option value="">Todos</option>
-          <option value="pending">Pendientes</option>
+          <option value="pending">Pendiente</option>
           <option value="in_progress">En proceso</option>
-          <option value="resolved">Resueltos</option>
+          <option value="resolved">Resuelto</option>
         </select>
-
-        <!-- Clear -->
-        <button
-          v-if="hasFilters"
-          @click="clearFilters"
-          class="btn-ghost text-xs"
-        >
-          Limpiar filtros
-        </button>
+        <select v-if="authStore.isAdmin" v-model="filters.userId" @change="onFilterChange" class="input-field w-auto">
+          <option value="">Todos los usuarios</option>
+          <option v-for="u in users" :key="u._id" :value="u._id">{{ u.name }}</option>
+        </select>
+        <select v-model="filters.platform" @change="onFilterChange" class="input-field w-auto">
+          <option value="">Todas</option>
+          <option v-for="p in platforms" :key="p" :value="p">{{ p }}</option>
+        </select>
       </div>
     </div>
 
-    <!-- Table -->
-    <div class="glass-card overflow-hidden">
-      <!-- Loading -->
-      <div
-        v-if="reportsStore.loading"
-        class="p-4 space-y-3"
-      >
-        <div
-          v-for="i in 8"
-          :key="i"
-          class="skeleton h-12 rounded-xl"
-        />
-      </div>
-
-      <!-- Empty -->
-      <div
-        v-else-if="!filteredReports.length"
-        class="py-20 text-center"
-      >
-        <div
-          class="w-16 h-16 rounded-2xl bg-rose-900/20 border border-rose-900/30 flex items-center justify-center mx-auto mb-4"
-        >
-          <svg
-            class="w-7 h-7 text-blush-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.5"
-              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"
-            />
-          </svg>
+    <div class="space-y-2">
+      <div v-if="loading" class="card p-4 space-y-3">
+        <div v-for="i in 5" :key="i" class="flex items-center gap-3">
+          <div class="skeleton w-9 h-9 rounded-lg shrink-0"></div>
+          <div class="flex-1">
+            <div class="skeleton h-4 w-32 rounded mb-2"></div>
+            <div class="skeleton h-3 w-24 rounded"></div>
+          </div>
         </div>
-
-        <p class="text-blush-400 font-medium">
-          Sin reportes
-        </p>
-
-        <p class="text-blush-600 text-sm mt-1">
-          {{
-            hasFilters
-              ? "Ningún reporte coincide con los filtros."
-              : "Aún no hay reportes registrados."
-          }}
-        </p>
       </div>
 
-      <!-- Table -->
-      <div v-else class="overflow-x-auto">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Plataforma</th>
-              <th>Correo</th>
-              <th v-if="authStore.isAdmin">Usuario</th>
-              <th>Estado</th>
-              <th>Tipo</th>
-              <th>Fecha</th>
-              <th class="w-10"></th>
-            </tr>
-          </thead>
+      <template v-else>
+        <ReportRow
+          v-for="report in reportsStore.reports" :key="report._id"
+          :report="report"
+          @click="router.push(`/app/reports/${report._id}`)"
+        />
+        <div v-if="(reportsStore.reports?.length || 0) === 0" class="card py-12 text-center">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" style="background: var(--rose-lighter);">
+            <svg class="w-6 h-6" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+          </div>
+          <p class="text-sm font-medium" style="color: var(--text-muted);">No se encontraron reportes</p>
+          <p v-if="hasActiveFilters" class="text-xs mt-1" style="color: var(--text-muted); opacity: 0.7;">
+            Intenta ajustar los filtros
+          </p>
+        </div>
+      </template>
+    </div>
 
-          <tbody>
-            <tr
-              v-for="report in filteredReports"
-              :key="report._id"
-              class="cursor-pointer hover:bg-rose-900/10 transition"
-              @click="router.push(`/reports/${report._id}`)"
-            >
-              <!-- Plataforma -->
-              <td>
-                <div class="flex items-center gap-2">
-                  <div
-                    class="w-7 h-7 rounded-lg bg-rose-900/30 border border-rose-900/30 flex items-center justify-center text-rose-300 text-xs font-mono shrink-0"
-                  >
-                    {{ report.platform?.charAt(0).toUpperCase() }}
-                  </div>
-
-                  <span class="font-medium text-blush-100">
-                    {{ report.platform }}
-                  </span>
-                </div>
-              </td>
-
-              <!-- Mail -->
-              <td class="font-mono text-xs text-blush-400">
-                {{ report.mail }}
-              </td>
-
-              <!-- Usuario -->
-              <td
-                v-if="authStore.isAdmin"
-                class="text-blush-400"
-              >
-                {{ report.user?.name || "—" }}
-              </td>
-
-              <!-- Estado -->
-              <td>
-                <span :class="statusBadge(report.status)">
-                  <span
-                    class="w-1.5 h-1.5 rounded-full bg-current"
-                  />
-
-                  {{ statusLabel(report.status) }}
-                </span>
-              </td>
-
-              <!-- Tipo -->
-              <td>
-                <span
-                  class="text-blush-500 text-xs capitalize"
-                >
-                  {{
-                    report.platform_type === "profile"
-                      ? "👥 Perfil"
-                      : "👤 Cuenta"
-                  }}
-                </span>
-              </td>
-
-              <!-- Fecha -->
-              <td class="text-blush-500 text-xs">
-                {{ formatDate(report.createdAt) }}
-              </td>
-
-              <!-- Arrow -->
-              <td>
-                <svg
-                  class="w-4 h-4 text-blush-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <div v-if="reportsStore.total > 0" class="flex items-center justify-between">
+      <p class="text-xs" style="color: var(--text-muted);">
+        Mostrando {{ reportsStore.reports?.length || 0 }} de {{ reportsStore.total }} reportes
+      </p>
+      <div class="flex items-center gap-2">
+        <button @click="prevPage" :disabled="(reportsStore.pagination?.page || 1) <= 1" class="btn-secondary text-xs">
+          Anterior
+        </button>
+        <span class="text-xs" style="color: var(--text-muted);">
+          P&aacute;gina {{ reportsStore.pagination?.page || 1 }}
+        </span>
+        <button @click="nextPage" :disabled="(reportsStore.pagination?.page || 1) * (reportsStore.pagination?.limit || 10) >= reportsStore.total" class="btn-secondary text-xs">
+          Siguiente
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { RouterLink, useRouter } from "vue-router";
+import { ref, computed, onMounted } from 'vue'
+import { useRouter, RouterLink } from 'vue-router'
+import { useAuthStore } from '../../store/auth'
+import { useReportsStore } from '../../store/reports'
+import ReportRow from '../../components/reports/ReportRow.vue'
 
-import { useAuthStore } from "../../store/auth";
-import { useReportsStore } from "../../store/reports";
+const router = useRouter()
+const authStore = useAuthStore()
+const reportsStore = useReportsStore()
+const loading = ref(true)
+const users = ref([])
+const searchTimer = ref(null)
+const filters = ref({ search: '', status: '', userId: '', platform: '' })
 
-const authStore = useAuthStore();
-const reportsStore = useReportsStore();
+const platforms = ['Netflix', 'Spotify', 'HBO', 'Disney+', 'Prime Video', 'Crunchyroll', 'YouTube Premium', 'Otro']
+const hasActiveFilters = computed(() => filters.value.search || filters.value.status || filters.value.platform)
 
-const router = useRouter();
-
-const search = ref("");
-const selectedStatus = ref("");
-
-/*
-|--------------------------------------------------------------------------
-| FILTERS
-|--------------------------------------------------------------------------
-*/
-
-const hasFilters = computed(() => {
-  return !!search.value || !!selectedStatus.value;
-});
-
-const filteredReports = computed(() => {
-  let data = [...reportsStore.reports];
-
-  // Buscar
-  if (search.value) {
-    const term = search.value.toLowerCase();
-
-    data = data.filter((report) => {
-      return (
-        report.mail?.toLowerCase().includes(term) ||
-        report.platform?.toLowerCase().includes(term)
-      );
-    });
-  }
-
-  // Estado
-  if (selectedStatus.value) {
-    data = data.filter(
-      (report) => report.status === selectedStatus.value
-    );
-  }
-
-  return data;
-});
-
-function clearFilters() {
-  search.value = "";
-  selectedStatus.value = "";
+function onSearch() {
+  clearTimeout(searchTimer.value)
+  searchTimer.value = setTimeout(() => onFilterChange(), 400)
 }
 
-/*
-|--------------------------------------------------------------------------
-| STATS
-|--------------------------------------------------------------------------
-*/
-
-const pendingReports = computed(() => {
-  return reportsStore.reports.filter(
-    (r) => r.status === "pending"
-  ).length;
-});
-
-const progressReports = computed(() => {
-  return reportsStore.reports.filter(
-    (r) => r.status === "in_progress"
-  ).length;
-});
-
-const resolvedReports = computed(() => {
-  return reportsStore.reports.filter(
-    (r) => r.status === "resolved"
-  ).length;
-});
-
-/*
-|--------------------------------------------------------------------------
-| HELPERS
-|--------------------------------------------------------------------------
-*/
-
-const statusBadge = (s) =>
-  ({
-    pending: "badge-pending",
-    in_progress: "badge-progress",
-    resolved: "badge-resolved",
-  })[s] || "badge-pending";
-
-const statusLabel = (s) =>
-  ({
-    pending: "Pendiente",
-    in_progress: "En proceso",
-    resolved: "Resuelto",
-  })[s] || s;
-
-function formatDate(d) {
-  return new Date(d).toLocaleDateString("es-MX", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
+function onFilterChange() {
+  reportsStore.filters = { ...filters.value }
+  loadReports(1)
 }
 
-/*
-|--------------------------------------------------------------------------
-| INIT
-|--------------------------------------------------------------------------
-*/
+function prevPage() {
+  const page = (reportsStore.pagination?.page || 1) - 1
+  if (page >= 1) loadReports(page)
+}
+
+function nextPage() {
+  const page = (reportsStore.pagination?.page || 1) + 1
+  loadReports(page)
+}
+
+async function loadReports(page = 1) {
+  loading.value = true
+  try {
+    if (authStore.isAdmin) {
+      await reportsStore.fetchReports({ ...filters.value, page })
+    } else {
+      await reportsStore.fetchMyReports({ ...filters.value, page })
+    }
+  } catch {
+    // handled by store
+  } finally {
+    loading.value = false
+  }
+}
 
 onMounted(async () => {
-  await reportsStore.fetchReports();
-});
+  reportsStore.resetFilters()
+  filters.value = { search: '', status: '', userId: '', platform: '' }
+  await loadReports()
+  if (authStore.isAdmin) {
+    try {
+      const res = await reportsStore.fetchAdminUsers?.()
+      if (res) users.value = res
+    } catch { /* ignore */ }
+  }
+})
 </script>

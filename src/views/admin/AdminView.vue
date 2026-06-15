@@ -1,352 +1,137 @@
 <template>
-  <div class="p-4 lg:p-8 max-w-7xl mx-auto">
-    <!-- Header -->
-    <div class="mb-8 animate-fade-up">
-      <h1 class="page-title">Panel de Administración</h1>
-      <p class="page-subtitle">Gestión completa de reportes · Lunali Streaming</p>
+  <div class="p-4 lg:p-6 space-y-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-xl font-display font-bold" style="color: var(--text-primary);">Administraci&oacute;n</h1>
+        <p class="text-sm mt-0.5" style="color: var(--text-muted);">Gestiona usuarios y reportes del sistema</p>
+      </div>
+      <button @click="fetchUsers" class="btn-secondary text-xs" :disabled="loading">
+        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+        </svg>
+        Actualizar
+      </button>
     </div>
 
-    <!-- Stats row -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      <div
-        v-for="(stat, i) in stats"
-        :key="stat.label"
-        :class="['glass-card p-5 flex items-center gap-4 animate-fade-up opacity-0-init', `animate-delay-${(i+1)*100}`]"
-      >
-        <div :class="['w-11 h-11 rounded-xl flex items-center justify-center shrink-0', stat.iconBg]">
-          <svg class="w-5 h-5" :class="stat.iconColor" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="stat.icon"/>
-          </svg>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="card">
+        <div class="p-5 border-b" style="border-color: var(--border-color);">
+          <h2 class="font-display font-bold" style="color: var(--text-primary);">Usuarios</h2>
+          <p class="text-xs mt-0.5" style="color: var(--text-muted);">{{ users.length }} registrados</p>
         </div>
-        <div>
-          <p class="text-2xl font-display font-bold" :class="stat.iconColor">
-            {{ stat.value }}
-          </p>
-          <p class="text-blush-500 text-xs">{{ stat.label }}</p>
+        <div v-if="loading" class="p-5 space-y-3">
+          <div v-for="i in 4" :key="i" class="flex items-center gap-3 p-3 rounded-xl" style="background: var(--bg-surface);">
+            <div class="skeleton w-9 h-9 rounded-lg"></div>
+            <div class="flex-1">
+              <div class="skeleton h-4 w-28 rounded mb-2"></div>
+              <div class="skeleton h-3 w-20 rounded"></div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Filters + table -->
-    <div class="glass-card overflow-hidden animate-fade-up animate-delay-300 opacity-0-init">
-      <!-- Toolbar -->
-      <div class="p-4 border-b border-rose-900/30 flex flex-col sm:flex-row gap-3">
-        <div class="flex-1 relative">
-          <svg class="w-4 h-4 text-blush-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
-          <input
-            v-model="reportsStore.filters.search"
-            @input="debouncedFetch"
-            type="text"
-            class="input-field pl-10 text-sm"
-            placeholder="Buscar por correo, plataforma, usuario..."
-          />
-        </div>
-        <select v-model="reportsStore.filters.status" @change="doFetch" class="input-field sm:w-44 text-sm">
-          <option value="">Todos los estados</option>
-          <option value="pending">⏳ Pendientes</option>
-          <option value="in_progress">🔄 En proceso</option>
-          <option value="resolved">✅ Resueltos</option>
-        </select>
-        <button v-if="hasFilters" @click="clearFilters" class="btn-ghost text-xs whitespace-nowrap">
-          Limpiar filtros
-        </button>
-      </div>
-
-      <!-- Loading -->
-      <div v-if="reportsStore.loading" class="p-4 space-y-3">
-        <div v-for="i in 6" :key="i" class="skeleton h-14 rounded-xl"></div>
-      </div>
-
-      <!-- Empty -->
-      <div v-else-if="!reportsStore.reports.length" class="py-20 text-center">
-        <div class="w-14 h-14 rounded-2xl bg-rose-900/20 border border-rose-900/30 flex items-center justify-center mx-auto mb-4">
-          <svg class="w-6 h-6 text-blush-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-          </svg>
-        </div>
-        <p class="text-blush-400 font-medium">Sin reportes</p>
-        <p class="text-blush-600 text-sm mt-1">{{ hasFilters ? 'Ningún resultado con esos filtros.' : 'No hay reportes registrados aún.' }}</p>
-      </div>
-
-      <!-- Table -->
-      <div v-else class="overflow-x-auto">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Plataforma</th>
-              <th>Cuenta</th>
-              <th>Usuario</th>
-              <th>Estado</th>
-              <th>Tipo</th>
-              <th>Fecha</th>
-              <th class="text-right pr-4">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="report in reportsStore.reports" :key="report._id">
-              <td>
-                <div class="flex items-center gap-2">
-                  <div class="w-7 h-7 rounded-lg bg-rose-900/30 border border-rose-900/30 flex items-center justify-center text-rose-300 text-xs font-bold shrink-0">
-                    {{ report.platform?.charAt(0).toUpperCase() }}
-                  </div>
-                  <span class="font-medium text-blush-100 whitespace-nowrap">{{ report.platform }}</span>
-                </div>
-              </td>
-              <td class="font-mono text-xs text-blush-400 max-w-[160px] truncate">{{ report.mail }}</td>
-              <td class="text-blush-300 whitespace-nowrap">{{ report.user?.name || '—' }}</td>
-              <td>
-                <span :class="statusBadge(report.status)">
-                  <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
-                  {{ statusLabel(report.status) }}
-                </span>
-              </td>
-              <td class="text-blush-500 text-xs whitespace-nowrap">
-                {{ report.platform_type === 'profile' ? '👥 Perfil' : '👤 Cuenta' }}
-              </td>
-              <td class="text-blush-500 text-xs whitespace-nowrap">{{ formatDate(report.createdAt) }}</td>
-              <td class="text-right pr-2">
-                <div class="flex items-center justify-end gap-1">
-                  <!-- Ver detalle -->
-                  <button
-                    @click="router.push(`/reports/${report._id}`)"
-                    class="btn-icon w-8 h-8"
-                    title="Ver detalle"
-                  >
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                    </svg>
-                  </button>
-
-                  <!-- Cambiar estado -->
-                  <button
-                    v-if="report.status === 'pending'"
-                    @click="quickStatus(report, 'in_progress')"
-                    class="btn-icon w-8 h-8 text-blue-400 border-blue-900/40 hover:border-blue-600/60 hover:bg-blue-900/20"
-                    title="Marcar en proceso"
-                  >
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                  </button>
-
-                  <!-- Resolver -->
-                  <button
-                    v-if="report.status !== 'resolved'"
-                    @click="openResolve(report)"
-                    class="btn-icon w-8 h-8 text-emerald-400 border-emerald-900/40 hover:border-emerald-600/60 hover:bg-emerald-900/20"
-                    title="Resolver"
-                  >
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                  </button>
-
-                  <!-- Editar resolución -->
-                  <button
-                    v-if="report.status === 'resolved'"
-                    @click="openEdit(report)"
-                    class="btn-icon w-8 h-8"
-                    title="Editar resolución"
-                  >
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                    </svg>
-                  </button>
-
-                  <!-- Eliminar -->
-                  <button
-                    @click="confirmDelete(report)"
-                    class="btn-icon w-8 h-8 text-rose-500 border-rose-900/40 hover:border-rose-600/60 hover:bg-rose-900/20"
-                    title="Eliminar"
-                  >
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                    </svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Pagination -->
-      <div v-if="reportsStore.pagination.pages > 1" class="px-4 py-3 border-t border-rose-900/30 flex items-center justify-between">
-        <p class="text-blush-500 text-xs">
-          {{ reportsStore.reports.length }} de {{ reportsStore.pagination.total }} reportes
-        </p>
-        <div class="flex items-center gap-1">
-          <button
-            :disabled="currentPage <= 1"
-            @click="changePage(currentPage - 1)"
-            class="btn-icon w-8 h-8 disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        <div v-else-if="users.length === 0" class="py-12 text-center">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" style="background: var(--rose-lighter);">
+            <svg class="w-6 h-6" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/>
             </svg>
-          </button>
-          <span class="text-blush-400 text-xs px-2">
-            {{ currentPage }} / {{ reportsStore.pagination.pages }}
-          </span>
-          <button
-            :disabled="currentPage >= reportsStore.pagination.pages"
-            @click="changePage(currentPage + 1)"
-            class="btn-icon w-8 h-8 disabled:opacity-30 disabled:cursor-not-allowed"
-          >
-            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </div>
+          <p class="text-sm font-medium" style="color: var(--text-muted);">No hay usuarios registrados</p>
+        </div>
+        <div v-else class="divide-y" style="border-color: var(--border-color);">
+          <div v-for="user in users" :key="user._id"
+               class="flex items-center gap-3 px-5 py-3.5 transition-colors"
+               style="color: var(--text-secondary);">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center text-xs font-medium shrink-0"
+                 style="background: var(--rose-lighter); color: var(--rose-primary);">
+              {{ user.name?.charAt(0).toUpperCase() || '?' }}
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium truncate" style="color: var(--text-primary);">{{ user.name }}</p>
+              <p class="text-xs truncate" style="color: var(--text-muted);">
+                {{ user.role === 'admin' ? 'Administrador' : 'Usuario' }}
+                <span v-if="user.reportCount !== undefined">&middot; {{ user.reportCount }} reportes</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="p-5 border-b" style="border-color: var(--border-color);">
+          <h2 class="font-display font-bold" style="color: var(--text-primary);">Pendientes</h2>
+          <p class="text-xs mt-0.5" style="color: var(--text-muted);">{{ pendingReports.length }} por resolver</p>
+        </div>
+        <div v-if="loading" class="p-5 space-y-3">
+          <div v-for="i in 4" :key="i" class="flex items-center gap-3 p-3 rounded-xl" style="background: var(--bg-surface);">
+            <div class="skeleton w-9 h-9 rounded-lg"></div>
+            <div class="flex-1">
+              <div class="skeleton h-4 w-24 rounded mb-2"></div>
+              <div class="skeleton h-3 w-16 rounded"></div>
+            </div>
+          </div>
+        </div>
+        <div v-else-if="pendingReports.length === 0" class="py-12 text-center">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" style="background: var(--rose-lighter);">
+            <svg class="w-6 h-6" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-          </button>
+          </div>
+          <p class="text-sm font-medium" style="color: var(--text-muted);">Todos los reportes est&aacute;n resueltos</p>
+        </div>
+        <div v-else class="divide-y" style="border-color: var(--border-color);">
+          <RouterLink v-for="report in pendingReports" :key="report._id"
+            :to="`/app/reports/${report._id}`"
+            class="flex items-center gap-3 px-5 py-3.5 transition-colors no-underline"
+            style="color: var(--text-secondary);"
+            @mouseenter="e => e.currentTarget.style.background = 'var(--bg-surface)'"
+            @mouseleave="e => e.currentTarget.style.background = 'transparent'">
+            <div class="w-9 h-9 rounded-lg flex items-center justify-center text-xs font-medium shrink-0"
+                 style="background: var(--rose-lighter); color: var(--rose-primary);">
+              {{ report.platform?.charAt(0).toUpperCase() || '?' }}
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium truncate" style="color: var(--text-primary);">{{ report.platform }}</p>
+              <p class="text-xs truncate" style="color: var(--text-muted);">{{ report.mail }}</p>
+            </div>
+            <span :class="report.status === 'in_progress' ? 'badge badge-progress' : 'badge badge-pending'">
+              {{ report.status === 'in_progress' ? 'En proceso' : 'Pendiente' }}
+            </span>
+          </RouterLink>
         </div>
       </div>
     </div>
-
-    <!-- Modals -->
-    <ResolveModal
-      v-model="showResolveModal"
-      :report="selectedReport"
-      :is-editing="false"
-      @resolved="handleResolved"
-    />
-    <ResolveModal
-      v-model="showEditModal"
-      :report="selectedReport"
-      :is-editing="true"
-      @resolved="handleResolved"
-    />
-    <ConfirmDialog
-      v-model="showDeleteConfirm"
-      title="Eliminar reporte"
-      :message="`¿Eliminar el reporte de ${selectedReport?.platform} (${selectedReport?.mail})? Se borrarán también las imágenes.`"
-      confirm-label="Sí, eliminar"
-      @confirm="handleDelete"
-    />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRouter }       from 'vue-router'
+import { RouterLink } from 'vue-router'
 import { useReportsStore } from '../../store/reports'
-import { useToastStore }   from '../../store/toast'
-import ResolveModal  from '../../components/reports/ResolvModal.vue'
-import ConfirmDialog from '../../components/ui/ConfirmDialog.vue'
 
-const router       = useRouter()
 const reportsStore = useReportsStore()
-const toast        = useToastStore()
+const loading = ref(true)
+const users = ref([])
+const reports = ref([])
 
-const currentPage       = ref(1)
-const selectedReport    = ref(null)
-const showResolveModal  = ref(false)
-const showEditModal     = ref(false)
-const showDeleteConfirm = ref(false)
-let searchTimeout       = null
+const pendingReports = computed(() => reports.value.filter(r => r.status !== 'resolved'))
 
-// ── Stats ──────────────────────────────────────────────────────────────────────
-const stats = computed(() => {
-  const all = reportsStore.reports
-  return [
-    {
-      label: 'Total reportes', value: reportsStore.pagination.total,
-      icon: 'M4 6h16M4 10h16M4 14h16M4 18h16',
-      iconBg: 'bg-rose-700/25', iconColor: 'text-rose-400',
-    },
-    {
-      label: 'Pendientes', value: all.filter(r => r.status === 'pending').length,
-      icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
-      iconBg: 'bg-amber-700/20', iconColor: 'text-amber-400',
-    },
-    {
-      label: 'En proceso', value: all.filter(r => r.status === 'in_progress').length,
-      icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15',
-      iconBg: 'bg-blue-700/20', iconColor: 'text-blue-400',
-    },
-    {
-      label: 'Resueltos', value: all.filter(r => r.status === 'resolved').length,
-      icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
-      iconBg: 'bg-emerald-700/20', iconColor: 'text-emerald-400',
-    },
-  ]
-})
-
-const hasFilters = computed(() =>
-  !!reportsStore.filters.status || !!reportsStore.filters.search
-)
-
-// ── Helpers ────────────────────────────────────────────────────────────────────
-const statusBadge = (s) => ({
-  pending: 'badge-pending', in_progress: 'badge-progress', resolved: 'badge-resolved',
-}[s] || 'badge-pending')
-
-const statusLabel = (s) => ({
-  pending: 'Pendiente', in_progress: 'En proceso', resolved: 'Resuelto',
-}[s] || s)
-
-function formatDate(d) {
-  if (!d) return '—'
-  return new Date(d).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' })
-}
-
-// ── Fetch / pagination ─────────────────────────────────────────────────────────
-function doFetch() {
-  currentPage.value = 1
-  reportsStore.fetchReports(1)
-}
-
-function debouncedFetch() {
-  clearTimeout(searchTimeout)
-  searchTimeout = setTimeout(doFetch, 400)
-}
-
-function clearFilters() {
-  reportsStore.resetFilters()
-  doFetch()
-}
-
-function changePage(page) {
-  currentPage.value = page
-  reportsStore.fetchReports(page)
-}
-
-// ── Actions ────────────────────────────────────────────────────────────────────
-async function quickStatus(report, status) {
-  const result = await reportsStore.updateStatus(report._id, status)
-  if (result.success) toast.success('Estado actualizado.')
-  else toast.error(result.message)
-}
-
-function openResolve(report) {
-  selectedReport.value = report
-  showResolveModal.value = true
-}
-
-function openEdit(report) {
-  selectedReport.value = report
-  showEditModal.value = true
-}
-
-function confirmDelete(report) {
-  selectedReport.value = report
-  showDeleteConfirm.value = true
-}
-
-function handleResolved(updated) {
-  if (updated) reportsStore.fetchReports(currentPage.value)
-}
-
-async function handleDelete() {
-  const result = await reportsStore.deleteReport(selectedReport.value._id)
-  if (result.success) {
-    toast.success('Reporte eliminado correctamente.')
-    reportsStore.fetchReports(currentPage.value)
-  } else {
-    toast.error(result.message)
+async function fetchData() {
+  loading.value = true
+  try {
+    const [usersRes, reportsRes] = await Promise.all([
+      reportsStore.fetchAdminUsers?.(),
+      reportsStore.fetchAdminReports?.()
+    ])
+    if (usersRes) users.value = usersRes
+    if (reportsRes) reports.value = reportsRes
+  } catch {
+    users.value = []
+    reports.value = []
+  } finally {
+    loading.value = false
   }
 }
 
-// ── Init ───────────────────────────────────────────────────────────────────────
-onMounted(() => reportsStore.fetchReports())
+async function fetchUsers() { await fetchData() }
+
+onMounted(fetchData)
 </script>

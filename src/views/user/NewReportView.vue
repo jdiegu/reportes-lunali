@@ -1,167 +1,119 @@
 <template>
-  <div class="p-4 lg:p-8 max-w-3xl mx-auto">
-    <!-- Header -->
-    <div class="mb-7 animate-fade-up">
-      <button @click="router.back()" class="btn-ghost text-xs mb-4 -ml-2">
-        ← Volver
-      </button>
-      <h1 class="page-title">Crear reporte</h1>
-      <p class="page-subtitle">Completa el formulario para reportar una falla en tu plataforma</p>
-    </div>
+  <div class="max-w-2xl mx-auto p-4 lg:p-6">
+    <div class="card p-6 lg:p-8">
+      <div class="flex items-center gap-4 mb-7">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center"
+             style="background: linear-gradient(135deg, var(--rose-lighter), var(--rose-light)); color: var(--rose-primary);">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-xl font-display font-bold" style="color: var(--text-primary);">Nuevo Reporte</h1>
+          <p class="text-sm" style="color: var(--text-muted);">Describe el problema que necesitas resolver</p>
+        </div>
+      </div>
 
-    <form @submit.prevent="handleSubmit" class="space-y-6">
-      <!-- Account info -->
-      <div class="glass-card p-6 animate-fade-up animate-delay-100 opacity-0-init">
-        <h2 class="font-display text-base font-bold text-blush-100 mb-5 flex items-center gap-2">
-          <span class="w-6 h-6 rounded-full bg-rose-600/25 border border-rose-600/40 text-rose-400 text-xs flex items-center justify-center">1</span>
-          Información de la cuenta
-        </h2>
-        <div class="grid sm:grid-cols-2 gap-5">
+      <form @submit.prevent="submitReport" class="space-y-5">
+        <div class="grid sm:grid-cols-2 gap-4">
           <div>
-            <label class="input-label">Plataforma *</label>
-            <input v-model="form.platform" type="text" class="input-field" placeholder="Netflix, Disney+, Spotify..." required />
-          </div>
-          <div>
-            <label class="input-label">Tipo de plataforma *</label>
-            <select v-model="form.platform_type" class="input-field" required>
-              <option value="account">👤 Cuenta individual</option>
-              <option value="profile">👥 Cuenta con perfiles compartidos</option>
+            <label class="input-label">Plataforma</label>
+            <select v-model="form.platform" required class="input-field">
+              <option value="" disabled>Selecciona</option>
+              <option v-for="p in platforms" :key="p" :value="p">{{ p }}</option>
             </select>
           </div>
-          <div class="sm:col-span-2">
-            <label class="input-label">Correo de la cuenta *</label>
-            <input v-model="form.mail" type="email" class="input-field" placeholder="correo@ejemplo.com" required />
-          </div>
           <div>
-            <label class="input-label">Contraseña de la cuenta</label>
-            <div class="relative">
-              <input v-model="form.password" :type="showPass ? 'text' : 'password'" class="input-field pr-10" placeholder="Opcional" />
-              <button type="button" @click="showPass = !showPass" class="absolute right-3 top-1/2 -translate-y-1/2 text-blush-500 hover:text-blush-300">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="showPass ? 'M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21' : 'M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div>
-            <label class="input-label">Fecha de entrega *</label>
-            <input v-model="form.delivery_date" type="date" class="input-field" required />
+            <label class="input-label">Tipo de problema</label>
+            <select v-model="form.problemType" required class="input-field">
+              <option value="" disabled>Selecciona</option>
+              <option v-for="t in problemTypes" :key="t" :value="t">{{ t }}</option>
+            </select>
           </div>
         </div>
-      </div>
 
-      <!-- Description -->
-      <div class="glass-card p-6 animate-fade-up animate-delay-200 opacity-0-init">
-        <h2 class="font-display text-base font-bold text-blush-100 mb-5 flex items-center gap-2">
-          <span class="w-6 h-6 rounded-full bg-rose-600/25 border border-rose-600/40 text-rose-400 text-xs flex items-center justify-center">2</span>
-          Descripción del problema
-        </h2>
         <div>
-          <label class="input-label">Describe la falla *</label>
-          <textarea
-            v-model="form.description"
-            class="input-field resize-none"
-            rows="4"
-            placeholder="Describe con detalle qué falla tiene la cuenta, cuándo ocurre, qué mensajes de error aparecen..."
-            required
-            minlength="10"
-          ></textarea>
-          <p class="text-blush-600 text-xs mt-1">Mínimo 10 caracteres · {{ form.description.length }} escritos</p>
+          <label class="input-label">Correo electr&oacute;nico</label>
+          <div class="relative">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--text-muted);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <input v-model="form.mail" type="email" placeholder="tu@email.com" required class="input-field pl-10" />
+          </div>
         </div>
-      </div>
 
-      <!-- Evidence images -->
-      <div class="glass-card p-6 animate-fade-up animate-delay-300 opacity-0-init">
-        <h2 class="font-display text-base font-bold text-blush-100 mb-5 flex items-center gap-2">
-          <span class="w-6 h-6 rounded-full bg-rose-600/25 border border-rose-600/40 text-rose-400 text-xs flex items-center justify-center">3</span>
-          Evidencias
-        </h2>
-        <div class="grid sm:grid-cols-2 gap-5">
-          <ImageUploader
-            label="Evidencia de la falla *"
-            hint="Captura de pantalla del error"
-            v-model="failEvidenceFile"
-          />
-          <ImageUploader
-            label="Evidencia de entrega *"
-            hint="Captura de que la cuenta fue entregada"
-            v-model="deliveryEvidenceFile"
-          />
+        <div>
+          <label class="input-label">Descripci&oacute;n</label>
+          <textarea v-model="form.description" rows="4" placeholder="Describe el problema detalladamente..." required class="input-field resize-none"></textarea>
         </div>
-      </div>
 
-      <!-- Error -->
-      <div v-if="errorMsg" class="text-rose-400 text-sm bg-rose-900/20 border border-rose-800/40 rounded-xl px-4 py-3">
-        {{ errorMsg }}
-      </div>
+        <div>
+          <ImageUploader v-model="form.image" label="Captura de pantalla" hint="Opcional, pero ayuda a resolver m&aacute;s r&aacute;pido" />
+        </div>
 
-      <!-- Actions -->
-      <div class="flex gap-3 animate-fade-up animate-delay-400 opacity-0-init">
-        <button type="button" @click="router.back()" class="btn-secondary flex-1">Cancelar</button>
-        <button type="submit" :disabled="submitting || !formValid" class="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed">
-          <svg v-if="submitting" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-          </svg>
-          {{ submitting ? 'Enviando...' : 'Enviar reporte' }}
-        </button>
-      </div>
-    </form>
+        <div v-if="error" class="rounded-lg border px-3 py-2 text-xs"
+             style="border-color: rgba(232,138,138,0.3); background: var(--error-bg); color: var(--error);">
+          {{ error }}
+        </div>
+
+        <div class="flex items-center gap-3 pt-2">
+          <button type="submit" :disabled="saving" class="btn-primary">
+            <svg v-if="saving" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+            <span v-if="saving">Enviando...</span>
+            <span v-else>Enviar reporte</span>
+          </button>
+          <RouterLink to="/app/reports" class="btn-secondary text-sm">Cancelar</RouterLink>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, reactive } from 'vue'
+import { useRouter, RouterLink } from 'vue-router'
 import { useReportsStore } from '../../store/reports'
+import { useToastStore } from '../../store/toast'
 import ImageUploader from '../../components/ui/ImageUploader.vue'
-
-import { useAuthStore } from '../../store/auth'
-const authStore = useAuthStore()
 
 const router = useRouter()
 const reportsStore = useReportsStore()
+const toast = useToastStore()
 
-const showPass = ref(false)
-const submitting = ref(false)
-const errorMsg = ref('')
-const failEvidenceFile = ref(null)
-const deliveryEvidenceFile = ref(null)
+const saving = ref(false)
+const error = ref('')
 
-console.log(authStore.user)
 const form = reactive({
-
-  user: authStore.user._id || '',
   platform: '',
-  platform_type: 'account',
   mail: '',
-  password: '',
-  delivery_date: '',
+  problemType: '',
   description: '',
+  image: null,
 })
 
-const formValid = computed(() =>
-  form.platform && form.mail && form.delivery_date &&
-  form.description.length >= 10 && failEvidenceFile.value && deliveryEvidenceFile.value
-)
+const platforms = ['Netflix', 'Spotify', 'HBO', 'Disney+', 'Prime Video', 'Crunchyroll', 'YouTube Premium', 'Otro']
+const problemTypes = ['Acceso', 'Pago', 'Cambio de contrase&ntilde;a', 'Perfil bloqueado', 'Cuenta compartida', 'Otro']
 
-async function handleSubmit() {
-  errorMsg.value = ''
-  submitting.value = true
+async function submitReport() {
+  error.value = ''
+  saving.value = true
   try {
-    const fd = new FormData()
-    Object.entries(form).forEach(([k, v]) => { if (v) fd.append(k, v) })
-    fd.append('fail_evidence', failEvidenceFile.value)
-    fd.append('delivery_evidence', deliveryEvidenceFile.value)
-
-    const result = await reportsStore.createReport(fd)
-    if (result.success) {
-      router.push(`/reports/${result.data._id}`)
-    } else {
-      errorMsg.value = result.message
-    }
+    const formData = new FormData()
+    formData.append('platform', form.platform)
+    formData.append('mail', form.mail)
+    formData.append('problemType', form.problemType)
+    formData.append('description', form.description)
+    if (form.image) formData.append('image', form.image)
+    await reportsStore.createReport(formData)
+    toast.success('Reporte creado', 'Tu reporte ha sido registrado exitosamente')
+    router.push('/app/reports')
+  } catch (e) {
+    error.value = e.message || 'Error al crear el reporte'
   } finally {
-    submitting.value = false
+    saving.value = false
   }
 }
-</script>   
+</script>

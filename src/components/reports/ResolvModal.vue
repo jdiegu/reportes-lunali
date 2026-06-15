@@ -1,143 +1,95 @@
 <template>
   <Teleport to="body">
-    <Transition name="modal">
-      <div v-if="modelValue" class="fixed inset-0 z-[9990] flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-dark-950/75 backdrop-blur-sm" @click="close"></div>
+    <Transition name="fade">
+      <div v-if="visible" class="fixed inset-0 z-[200] flex items-center justify-center p-4">
+        <div class="absolute inset-0" style="background: rgba(0,0,0,0.35); backdrop-filter: blur(4px);" @click="cancel"></div>
 
-        <div class="glass-card w-full max-w-lg relative z-10 max-h-[90vh] overflow-y-auto">
-
-          <!-- Header -->
-          <div class="px-6 pt-6 pb-4 border-b border-rose-900/30 sticky top-0 glass-card rounded-b-none z-10">
-            <div class="flex items-center justify-between">
-              <div>
-                <h2 class="font-display text-xl font-bold text-blush-50">
-                  {{ isEditing ? 'Editar resolución' : 'Resolver reporte' }}
-                </h2>
-                <p class="text-blush-500 text-xs mt-0.5">
-                  {{ report?.platform }} · <span class="font-mono">{{ report?.mail }}</span>
-                </p>
-              </div>
-              <button @click="close" class="btn-icon">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        <div class="relative rounded-2xl border shadow-xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto"
+             style="background: var(--bg-card); border-color: var(--border-color);">
+          <div class="flex items-center justify-between mb-5">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl flex items-center justify-center" style="background: var(--rose-lighter);">
+                <svg class="w-4 h-4" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-              </button>
+              </div>
+              <h3 class="font-display font-bold text-lg" style="color: var(--text-primary);">Resolver reporte</h3>
             </div>
+            <button @click="cancel" class="btn-icon" style="color: var(--text-muted);">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
           </div>
 
-          <!-- Bulk-resolve notice (solo cuando es plataforma de perfil y no es edición) -->
-          <div
-            v-if="report?.platform_type === 'profile' && !isEditing"
-            class="mx-6 mt-5 p-3 rounded-xl bg-amber-900/20 border border-amber-700/30 flex gap-2.5"
-          >
-            <svg class="w-4 h-4 text-amber-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <p class="text-amber-300 text-xs leading-relaxed">
-              <strong>Plataforma con perfiles compartidos.</strong>
-              Al resolver este reporte, todos los reportes con la misma cuenta
-              (<span class="font-mono">{{ report?.mail }}</span>) quedarán resueltos automáticamente
-              con la misma solución.
-            </p>
-          </div>
+          <div v-if="report" class="space-y-4">
+            <div class="rounded-xl p-4" style="background: var(--bg-surface);">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-medium"
+                     style="background: var(--rose-lighter); color: var(--rose-primary);">
+                  {{ report.platform?.charAt(0).toUpperCase() || '?' }}
+                </div>
+                <div>
+                  <p class="text-sm font-medium" style="color: var(--text-primary);">{{ report.platform }}</p>
+                  <p class="text-xs" style="color: var(--text-muted);">{{ report.mail }}</p>
+                </div>
+              </div>
+              <p class="text-xs" style="color: var(--text-muted);">{{ report.problemType }}</p>
+            </div>
 
-          <!-- Form -->
-          <form @submit.prevent="handleSubmit" class="p-6 space-y-5">
-
-            <!-- Tipo de solución -->
             <div>
-              <label class="input-label">Tipo de solución *</label>
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <label class="input-label">Tipo de resoluci&oacute;n</label>
+              <div class="grid grid-cols-2 gap-2">
                 <button
-                  v-for="opt in resolutionTypes"
-                  :key="opt.value"
-                  type="button"
-                  @click="form.type = opt.value"
-                  :class="[
-                    'px-3 py-2.5 rounded-xl text-xs font-medium border transition-all duration-150 text-left',
-                    form.type === opt.value
-                      ? 'bg-rose-600/25 border-rose-500/60 text-rose-300'
-                      : 'border-rose-900/40 text-blush-400 hover:border-rose-800/60 hover:text-blush-200'
-                  ]"
+                  v-for="opt in resolutionOptions" :key="opt.value"
+                  @click="selectedType = opt.value"
+                  :class="['rounded-xl border px-3 py-2.5 text-sm font-medium transition-all duration-200 text-left']"
+                  :style="selectedType === opt.value
+                    ? { background: 'linear-gradient(135deg, var(--rose-primary), var(--rose-600))', borderColor: 'var(--rose-primary)', color: 'white' }
+                    : { background: 'var(--bg-surface)', borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }"
                 >
-                  <span class="block text-lg mb-0.5">{{ opt.emoji }}</span>
-                  {{ opt.label }}
+                  <p>{{ opt.label }}</p>
+                  <p v-if="opt.hint" class="text-xs opacity-70 mt-0.5">{{ opt.hint }}</p>
                 </button>
               </div>
             </div>
 
-            <!-- Datos de reposición (solo si type === 'replacement') -->
-            <Transition name="slide-down">
-              <div
-                v-if="form.type === 'replacement'"
-                class="space-y-3 rounded-xl border border-rose-800/30 p-4 bg-rose-900/10"
-              >
-                <p class="text-blush-400 text-xs font-medium uppercase tracking-wider">
-                  Datos de la cuenta de reposición
-                </p>
+            <div>
+              <label class="input-label">Soluci&oacute;n</label>
+              <textarea v-model="solutionText" rows="3" class="input-field resize-none" placeholder="Describe la soluci&oacute;n aplicada..."></textarea>
+            </div>
+
+            <div v-if="selectedType === 'replace'">
+              <p class="text-xs font-medium mb-2" style="color: var(--text-muted);">Nuevas credenciales</p>
+              <div class="rounded-xl p-4 space-y-3 border" style="background: var(--bg-surface); border-color: var(--border-color);">
                 <div>
-                  <label class="input-label">Nuevo correo *</label>
-                  <input
-                    v-model="form.replaced_mail"
-                    type="email"
-                    class="input-field"
-                    placeholder="nuevo@correo.com"
-                    :required="form.type === 'replacement'"
-                  />
+                  <label class="text-xs" style="color: var(--text-muted);">Nuevo correo</label>
+                  <input v-model="replaceMail" type="email" class="input-field mt-0.5" placeholder="nuevo@email.com" />
                 </div>
                 <div>
-                  <label class="input-label">Nueva contraseña *</label>
-                  <input
-                    v-model="form.replaced_password"
-                    type="text"
-                    class="input-field font-mono"
-                    placeholder="contraseña123"
-                    :required="form.type === 'replacement'"
-                  />
+                  <label class="text-xs" style="color: var(--text-muted);">Nueva contrase&ntilde;a</label>
+                  <input v-model="replacePassword" type="text" class="input-field mt-0.5" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
                 </div>
               </div>
-            </Transition>
-
-            <!-- Explicación -->
-            <div>
-              <label class="input-label">Explicación de la solución *</label>
-              <textarea
-                v-model="form.text"
-                class="input-field resize-none"
-                rows="4"
-                placeholder="Describe cómo se resolvió el problema, qué se hizo y cualquier instrucción adicional para el usuario..."
-                required
-              ></textarea>
-              <p class="text-blush-700 text-xs mt-1">{{ form.text.length }} caracteres</p>
             </div>
 
-            <!-- Error -->
-            <div
-              v-if="errorMsg"
-              class="text-rose-400 text-xs bg-rose-900/20 border border-rose-800/40 rounded-lg px-3 py-2"
-            >
-              {{ errorMsg }}
+            <div v-if="error" class="rounded-lg border px-3 py-2 text-xs"
+                 style="border-color: rgba(232,138,138,0.3); background: var(--error-bg); color: var(--error);">
+              {{ error }}
             </div>
 
-            <!-- Acciones -->
-            <div class="flex gap-3 pt-1">
-              <button type="button" @click="close" class="btn-secondary flex-1">
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                :disabled="submitting || !formValid"
-                class="btn-primary flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <svg v-if="submitting" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+            <div class="flex justify-end gap-3 pt-2">
+              <button @click="cancel" class="btn-secondary text-sm">Cancelar</button>
+              <button @click="handleResolve" :disabled="saving" class="btn-primary text-sm">
+                <svg v-if="saving" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                 </svg>
-                {{ submitting ? 'Guardando...' : (isEditing ? 'Actualizar resolución' : 'Marcar como resuelto') }}
+                <span v-if="saving">Resolviendo...</span>
+                <span v-else>Resolver</span>
               </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </Transition>
@@ -145,110 +97,66 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, watch } from 'vue'
-import { useReportsStore } from '../../store/reports'
+import { ref, watch } from 'vue'
 import { useToastStore } from '../../store/toast'
+import { useReportsStore } from '../../store/reports'
+
+const toast = useToastStore()
+const reportsStore = useReportsStore()
 
 const props = defineProps({
-  modelValue: { type: Boolean, required: true },
-  report:     { type: Object,  default: null },
-  isEditing:  { type: Boolean, default: false },
+  visible: Boolean,
+  report: Object,
 })
 
-const emit = defineEmits(['update:modelValue', 'resolved'])
+const emit = defineEmits(['close', 'resolved'])
 
-const reportsStore = useReportsStore()
-const toast        = useToastStore()
+const saving = ref(false)
+const error = ref('')
+const selectedType = ref('fix')
+const solutionText = ref('')
+const replaceMail = ref('')
+const replacePassword = ref('')
 
-const submitting = ref(false)
-const errorMsg   = ref('')
-
-const form = reactive({
-  type:              '',
-  text:              '',
-  replaced_mail:     '',
-  replaced_password: '',
-})
-
-const resolutionTypes = [
-  { value: 'replacement', label: 'Reposición',       emoji: '🔄' },
-  { value: 'fix',         label: 'Corrección',        emoji: '🔧' },
-  { value: 'refund',      label: 'Reembolso',         emoji: '💰' },
-  { value: 'no_fault',    label: 'Sin falla',         emoji: '✅' },
-  { value: 'other',       label: 'Otro',              emoji: '📝' },
+const resolutionOptions = [
+  { value: 'fix',     label: 'Correcci&oacute;n', hint: 'Sin cambio de credenciales' },
+  { value: 'replace', label: 'Reemplazo',           hint: 'Nuevo correo y contrase&ntilde;a' },
 ]
 
-const formValid = computed(() =>
-  form.type &&
-  form.text.trim().length > 0 &&
-  (form.type !== 'replacement' || (form.replaced_mail && form.replaced_password))
-)
-
-// Pre-llenar cuando se abre en modo edición
-watch(() => props.modelValue, (open) => {
-  errorMsg.value = ''
-  if (!open) return
-
-  if (props.isEditing && props.report?.resolution) {
-    const r = props.report.resolution
-    form.type              = r.type              || ''
-    form.text              = r.text              || ''
-    form.replaced_mail     = r.replaced_mail     || ''
-    form.replaced_password = r.replaced_password || ''
-  } else {
-    form.type              = ''
-    form.text              = ''
-    form.replaced_mail     = ''
-    form.replaced_password = ''
+watch(() => props.visible, (v) => {
+  if (v) {
+    selectedType.value = 'fix'
+    solutionText.value = ''
+    replaceMail.value = ''
+    replacePassword.value = ''
+    error.value = ''
   }
 })
 
-function close() {
-  emit('update:modelValue', false)
-}
+function cancel() { emit('close') }
 
-async function handleSubmit() {
-  submitting.value = true
-  errorMsg.value   = ''
-
+async function handleResolve() {
+  error.value = ''
+  saving.value = true
   try {
-    const payload = {
-      type: form.type,
-      text: form.text,
-      ...(form.type === 'replacement' && {
-        replaced_mail:     form.replaced_mail,
-        replaced_password: form.replaced_password,
-      }),
+    const payload = { text: solutionText.value, type: selectedType.value }
+    if (selectedType.value === 'replace') {
+      payload.replaced_mail = replaceMail.value
+      payload.replaced_password = replacePassword.value
     }
-
-    const result = props.isEditing
-      ? await reportsStore.updateResolution(props.report._id, payload)
-      : await reportsStore.resolveReport(props.report._id, payload)
-
-    if (result.success) {
-      toast.success(
-        result.message ||
-        (props.isEditing ? 'Resolución actualizada.' : 'Reporte resuelto correctamente.')
-      )
-      emit('resolved', result.data)
-      close()
-    } else {
-      errorMsg.value = result.message
+    await reportsStore.resolveReport(props.report._id, payload)
+    const typeLabel = resolutionOptions.find(o => o.value === selectedType.value)?.label || selectedType.value
+    const msgParts = ['Reporte resuelto (' + typeLabel + ')']
+    if (selectedType.value === 'replace' && replaceMail.value) {
+      msgParts.push('Reemplazo: ' + replaceMail.value)
     }
+    toast.success('Reporte resuelto', msgParts.join(' — '))
+    emit('resolved')
+    emit('close')
+  } catch (e) {
+    error.value = e.message || 'Error al resolver el reporte'
   } finally {
-    submitting.value = false
+    saving.value = false
   }
 }
 </script>
-
-<style scoped>
-.modal-enter-active,
-.modal-leave-active { transition: opacity 0.25s ease; }
-.modal-enter-from,
-.modal-leave-to     { opacity: 0; }
-
-.slide-down-enter-active,
-.slide-down-leave-active { transition: all 0.25s ease; }
-.slide-down-enter-from   { opacity: 0; transform: translateY(-8px); }
-.slide-down-leave-to     { opacity: 0; transform: translateY(-8px); }
-</style>

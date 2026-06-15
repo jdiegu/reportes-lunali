@@ -3,38 +3,41 @@ export default {
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
-
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
         blush: {
-          50: "#fdf4f7",
-          100: "#fce7ef",
-          200: "#f9d0df",
-          300: "#f4a9c3",
-          400: "#ec729f",
-          500: "#e71a55",
-          600: "#d1154c",
-          700: "#a31040",
-          800: "#7f1036",
-          900: "#5b0d2a",
+          50: "#fdf6f9",
+          100: "#fdf0f4",
+          200: "#fce7ef",
+          300: "#f5d6e0",
+          400: "#f2c4d3",
+          500: "#d46a8a",
+          600: "#c45a7a",
+          700: "#a34565",
+          800: "#7f3650",
+          900: "#5b2a3c",
         },
-
-        dark: {
-          950: "#1a0f15",
+        rose: {
+          50: "#fdf6f9",
+          100: "#fdf0f4",
+          200: "#fce7ef",
+          300: "#f5d6e0",
+          400: "#f2c4d3",
+          500: "#d46a8a",
+          600: "#c45a7a",
+          700: "#a34565",
+          800: "#7f3650",
+          900: "#5b2a3c",
         },
       },
-
       fontFamily: {
-        body: ["Inter", "sans-serif"],
-        display: ["Poppins", "sans-serif"],
-      },
-
-      boxShadow: {
-        rose: "0 0 20px rgba(231,26,85,0.35)",
+        display: ["Playfair Display", "serif"],
+        body: ["DM Sans", "system-ui", "sans-serif"],
+        mono: ["JetBrains Mono", "monospace"],
       },
     },
   },
-
   plugins: [],
 }

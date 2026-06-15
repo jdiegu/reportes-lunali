@@ -5,9 +5,10 @@ export const useToastStore = defineStore('toast', () => {
   const toasts = ref([])
   let nextId = 0
 
-  function add(message, type = 'info', duration = 4000) {
+  function add(msg, type = 'info', duration = 4000) {
     const id = ++nextId
-    toasts.value.push({ id, message, type })
+    const toast = typeof msg === 'string' ? { title: msg } : msg
+    toasts.value.push({ id, type, ...toast })
     if (duration > 0) setTimeout(() => remove(id), duration)
     return id
   }
@@ -16,10 +17,10 @@ export const useToastStore = defineStore('toast', () => {
     toasts.value = toasts.value.filter(t => t.id !== id)
   }
 
-  const success = (msg, d) => add(msg, 'success', d)
-  const error   = (msg, d) => add(msg, 'error', d)
-  const info    = (msg, d) => add(msg, 'info', d)
-  const warning = (msg, d) => add(msg, 'warning', d)
+  const success = (title, msg, d) => add(typeof title === 'object' ? title : { title, message: msg }, 'success', d || 4000)
+  const error   = (title, msg, d) => add(typeof title === 'object' ? title : { title, message: msg }, 'error', d || 4000)
+  const info    = (title, msg, d) => add(typeof title === 'object' ? title : { title, message: msg }, 'info', d || 4000)
+  const warning = (title, msg, d) => add(typeof title === 'object' ? title : { title, message: msg }, 'warning', d || 4000)
 
   return { toasts, add, remove, success, error, info, warning }
 })

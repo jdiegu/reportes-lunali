@@ -2,36 +2,23 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
   history: createWebHistory(),
-
-  scrollBehavior() {
-    return { top: 0 };
-  },
-
+  scrollBehavior() { return { top: 0 }; },
   routes: [
-    // ─────────────────────────────
-    // LOGIN
-    // ─────────────────────────────
-
+    {
+      path: "/",
+      name: "Landing",
+      component: () => import("../views/LandingPage.vue"),
+    },
     {
       path: "/login",
       name: "Login",
       component: () => import("../views/auth/Loginview.vue"),
-      meta: {
-        guest: true,
-      },
+      meta: { guest: true },
     },
-
-    // ─────────────────────────────
-    // APP
-    // ─────────────────────────────
-
     {
-      path: "/",
+      path: "/app",
       component: () => import("../components/layout/AppLayout.vue"),
-      meta: {
-        requiresAuth: true,
-      },
-
+      meta: { requiresAuth: true },
       children: [
         {
           path: "",
@@ -47,9 +34,7 @@ const router = createRouter({
           path: "reports/new",
           name: "NewReport",
           component: () => import("../views/user/NewReportView.vue"),
-          meta: {
-            userOnly: true,
-          },
+          meta: { userOnly: true },
         },
         {
           path: "reports/:id",
@@ -60,73 +45,24 @@ const router = createRouter({
           path: "admin",
           name: "Admin",
           component: () => import("../views/admin/AdminView.vue"),
-          meta: {
-            adminOnly: true,
-          },
+          meta: { adminOnly: true },
         },
       ],
     },
-
-    // ─────────────────────────────
-    // NOT FOUND
-    // ─────────────────────────────
-
-    {
-      path: "/:pathMatch(.*)*",
-
-      redirect: "/",
-    },
+    { path: "/:pathMatch(.*)*", redirect: "/" },
   ],
 });
 
-// ─────────────────────────────────────────────
-// AUTH GUARD
-// ─────────────────────────────────────────────
-
 router.beforeEach((to) => {
-  // Obtener datos DIRECTO del localStorage
-  // porque Pinia aún no hidrata al cargar
-
   const token = localStorage.getItem("lunali_token");
-
   const user = JSON.parse(localStorage.getItem("lunali_user") || "null");
-
   const isLoggedIn = !!token && !!user;
-
   const isAdmin = ["admin", "superadmin", "boss"].includes(user?.role);
 
-  // ─────────────────────────────
-  // Requiere login
-  // ─────────────────────────────
-
-  if (to.meta.requiresAuth && !isLoggedIn) {
-    return "/login";
-  }
-
-  // ─────────────────────────────
-  // Página guest
-  // ─────────────────────────────
-
-  if (to.meta.guest && isLoggedIn) {
-    return "/";
-  }
-
-  // ─────────────────────────────
-  // Solo admins
-  // ─────────────────────────────
-
-  if (to.meta.adminOnly && !isAdmin) {
-    return "/";
-  }
-
-  // ─────────────────────────────
-  // Solo users normales
-  // ─────────────────────────────
-
-  if (to.meta.userOnly && isAdmin) {
-    return "/reports";
-  }
-
+  if (to.meta.requiresAuth && !isLoggedIn) return "/login";
+  if (to.meta.guest && isLoggedIn) return "/app";
+  if (to.meta.adminOnly && !isAdmin) return "/app";
+  if (to.meta.userOnly && isAdmin) return "/app/reports";
   return true;
 });
 
