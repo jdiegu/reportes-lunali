@@ -1,43 +1,45 @@
 <template>
-  <div class="p-4 lg:p-6 space-y-6">
-    <div class="flex items-center justify-between">
+  <div class="p-4 sm:p-5 lg:p-6 space-y-4 sm:space-y-5 lg:space-y-6">
+    <div class="flex items-start sm:items-center justify-between gap-3">
       <div>
-        <h1 class="text-xl">Reportes</h1>
-        <p class="text-sm mt-0.5" style="color: var(--text-muted);">
+        <h1 class="text-xl sm:text-2xl">Reportes</h1>
+        <p class="text-xs sm:text-sm mt-0.5" style="color: var(--text-muted);">
           {{ authStore.isAdmin ? 'Todos los reportes del sistema' : 'Tus reportes registrados' }}
         </p>
       </div>
     </div>
 
-    <div class="card p-4">
-      <div class="flex flex-wrap items-center gap-2">
-        <div class="relative flex-1 min-w-[180px]">
-          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--text-muted);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+    <div class="card p-3 sm:p-4">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2.5">
+        <div class="relative flex-1 min-w-0">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--text-muted);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
           <input v-model="filters.search" @input="onSearch" type="text" placeholder="Buscar..."
                  class="input-field pl-9 text-sm" />
         </div>
-        <select v-model="filters.status" @change="onFilterChange" class="input-field w-auto text-sm">
-          <option value="">Todos</option>
-          <option value="pending">Pendiente</option>
-          <option value="in_progress">En proceso</option>
-          <option value="resolved">Resuelto</option>
-        </select>
-        <select v-model="filters.platform" @change="onFilterChange" class="input-field w-auto text-sm">
-          <option value="">Plataformas</option>
-          <option v-for="p in platforms" :key="p" :value="p">{{ p }}</option>
-        </select>
-        <button @click="onFilterChange" class="btn-secondary text-xs h-[38px]">
-          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-          </svg>
-        </button>
+        <div class="flex gap-2">
+          <select v-model="filters.status" @change="onFilterChange" class="input-field text-sm !w-auto flex-1 sm:flex-initial">
+            <option value="">Todos</option>
+            <option value="pending">Pendiente</option>
+            <option value="in_progress">En proceso</option>
+            <option value="resolved">Resuelto</option>
+          </select>
+          <select v-model="filters.platform" @change="onFilterChange" class="input-field text-sm !w-auto flex-1 sm:flex-initial">
+            <option value="">Plataformas</option>
+            <option v-for="p in platforms" :key="p" :value="p">{{ p }}</option>
+          </select>
+          <button @click="onFilterChange" class="btn-secondary text-xs !h-[38px] !px-3 shrink-0">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
 
     <div class="space-y-2">
-      <div v-if="loading" class="card p-5 space-y-3">
+      <div v-if="loading" class="card p-4 sm:p-5 space-y-3">
         <div v-for="i in 5" :key="i" class="flex items-center gap-3">
           <div class="skeleton w-10 h-10 rounded-xl shrink-0"></div>
           <div class="flex-1 space-y-2">
@@ -48,10 +50,10 @@
       </div>
 
       <template v-else>
-        <div v-if="sortedReports.length === 0" class="card py-16 text-center">
+        <div v-if="sortedReports.length === 0" class="card py-12 sm:py-16 text-center px-4">
           <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style="background: var(--rose-lighter);">
-            <svg class="w-7 h-7" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            <svg class="w-7 h-7" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
           </div>
           <p class="text-sm font-medium" style="color: var(--text-muted);">No se encontraron reportes</p>
@@ -65,7 +67,7 @@
       </template>
     </div>
 
-    <div v-if="sortedReports.length > 0" class="flex items-center justify-between pt-2">
+    <div v-if="sortedReports.length > 0" class="flex items-center justify-between pt-1">
       <p class="text-xs" style="color: var(--text-muted);">{{ sortedReports.length }} reporte(s)</p>
     </div>
   </div>

@@ -13,23 +13,23 @@ export const useReportsStore = defineStore("reports", () => {
   const pagination = reactive({ total: 0, pages: 1, page: 1 });
   const total = computed(() => pagination.total);
 
-  async function fetchReports(pageNum = 1) {
+  async function fetchReports(params = {}) {
     loading.value = true;
     error.value = null;
     try {
       const authStore = useAuthStore();
-      const params = {
-        page: typeof pageNum === "object" ? (pageNum.page || 1) : pageNum,
-        search: filters.search,
-        status: filters.status,
+      const queryParams = {
+        page: params.page || 1,
+        search: params.search || "",
+        status: params.status || "",
         userid: authStore.user?._id,
         role: authStore.user?.role,
       };
-      const { data } = await reportsApi.list(params);
+      const { data } = await reportsApi.list(queryParams);
       reports.value = Array.isArray(data) ? data : data?.reports || [];
       pagination.total = reports.value.length;
       pagination.pages = Math.ceil(reports.value.length / 50) || 1;
-      pagination.page = params.page;
+      pagination.page = queryParams.page;
     } catch (err) {
       error.value = err.response?.data?.message || "Error al cargar reportes";
     } finally {
@@ -86,7 +86,8 @@ export const useReportsStore = defineStore("reports", () => {
 
   async function fetchAdminReports() {
     try {
-      const { data } = await reportsApi.list({ all: true });
+      const authStore = useAuthStore();
+      const { data } = await reportsApi.list({ all: true, role: authStore.user?.role });
       return Array.isArray(data) ? data : [];
     } catch {
       return [];
@@ -153,7 +154,7 @@ export const useReportsStore = defineStore("reports", () => {
   async function resolveReport(id, payload) {
     try {
       await reportsApi.resolve(id, payload);
-      await fetchReports(pagination.page);
+      await fetchReports({ page: pagination.page });
       if (currentReport.value && currentReport.value._id === id) {
         await fetchReport(id);
       }
@@ -169,7 +170,7 @@ export const useReportsStore = defineStore("reports", () => {
   async function updateResolution(id, payload) {
     try {
       await reportsApi.resolve(id, payload);
-      await fetchReports(pagination.page);
+      await fetchReports({ page: pagination.page });
       if (currentReport.value && currentReport.value._id === id) {
         await fetchReport(id);
       }

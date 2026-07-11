@@ -6,8 +6,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "Landing",
-      component: () => import("../views/LandingPage.vue"),
+      redirect: "/login",
     },
     {
       path: "/login",
@@ -25,9 +24,11 @@ const router = createRouter({
         { path: "reports/new", name: "NewReport", component: () => import("../views/user/NewReportView.vue"), meta: { userOnly: true } },
         { path: "reports/:id", name: "ReportDetail", component: () => import("../views/user/ReportDetailView.vue") },
         { path: "admin", name: "Admin", component: () => import("../views/admin/AdminView.vue"), meta: { adminOnly: true } },
+        { path: "admin/users/:id", name: "UserBalance", component: () => import("../views/admin/UserBalanceView.vue"), meta: { adminOnly: true } },
+        { path: "balance", name: "Balance", component: () => import("../views/user/BalanceView.vue") },
       ],
     },
-    { path: "/:pathMatch(.*)*", redirect: "/" },
+    { path: "/:pathMatch(.*)*", redirect: "/login" },
   ],
 });
 

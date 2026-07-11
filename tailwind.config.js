@@ -33,9 +33,13 @@ export default {
         },
       },
       fontFamily: {
-        display: ["Playfair Display", "serif"],
-        body: ["DM Sans", "system-ui", "sans-serif"],
+        display: ["Playfair Display", "Georgia", "serif"],
+        body: ["DM Sans", "system-ui", "-apple-system", "sans-serif"],
         mono: ["JetBrains Mono", "monospace"],
+      },
+      borderRadius: {
+        '2xl': '1rem',
+        '3xl': '1.5rem',
       },
     },
   },

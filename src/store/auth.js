@@ -16,124 +16,68 @@ export const useAuthStore = defineStore('auth', () => {
 
   const error = ref(null)
 
-  // ─────────────────────────────────────────────
-  // COMPUTED
-  // ─────────────────────────────────────────────
-
   const isLoggedIn = computed(() =>
     !!token.value && !!user.value
   )
 
   const isAdmin = computed(() =>
-    ['admin', 'superadmin'].includes(user.value?.role)
+    ['admin', 'boss'].includes(user.value?.role)
   )
 
   const userRole = computed(() =>
     user.value?.role || 'guest'
   )
 
-  // ─────────────────────────────────────────────
-  // LOGIN
-  // ─────────────────────────────────────────────
+  const balance = computed(() =>
+    user.value?.balance || 0
+  )
+
+  function updateBalance(newBalance) {
+    if (user.value) {
+      user.value.balance = newBalance
+      localStorage.setItem('lunali_user', JSON.stringify(user.value))
+    }
+  }
 
   async function login(credentials) {
     loading.value = true
     error.value = null
-
     try {
       const { data } = await authApi.login(credentials)
-
       token.value = data.token
       user.value = data.user
-
-      localStorage.setItem(
-        'lunali_token',
-        data.token
-      )
-
-      localStorage.setItem(
-        'lunali_user',
-        JSON.stringify(data.user)
-      )
-
-      return {
-        success: true,
-        user: data.user
-      }
-
+      localStorage.setItem('lunali_token', data.token)
+      localStorage.setItem('lunali_user', JSON.stringify(data.user))
+      return { success: true, user: data.user }
     } catch (err) {
-
-      error.value =
-        err.response?.data?.message ||
-        'Error al iniciar sesión'
-
-      return {
-        success: false,
-        message: error.value
-      }
-
+      error.value = err.response?.data?.message || 'Error al iniciar sesion'
+      return { success: false, message: error.value }
     } finally {
       loading.value = false
     }
   }
-
-  // ─────────────────────────────────────────────
-  // REGISTER
-  // ─────────────────────────────────────────────
 
   async function register(credentials) {
-
     loading.value = true
     error.value = null
-
     try {
-
-      const { data } =
-        await authApi.register(credentials)
-
+      const { data } = await authApi.register(credentials)
       token.value = data.token
       user.value = data.user
-
-      localStorage.setItem(
-        'lunali_token',
-        data.token
-      )
-
-      localStorage.setItem(
-        'lunali_user',
-        JSON.stringify(data.user)
-      )
-
-      return {
-        success: true,
-        user: data.user
-      }
-
+      localStorage.setItem('lunali_token', data.token)
+      localStorage.setItem('lunali_user', JSON.stringify(data.user))
+      return { success: true, user: data.user }
     } catch (err) {
-
-      error.value =
-        err.response?.data?.message ||
-        'Error al registrarse'
-
-      return {
-        success: false,
-        message: error.value
-      }
-
+      error.value = err.response?.data?.message || 'Error al registrarse'
+      return { success: false, message: error.value }
     } finally {
       loading.value = false
     }
   }
 
-  // ─────────────────────────────────────────────
-  // LOGOUT
-  // ─────────────────────────────────────────────
-
   function logout() {
-
     token.value = null
     user.value = null
-
     localStorage.removeItem('lunali_token')
     localStorage.removeItem('lunali_user')
   }
@@ -147,9 +91,11 @@ export const useAuthStore = defineStore('auth', () => {
     isLoggedIn,
     isAdmin,
     userRole,
+    balance,
 
     login,
     register,
-    logout
+    logout,
+    updateBalance,
   }
 })

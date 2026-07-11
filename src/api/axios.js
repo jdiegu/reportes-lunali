@@ -44,4 +44,11 @@ export const reportsApi = {
   delete: (id) => api.delete(`/reports/${id}`),
 };
 
+export const usersApi = {
+  list: () => api.get("/users"),
+  get: (id) => api.get(`/users/${id}`),
+  updateBalance: (id, amount, operation) =>
+    api.patch(`/users/${id}/balance`, { amount, operation }),
+};
+
 export default api;

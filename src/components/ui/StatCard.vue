@@ -1,16 +1,17 @@
 <template>
-  <div class="card p-5 flex items-center gap-4">
-    <div :class="['w-11 h-11 rounded-xl flex items-center justify-center shrink-0', colorMap[stat.color]?.bg || 'bg-rose-100']">
-      <svg class="w-5 h-5" :class="colorMap[stat.color]?.text || 'text-rose-500'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="iconPaths[stat.icon] || iconPaths.list" />
+  <div class="card p-4 sm:p-5 flex items-center gap-3 sm:gap-4">
+    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0"
+         :style="{ background: colorMap[stat.color]?.bg || 'var(--rose-lighter)' }">
+      <svg class="w-5 h-5" :style="{ color: colorMap[stat.color]?.text || 'var(--rose-primary)' }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" :d="iconPaths[stat.icon] || iconPaths.list" />
       </svg>
     </div>
     <div class="min-w-0">
-      <div v-if="loading" class="skeleton h-7 w-12 rounded mb-1"></div>
-      <p v-else class="text-2xl font-display font-bold" :class="colorMap[stat.color]?.text || 'text-rose-500'">
+      <div v-if="loading" class="skeleton h-6 sm:h-7 w-10 sm:w-12 rounded mb-1"></div>
+      <p v-else class="text-xl sm:text-2xl font-display font-bold" :style="{ color: colorMap[stat.color]?.text || 'var(--rose-primary)' }">
         {{ stat.value }}
       </p>
-      <p class="text-xs" style="color: var(--text-muted);">{{ stat.label }}</p>
+      <p class="text-[11px] sm:text-xs" style="color: var(--text-muted);">{{ stat.label }}</p>
     </div>
   </div>
 </template>
@@ -22,10 +23,10 @@ defineProps({
 })
 
 const colorMap = {
-  rose:    { bg: 'bg-rose-100',    text: 'text-rose-500' },
-  amber:   { bg: 'bg-amber-100',   text: 'text-amber-600' },
-  blue:    { bg: 'bg-blue-100',    text: 'text-blue-500' },
-  emerald: { bg: 'bg-emerald-100', text: 'text-emerald-500' },
+  rose:    { bg: 'var(--rose-lighter)',   text: 'var(--rose-primary)' },
+  amber:   { bg: 'var(--warning-bg)',     text: 'var(--warning)' },
+  blue:    { bg: 'var(--info-bg)',        text: 'var(--info)' },
+  emerald: { bg: 'var(--success-bg)',     text: 'var(--success)' },
 }
 
 const iconPaths = {
