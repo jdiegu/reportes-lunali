@@ -30,7 +30,7 @@
     ]">
       <header class="h-14 sm:h-16 flex items-center gap-3 px-4 lg:px-6 border-b shrink-0 sticky top-0 z-30"
               :style="{ background: 'var(--header-bg)', borderColor: 'var(--sidebar-border)', backdropFilter: 'blur(16px)' }">
-        <button @click="toggleSidebar" class="btn-icon !w-9 !h-9">
+        <button @click="toggleSidebar" class="btn-icon !w-9 !h-9" style="color: var(--rose-primary);">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
           </svg>
@@ -42,13 +42,13 @@
 
         <div class="flex items-center gap-1.5">
           <button v-if="!authStore.isAdmin" @click="router.push('/app/reports/new')" class="btn-primary text-xs sm:text-sm !py-2 !px-3 sm:!px-4">
-            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
             </svg>
             <span class="hidden sm:inline">Nuevo</span>
           </button>
 
-          <button @click="toggleTheme" class="btn-icon hidden sm:flex" :title="isDark ? 'Modo claro' : 'Modo oscuro'">
+          <button @click="toggleTheme" class="btn-icon hidden sm:flex" :title="isDark ? 'Modo claro' : 'Modo oscuro'" style="color: var(--rose-primary);">
             <svg v-if="isDark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
             </svg>
@@ -63,8 +63,33 @@
         </div>
       </header>
 
-      <main class="flex-1 overflow-y-auto">
-        <RouterView />
+      <main class="flex-1 overflow-y-auto flex flex-col">
+        <div class="flex-1">
+          <RouterView />
+        </div>
+        <footer class="border-t shrink-0" :style="{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }">
+          <div class="px-4 py-4 sm:py-5">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div class="flex items-center gap-2.5">
+                <div class="w-5 h-5 rounded-full overflow-hidden shrink-0 ring-2" :style="{ '--tw-ring-color': 'var(--rose-primary)' }">
+                  <img src="/icon.png" alt="Lunali" class="w-full h-full object-cover" />
+                </div>
+                <div class="flex items-center gap-2 text-xs" style="color: var(--text-muted);">
+                  <span class="font-semibold" style="color: var(--rose-primary);">Lunali Streaming</span>
+                  <span class="opacity-40">·</span>
+                  <span>Desarrollado por <span class="font-semibold" style="color: var(--text-secondary);">jdiegu</span></span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 text-xs px-2.5 py-1 rounded-full"
+                   :style="{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)' }">
+                <svg class="w-3 h-3" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                </svg>
+                <span style="color: var(--text-secondary);">+52 271 141 0542</span>
+              </div>
+            </div>
+          </div>
+        </footer>
       </main>
     </div>
 

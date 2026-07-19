@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-4xl mx-auto p-4 sm:p-5 lg:p-6 space-y-5 sm:space-y-6">
     <div class="flex items-center justify-between">
-      <button @click="goBack" class="inline-flex items-center gap-2 btn-ghost text-xs sm:text-sm no-underline !px-2 sm:!px-3">
+      <button @click="goBack" class="inline-flex items-center gap-2 btn-ghost text-xs sm:text-sm no-underline !px-2 sm:!px-3" style="color: var(--rose-primary);">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
         </svg>
@@ -33,6 +33,10 @@
             <div class="flex-1 min-w-0">
               <h1 class="text-xl sm:text-2xl mb-0.5">{{ report.platform }}</h1>
               <p class="text-xs sm:text-sm truncate" style="color: var(--text-muted);">{{ report.mail }}</p>
+              <p v-if="report.user?.phone" class="text-[10px] sm:text-xs mt-0.5 flex items-center gap-1" style="color: var(--text-muted);">
+                <svg class="w-3 h-3 shrink-0" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                {{ report.user.phone }}
+              </p>
             </div>
             <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
               <button v-if="authStore.isAdmin && report.status !== 'resolved'" @click="openResolveModal" class="btn-primary text-xs">
@@ -62,9 +66,17 @@
               <div v-for="info in reportInfo" :key="info.label" class="rounded-xl p-3" style="background: var(--bg-surface);">
                 <p class="text-[10px] font-semibold uppercase tracking-wider mb-1" style="color: var(--text-muted);">{{ info.label }}</p>
                 <div class="flex items-center gap-2">
-                  <p class="text-xs sm:text-sm font-medium truncate" :class="info.mono ? 'font-mono' : ''" style="color: var(--text-primary);">{{ info.value }}</p>
-                  <button v-if="info.copy" @click="copyToClipboard(info.copy)" class="btn-ghost shrink-0 !p-0.5">
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <p class="text-xs sm:text-sm font-medium truncate" :class="info.mono ? 'font-mono' : ''" style="color: var(--text-primary);">
+                    <template v-if="info.isPassword">{{ showReportPassword ? info.value : '••••••' }}</template>
+                    <template v-else>{{ info.value }}</template>
+                  </p>
+                  <button v-if="info.isPassword" @click="showReportPassword = !showReportPassword" class="btn-ghost shrink-0 !p-1 rounded-lg" :title="showReportPassword ? 'Ocultar' : 'Mostrar'" style="color: var(--rose-primary);">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" :d="showReportPassword ? 'M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21' : 'M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'"/>
+                    </svg>
+                  </button>
+                  <button v-if="info.copy" @click="copyToClipboard(info.copy)" class="btn-ghost shrink-0 !p-1 rounded-lg" title="Copiar" style="color: var(--rose-primary);">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"/>
                     </svg>
                   </button>
@@ -136,8 +148,8 @@
                   <span class="text-[10px] sm:text-xs" style="color: var(--text-muted);">Nuevo correo</span>
                   <div class="flex items-center gap-2 mt-0.5">
                     <span class="text-xs sm:text-sm font-medium truncate" style="color: var(--text-primary);">{{ report.resolution.replaced_mail }}</span>
-                    <button @click="copyToClipboard(report.resolution.replaced_mail)" class="btn-ghost shrink-0 !p-1">
-                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <button @click="copyToClipboard(report.resolution.replaced_mail)" class="btn-ghost shrink-0 !p-1 rounded-lg" style="color: var(--rose-primary);">
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"/>
                       </svg>
                     </button>
@@ -149,13 +161,13 @@
                     <span class="text-xs sm:text-sm font-mono font-medium truncate" style="color: var(--text-primary);">
                       {{ showPassword ? report.resolution.replaced_password : '••••••••••••' }}
                     </span>
-                    <button @click="showPassword = !showPassword" class="btn-ghost shrink-0 !p-1" :title="showPassword ? 'Ocultar' : 'Mostrar'">
-                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <button @click="showPassword = !showPassword" class="btn-ghost shrink-0 !p-1 rounded-lg" :title="showPassword ? 'Ocultar' : 'Mostrar'" style="color: var(--rose-primary);">
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" :d="showPassword ? 'M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21' : 'M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'"/>
                       </svg>
                     </button>
-                    <button @click="copyToClipboard(report.resolution.replaced_password)" class="btn-ghost shrink-0 !p-1">
-                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <button @click="copyToClipboard(report.resolution.replaced_password)" class="btn-ghost shrink-0 !p-1 rounded-lg" style="color: var(--rose-primary);">
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2"/>
                       </svg>
                     </button>
@@ -246,6 +258,7 @@ const toast = useToastStore()
 
 const loading = ref(true)
 const showPassword = ref(false)
+const showReportPassword = ref(false)
 const lightboxSrc = ref(null)
 const showResolveModal = ref(false)
 const showEditModal = ref(false)
@@ -270,11 +283,12 @@ const reportInfo = computed(() => {
     { label: 'Plataforma', value: r.platform },
     { label: 'Tipo', value: r.platform_type === 'profile' ? 'Perfil' : 'Cuenta' },
     { label: 'Cuenta', value: r.mail },
-    { label: 'Contrasena', value: r.password ? '••••••' : '—', copy: r.password },
+    { label: 'Contrasena', value: r.password, isPassword: true, copy: r.password },
+    { label: 'Telefono del cliente', value: r.user?.phone || '—', copy: r.user?.phone },
     { label: 'Fecha de entrega', value: formatDate(r.delivery_date) },
+    { label: 'Reportado por', value: r.user?.name || r.user?.username || '—' },
     { label: 'Creado', value: formatDate(r.createdAt) },
     { label: 'Actualizado', value: formatDate(r.updatedAt) },
-    { label: 'Reportado por', value: r.user?.name || r.user?.username || '—' },
   ]
 })
 

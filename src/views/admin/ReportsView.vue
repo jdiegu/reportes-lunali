@@ -7,12 +7,18 @@
           {{ authStore.isAdmin ? 'Todos los reportes del sistema' : 'Tus reportes registrados' }}
         </p>
       </div>
+      <button @click="sortAsc = !sortAsc" class="btn-ghost text-xs !px-3 !py-2 gap-1.5 shrink-0" :title="sortAsc ? 'Mas antiguos primero' : 'Mas recientes primero'" style="color: var(--rose-primary);">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"/>
+        </svg>
+        {{ sortAsc ? 'Antiguos' : 'Recientes' }}
+      </button>
     </div>
 
     <div class="card p-3 sm:p-4">
       <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2.5">
         <div class="relative flex-1 min-w-0">
-          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--text-muted);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
           <input v-model="filters.search" @input="onSearch" type="text" placeholder="Buscar..."
@@ -29,8 +35,8 @@
             <option value="">Plataformas</option>
             <option v-for="p in platforms" :key="p" :value="p">{{ p }}</option>
           </select>
-          <button @click="onFilterChange" class="btn-secondary text-xs !h-[38px] !px-3 shrink-0">
-            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <button @click="onFilterChange" class="btn-secondary text-xs !h-[38px] !px-3 shrink-0" style="color: var(--rose-primary);">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
             </svg>
           </button>
@@ -85,6 +91,7 @@ const authStore = useAuthStore()
 const reportsStore = useReportsStore()
 const loading = ref(true)
 const searchTimer = ref(null)
+const sortAsc = ref(true)
 const filters = ref({ search: '', status: '', platform: '' })
 
 const platforms = ['Netflix', 'Spotify', 'HBO', 'Disney+', 'Prime Video', 'Crunchyroll', 'YouTube Premium', 'Otro']
@@ -101,7 +108,10 @@ const sortedReports = computed(() => {
   if (status) list = list.filter(r => r.status === status)
   if (platform) list = list.filter(r => r.platform === platform)
 
-  list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+  list.sort((a, b) => sortAsc.value
+    ? new Date(a.createdAt) - new Date(b.createdAt)
+    : new Date(b.createdAt) - new Date(a.createdAt)
+  )
   return list
 })
 

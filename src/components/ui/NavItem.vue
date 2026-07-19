@@ -7,12 +7,12 @@
     ]"
     :style="isActive
       ? { background: 'var(--sidebar-active-bg)', color: 'white' }
-      : { color: 'var(--text-muted)' }"
+      : { color: 'var(--text-secondary)' }"
     :title="!expanded ? item.label : undefined"
   >
     <svg class="w-[1.125rem] h-[1.125rem] shrink-0 transition-colors duration-200"
          :class="isActive ? 'text-white' : ''"
-         :style="!isActive ? { color: 'var(--text-muted)' } : {}"
+         :style="!isActive ? { color: 'var(--text-secondary)' } : {}"
          fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round" :d="iconPath" />
     </svg>

@@ -5,8 +5,8 @@
     @mouseenter="hover = true"
     @mouseleave="hover = false"
   >
-    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-xs sm:text-sm font-bold shrink-0 transition-all duration-200"
-         :style="{ background: hover ? 'var(--rose-gradient)' : 'var(--rose-lighter)', color: hover ? 'white' : 'var(--rose-primary)' }">
+    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center text-sm sm:text-base font-bold shrink-0 transition-all duration-200"
+         :style="{ background: hover ? 'var(--rose-gradient)' : 'var(--rose-lighter)', color: hover ? 'white' : 'var(--rose-primary)', boxShadow: hover ? '0 4px 12px rgba(196,90,122,0.3)' : 'none' }">
       {{ platformInitial }}
     </div>
     <div class="flex-1 min-w-0">

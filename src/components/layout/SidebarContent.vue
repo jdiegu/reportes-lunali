@@ -1,10 +1,12 @@
 <template>
   <div class="flex flex-col h-full">
     <div class="flex items-center h-14 sm:h-16 px-4 border-b shrink-0 gap-3" :style="{ borderColor: 'var(--sidebar-border)' }">
-      <div class="w-9 h-9 min-w-[2.25rem] rounded-xl flex items-center justify-center" style="background: var(--rose-gradient);">
-        <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4"/>
-        </svg>
+      <div class="sidebar-logo min-w-[2.5rem]">
+        <div class="sidebar-logo-ring">
+          <div class="sidebar-logo-inner">
+            <img src="/icon.png" alt="Lunali" class="sidebar-logo-img" />
+          </div>
+        </div>
       </div>
       <Transition name="fade-text">
         <span v-show="expanded" class="font-display font-bold text-lg whitespace-nowrap" style="color: var(--text-primary);">Lunali</span>
@@ -39,7 +41,7 @@
           </div>
         </Transition>
         <Transition name="fade-text">
-          <button v-show="expanded" @click="$emit('logout')" class="btn-icon shrink-0 !w-8 !h-8" title="Cerrar sesion">
+          <button v-show="expanded" @click="$emit('logout')" class="btn-icon shrink-0 !w-8 !h-8" title="Cerrar sesion" style="color: var(--error);">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
             </svg>
@@ -69,4 +71,23 @@ defineEmits(['toggleTheme', 'logout'])
 .fade-text-enter-active { transition: opacity 0.2s ease 0.05s; }
 .fade-text-leave-active { transition: opacity 0.1s ease; }
 .fade-text-enter-from, .fade-text-leave-to { opacity: 0; }
+
+.sidebar-logo { width: 2.5rem; height: 2.5rem; position: relative; }
+.sidebar-logo-ring {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  padding: 2px;
+  background: linear-gradient(135deg, #e88aac, #d46a8a, #b84a6a);
+}
+.sidebar-logo-inner {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--sidebar-bg);
+}
+.sidebar-logo-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
 </style>

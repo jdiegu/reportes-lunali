@@ -102,7 +102,11 @@ const reportsStore = useReportsStore()
 const loading = ref(true)
 const allReports = ref([])
 
-const recentList = computed(() => allReports.value.slice(0, 5))
+const recentList = computed(() => {
+  return [...allReports.value]
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+    .slice(0, 5)
+})
 
 const stats = computed(() => [
   { label: 'Total', value: allReports.value.length, icon: 'list', color: 'rose' },
