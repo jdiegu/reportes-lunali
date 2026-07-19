@@ -68,6 +68,7 @@
         <ReportRow
           v-for="report in sortedReports" :key="report._id"
           :report="report"
+          :show-user="authStore.isAdmin"
           @click="router.push(`/app/reports/${report._id}`)"
         />
       </template>

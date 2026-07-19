@@ -44,7 +44,7 @@
             <div class="logo-glow"></div>
           </div>
           <h1 class="login-title text-3xl sm:text-4xl mb-2">Lunali</h1>
-          <p class="text-sm sm:text-base login-subtitle">Sistema de reportes para streaming</p>
+          <p class="text-sm sm:text-base login-subtitle">Sistema de reportes</p>
         </div>
 
         <div class="login-card p-6 sm:p-8">
