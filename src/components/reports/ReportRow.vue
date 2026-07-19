@@ -90,6 +90,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { LOCALE } from '../../config/constants'
 
 const props = defineProps({
   report: Object,
@@ -143,13 +144,13 @@ const relativeDate = computed(() => {
   if (diff < 3600) return `${Math.floor(diff / 60)}m`
   if (diff < 86400) return `${Math.floor(diff / 3600)}h`
   if (diff < 604800) return `${Math.floor(diff / 86400)}d`
-  return date.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })
+  return date.toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' })
 })
 
 const deliveryDate = computed(() => {
   if (!props.report.delivery_date) return ''
   const d = new Date(props.report.delivery_date)
-  return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' })
+  return d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'short', year: 'numeric' })
 })
 </script>
 

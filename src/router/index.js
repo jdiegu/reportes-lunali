@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { STORAGE_KEYS } from "../config/constants";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -33,8 +34,8 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  const token = localStorage.getItem("lunali_token");
-  const user = JSON.parse(localStorage.getItem("lunali_user") || "null");
+  const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
+  const user = JSON.parse(localStorage.getItem(STORAGE_KEYS.USER) || "null");
   const isLoggedIn = !!token && !!user;
   const isAdmin = user?.role === "admin" || user?.role === "boss";
 

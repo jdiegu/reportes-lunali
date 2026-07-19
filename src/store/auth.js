@@ -1,15 +1,16 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { authApi } from '../api/axios'
+import { STORAGE_KEYS } from '../config/constants'
 
 export const useAuthStore = defineStore('auth', () => {
 
   const token = ref(
-    localStorage.getItem('lunali_token') || null
+    localStorage.getItem(STORAGE_KEYS.TOKEN) || null
   )
 
   const user = ref(
-    JSON.parse(localStorage.getItem('lunali_user') || 'null')
+    JSON.parse(localStorage.getItem(STORAGE_KEYS.USER) || 'null')
   )
 
   const loading = ref(false)
@@ -35,7 +36,7 @@ export const useAuthStore = defineStore('auth', () => {
   function updateBalance(newBalance) {
     if (user.value) {
       user.value.balance = newBalance
-      localStorage.setItem('lunali_user', JSON.stringify(user.value))
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user.value))
     }
   }
 
@@ -46,8 +47,8 @@ export const useAuthStore = defineStore('auth', () => {
       const { data } = await authApi.login(credentials)
       token.value = data.token
       user.value = data.user
-      localStorage.setItem('lunali_token', data.token)
-      localStorage.setItem('lunali_user', JSON.stringify(data.user))
+      localStorage.setItem(STORAGE_KEYS.TOKEN, data.token)
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(data.user))
       return { success: true, user: data.user }
     } catch (err) {
       error.value = err.response?.data?.message || 'Error al iniciar sesion'
@@ -64,8 +65,8 @@ export const useAuthStore = defineStore('auth', () => {
       const { data } = await authApi.register(credentials)
       token.value = data.token
       user.value = data.user
-      localStorage.setItem('lunali_token', data.token)
-      localStorage.setItem('lunali_user', JSON.stringify(data.user))
+      localStorage.setItem(STORAGE_KEYS.TOKEN, data.token)
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(data.user))
       return { success: true, user: data.user }
     } catch (err) {
       error.value = err.response?.data?.message || 'Error al registrarse'
@@ -78,8 +79,8 @@ export const useAuthStore = defineStore('auth', () => {
   function logout() {
     token.value = null
     user.value = null
-    localStorage.removeItem('lunali_token')
-    localStorage.removeItem('lunali_user')
+    localStorage.removeItem(STORAGE_KEYS.TOKEN)
+    localStorage.removeItem(STORAGE_KEYS.USER)
   }
 
   return {

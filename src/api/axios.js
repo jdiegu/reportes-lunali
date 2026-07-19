@@ -1,13 +1,14 @@
 import axios from "axios";
+import { STORAGE_KEYS } from "../config/constants";
 
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "/api",
   timeout: 15000,
 });
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("lunali_token");
+    const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
@@ -18,8 +19,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem("lunali_token");
-      localStorage.removeItem("lunali_user");
+      localStorage.removeItem(STORAGE_KEYS.TOKEN);
+      localStorage.removeItem(STORAGE_KEYS.USER);
       window.location.href = "/login";
     }
     return Promise.reject(error);

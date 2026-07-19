@@ -222,7 +222,7 @@
                   />
                 </svg>
                 <span style="color: var(--text-secondary)"
-                  >+52 271 141 0542</span
+                  >{{ CONTACT_PHONE }}</span
                 >
               </div>
             </div>
@@ -247,6 +247,7 @@ import { ref, computed } from "vue";
 import { useRoute, useRouter, RouterView } from "vue-router";
 import { useAuthStore } from "../../store/auth";
 import { useTheme } from "../../composables/useTheme";
+import { CONTACT_PHONE } from "../../config/constants";
 import SidebarContent from "./SidebarContent.vue";
 
 const authStore = useAuthStore();

@@ -247,6 +247,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../../store/auth'
 import { useReportsStore } from '../../store/reports'
 import { useToastStore } from '../../store/toast'
+import { LOCALE } from '../../config/constants'
 import ResolvModal from '../../components/reports/ResolvModal.vue'
 import ConfirmDialog from '../../components/ui/ConfirmDialog.vue'
 
@@ -301,7 +302,7 @@ const timeline = computed(() => [
 function getUploadUrl(path) {
   if (!path) return ''
   if (path.startsWith('http')) return path
-  const base = import.meta.env.VITE_API_URL || ''
+  const base = import.meta.env.VITE_API_BASE_URL === '/api' ? '' : import.meta.env.VITE_API_BASE_URL
   const cleanPath = path.replace(/\\/g, '/').split('/').pop()
   return `${base}/uploads/${cleanPath}`
 }
@@ -312,7 +313,7 @@ function onImgError(e) {
 
 function formatDate(date) {
   if (!date) return '—'
-  return new Date(date).toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+  return new Date(date).toLocaleDateString(LOCALE, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
 }
 
 function copyToClipboard(text) {

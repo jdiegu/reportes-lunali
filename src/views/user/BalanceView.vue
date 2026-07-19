@@ -15,7 +15,7 @@
         </div>
         <p class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: var(--text-muted);">Saldo disponible</p>
         <p class="text-5xl sm:text-6xl font-display font-bold" style="color: var(--text-primary);">${{ balance.toFixed(2) }}</p>
-        <p class="text-xs mt-3" style="color: var(--text-muted);">Actualizado al {{ new Date().toLocaleDateString('es-MX') }}</p>
+        <p class="text-xs mt-3" style="color: var(--text-muted);">Actualizado al {{ today }}</p>
       </div>
 
       <div class="p-5 sm:p-6" v-if="balance > 0">
@@ -42,7 +42,9 @@
 <script setup>
 import { computed } from 'vue'
 import { useAuthStore } from '../../store/auth'
+import { LOCALE } from '../../config/constants'
 
 const authStore = useAuthStore()
 const balance = computed(() => authStore.balance)
+const today = computed(() => new Date().toLocaleDateString(LOCALE))
 </script>
