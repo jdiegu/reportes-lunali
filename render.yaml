@@ -1,5 +1,15 @@
 services:
-  - type: static_site
+  - type: web
     name: reportes-lunali
-    buildCommand: npm run build
-    staticPublishPath: dist
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: npx serve dist -s -l $PORT
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: VITE_API_BASE_URL
+        sync: false
+      - key: VITE_APP_LOCALE
+        value: es-MX
+      - key: VITE_CONTACT_PHONE
+        value: +52 271 141 0542

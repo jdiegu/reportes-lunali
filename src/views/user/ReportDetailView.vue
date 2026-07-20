@@ -302,9 +302,10 @@ const timeline = computed(() => [
 function getUploadUrl(path) {
   if (!path) return ''
   if (path.startsWith('http')) return path
-  const base = import.meta.env.VITE_API_BASE_URL === '/api' ? '' : import.meta.env.VITE_API_BASE_URL
+  const apiBase = import.meta.env.VITE_API_BASE_URL || '/api'
+  const serverBase = apiBase.replace(/\/api\/?$/, '')
   const cleanPath = path.replace(/\\/g, '/').split('/').pop()
-  return `${base}/uploads/${cleanPath}`
+  return `${serverBase}/uploads/${cleanPath}`
 }
 
 function onImgError(e) {
