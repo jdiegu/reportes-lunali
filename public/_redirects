@@ -1,1 +1,4 @@
-/*    /index.html   200
+/assets/*    /assets/:splat    200
+/icon.png   /icon.png         200
+/favicon.svg /favicon.svg     200
+/*           /index.html      200
