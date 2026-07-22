@@ -3,6 +3,17 @@ import { ref, computed } from 'vue'
 import { authApi } from '../api/axios'
 import { STORAGE_KEYS } from '../config/constants'
 
+function safeParseJSON(key) {
+  try {
+    const raw = localStorage.getItem(key)
+    if (!raw || raw === 'undefined' || raw === 'null') return null
+    return JSON.parse(raw)
+  } catch {
+    localStorage.removeItem(key)
+    return null
+  }
+}
+
 export const useAuthStore = defineStore('auth', () => {
 
   const token = ref(
@@ -10,7 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
   )
 
   const user = ref(
-    JSON.parse(localStorage.getItem(STORAGE_KEYS.USER) || 'null')
+    safeParseJSON(STORAGE_KEYS.USER)
   )
 
   const loading = ref(false)

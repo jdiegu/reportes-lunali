@@ -1,6 +1,17 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { STORAGE_KEYS } from "../config/constants";
 
+function safeParseJSON(key) {
+  try {
+    const raw = localStorage.getItem(key)
+    if (!raw || raw === 'undefined' || raw === 'null') return null
+    return JSON.parse(raw)
+  } catch {
+    localStorage.removeItem(key)
+    return null
+  }
+}
+
 const router = createRouter({
   history: createWebHistory(),
   scrollBehavior() { return { top: 0 }; },
@@ -35,7 +46,7 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
-  const user = JSON.parse(localStorage.getItem(STORAGE_KEYS.USER) || "null");
+  const user = safeParseJSON(STORAGE_KEYS.USER);
   const isLoggedIn = !!token && !!user;
   const isAdmin = user?.role === "admin" || user?.role === "boss";
 

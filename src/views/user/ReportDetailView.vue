@@ -136,6 +136,24 @@
               <p class="text-xs sm:text-sm leading-relaxed" style="color: var(--text-secondary);">{{ report.resolution.text }}</p>
             </div>
 
+            <div v-if="report.resolution.resolvedBy && authStore.isAdmin" class="rounded-xl p-3 sm:p-4 mb-3 sm:mb-4 flex items-center gap-3" style="background: var(--bg-card);">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shrink-0"
+                   style="background: var(--rose-gradient); color: white;">
+                {{ (report.resolution.resolvedBy?.username || '?').charAt(0).toUpperCase() }}
+              </div>
+              <div class="min-w-0 flex-1">
+                <p class="text-[10px] sm:text-xs" style="color: var(--text-muted);">Resuelto por</p>
+                <p class="text-xs sm:text-sm font-medium truncate" style="color: var(--text-primary);">{{ report.resolution.resolvedBy?.username || '—' }}</p>
+              </div>
+              <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold"
+                    :style="{
+                      background: report.resolution.resolvedBy?.role === 'boss' ? 'var(--rose-lighter)' : 'var(--info-bg)',
+                      color: report.resolution.resolvedBy?.role === 'boss' ? 'var(--rose-primary)' : 'var(--info)',
+                    }">
+                {{ report.resolution.resolvedBy?.role === 'boss' ? 'Boss' : 'Admin' }}
+              </span>
+            </div>
+
             <div v-if="report.resolution.replaced_mail || report.resolution.replaced_password" class="rounded-xl border p-3 sm:p-4" style="background: var(--bg-card); border-color: var(--border-color);">
               <p class="text-[10px] sm:text-xs font-semibold mb-2.5 sm:mb-3 flex items-center gap-1.5" style="color: var(--rose-primary);">
                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -288,6 +306,7 @@ const reportInfo = computed(() => {
     { label: 'Telefono del cliente', value: r.user?.phone || '—', copy: r.user?.phone },
     { label: 'Fecha de entrega', value: formatDate(r.delivery_date) },
     { label: 'Reportado por', value: r.user?.name || r.user?.username || '—' },
+    ...(authStore.isAdmin ? [{ label: 'Ultimo movimiento', value: r.updatedBy?.username ? `${r.updatedBy.username} (${r.updatedBy.role})` : '—' }] : []),
     { label: 'Creado', value: formatDate(r.createdAt) },
     { label: 'Actualizado', value: formatDate(r.updatedAt) },
   ]

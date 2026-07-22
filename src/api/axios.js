@@ -21,7 +21,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem(STORAGE_KEYS.TOKEN);
       localStorage.removeItem(STORAGE_KEYS.USER);
-      window.location.href = "/login";
+      window.dispatchEvent(new CustomEvent("auth:unauthorized"));
     }
     return Promise.reject(error);
   },
@@ -50,6 +50,7 @@ export const usersApi = {
   get: (id) => api.get(`/users/${id}`),
   updateBalance: (id, amount, operation) =>
     api.patch(`/users/${id}/balance`, { amount, operation }),
+  updateRole: (id, role) => api.patch(`/users/${id}/role`, { role }),
 };
 
 export default api;

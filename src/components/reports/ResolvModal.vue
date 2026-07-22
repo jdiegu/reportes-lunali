@@ -52,7 +52,12 @@
                     ? { background: 'var(--rose-gradient)', borderColor: 'var(--rose-primary)', color: 'white', boxShadow: '0 2px 12px rgba(196,90,122,0.3)' }
                     : { background: 'var(--bg-surface)', borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }"
                 >
-                  <div class="text-lg mb-0.5">{{ opt.emoji }}</div>
+                  <div class="w-8 h-8 rounded-lg flex items-center justify-center mx-auto mb-1"
+                       :style="{ background: selectedType === opt.value ? 'rgba(255,255,255,0.2)' : 'var(--bg-card)' }">
+                    <svg class="w-4 h-4" :style="{ color: selectedType === opt.value ? 'white' : 'var(--rose-primary)' }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" :d="opt.icon"/>
+                    </svg>
+                  </div>
                   <p class="text-xs font-semibold">{{ opt.label }}</p>
                 </button>
               </div>
@@ -74,7 +79,7 @@
                 Nuevas credenciales
               </p>
               <input v-model="replaceMail" type="email" class="input-field" placeholder="nuevo_correo@email.com" />
-              <input v-model="replacePassword" type="text" class="input-field" placeholder="Nueva contrasena" />
+              <input v-model="replacePassword" type="password" class="input-field" placeholder="Nueva contrasena" />
             </div>
 
             <div v-if="selectedType === 'credit'"
@@ -136,9 +141,9 @@ const replacePassword = ref('')
 const creditAmount = ref(0)
 
 const resolutionOptions = [
-  { value: 'replace',  label: 'Reemplazo',  emoji: '🔄', preset: 'Se realizo un reemplazo de credenciales. Se asigno un nuevo correo y contrasena para restablecer el acceso a la cuenta.' },
-  { value: 'credit',   label: 'Saldo',      emoji: '💰', preset: 'Se acredito un saldo a favor como compensacion por el inconveniente presentado.' },
-  { value: 'reject',   label: 'No Procede', emoji: '🚫', preset: 'El reporte no procede. Despues de revisar la evidencia, no se encontraron anomalias que justifiquen una intervencion.' },
+  { value: 'replace',  label: 'Reemplazo',  icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15', preset: 'Se realizo un reemplazo de credenciales. Se asigno un nuevo correo y contrasena para restablecer el acceso a la cuenta.' },
+  { value: 'credit',   label: 'Saldo',      icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', preset: 'Se acredito un saldo a favor como compensacion por el inconveniente presentado.' },
+  { value: 'reject',   label: 'No Procede', icon: 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636', preset: 'El reporte no procede. Despues de revisar la evidencia, no se encontraron anomalias que justifiquen una intervencion.' },
 ]
 
 function selectType(opt) {

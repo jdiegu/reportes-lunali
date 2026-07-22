@@ -28,7 +28,7 @@
             </div>
             <div>
               <label class="input-label">Contrasena de la cuenta</label>
-              <input v-model="form.password" type="text" placeholder="Contrasena del usuario" class="input-field" />
+              <input v-model="form.password" type="password" placeholder="Contrasena del usuario" class="input-field" />
             </div>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3 sm:mt-4">

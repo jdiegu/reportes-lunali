@@ -92,7 +92,7 @@ const authStore = useAuthStore()
 const reportsStore = useReportsStore()
 const loading = ref(true)
 const searchTimer = ref(null)
-const sortAsc = ref(true)
+const sortAsc = ref(false)
 const filters = ref({ search: '', status: '', platform: '' })
 
 const platforms = ['Netflix', 'Spotify', 'HBO', 'Disney+', 'Prime Video', 'Crunchyroll', 'YouTube Premium', 'Otro']
