@@ -10,15 +10,14 @@ export default defineConfig({
     }
   },
   server: {
-    host: '0.0.0.0',
     port: parseInt(process.env.VITE_DEV_PORT || '5172'),
     proxy: {
       '/api': {
-        target: process.env.VITE_API_TARGET || 'http://localhost:4000',
+        target: 'http://localhost:3001',
         changeOrigin: true
       },
       '/uploads': {
-        target: process.env.VITE_API_TARGET || 'http://localhost:4000',
+        target: 'http://localhost:3001',
         changeOrigin: true
       }
     }
