@@ -9,7 +9,7 @@
         </div>
       </div>
       <Transition name="fade-text">
-        <span v-show="expanded" class="font-display font-bold text-lg whitespace-nowrap" style="color: var(--text-primary);">Lunali</span>
+        <span v-show="expanded" class="font-display font-semibold text-lg whitespace-nowrap" style="color: var(--text-primary);">Lunali</span>
       </Transition>
     </div>
 
@@ -19,12 +19,8 @@
 
     <div class="border-t shrink-0 px-3 py-3 space-y-1" :style="{ borderColor: 'var(--sidebar-border)' }">
       <button @click="$emit('toggleTheme')" class="flex items-center gap-3 w-full rounded-xl px-3 py-2 text-xs font-medium transition-colors btn-ghost justify-start">
-        <svg v-if="isDark" class="w-[1.125rem] h-[1.125rem] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-        </svg>
-        <svg v-else class="w-[1.125rem] h-[1.125rem] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
-        </svg>
+        <Sun v-if="isDark" class="w-[1.125rem] h-[1.125rem] shrink-0" />
+        <Moon v-else class="w-[1.125rem] h-[1.125rem] shrink-0" />
         <Transition name="fade-text">
           <span v-show="expanded" class="whitespace-nowrap">{{ isDark ? 'Modo claro' : 'Modo oscuro' }}</span>
         </Transition>
@@ -42,9 +38,7 @@
         </Transition>
         <Transition name="fade-text">
           <button v-show="expanded" @click="$emit('logout')" class="btn-icon shrink-0 !w-8 !h-8" title="Cerrar sesion" style="color: var(--error);">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-            </svg>
+            <LogOut class="w-4 h-4" />
           </button>
         </Transition>
       </div>
@@ -54,6 +48,7 @@
 
 <script setup>
 import NavItem from '../ui/NavItem.vue'
+import { Sun, Moon, LogOut } from '@lucide/vue'
 
 defineProps({
   expanded: Boolean,

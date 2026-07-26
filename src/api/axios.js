@@ -2,7 +2,7 @@ import axios from "axios";
 import { STORAGE_KEYS } from "../config/constants";
 
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "/api",
   timeout: 15000,
 });
 
@@ -40,7 +40,7 @@ export const reportsApi = {
     api.post("/reports", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     }),
-  update: (id, data) => api.put(`/reports/${id}`, data),
+  update: (id, data, config) => api.put(`/reports/${id}`, data, config),
   resolve: (id, data) => api.put(`/reports/${id}/resolve`, data),
   delete: (id) => api.delete(`/reports/${id}`),
 };
@@ -48,9 +48,27 @@ export const reportsApi = {
 export const usersApi = {
   list: () => api.get("/users"),
   get: (id) => api.get(`/users/${id}`),
+  updateOwn: (data) => api.put("/users/me", data),
+  adminUpdate: (id, data) => api.put(`/users/${id}`, data),
+  adminResetPassword: (id, newPassword) => api.put(`/users/${id}`, { password: newPassword }),
   updateBalance: (id, amount, operation) =>
     api.patch(`/users/${id}/balance`, { amount, operation }),
   updateRole: (id, role) => api.patch(`/users/${id}/role`, { role }),
+};
+
+export const platformsApi = {
+  list: () => api.get("/platforms"),
+  listAll: () => api.get("/platforms/all"),
+  create: (data) => api.post("/platforms", data),
+  update: (id, data) => api.put(`/platforms/${id}`, data),
+  delete: (id) => api.delete(`/platforms/${id}`),
+};
+
+export const notificationsApi = {
+  list: () => api.get("/notifications"),
+  unreadCount: () => api.get("/notifications/unread"),
+  markRead: (id) => api.patch(`/notifications/${id}/read`),
+  markAllRead: () => api.patch("/notifications/read-all"),
 };
 
 export default api;

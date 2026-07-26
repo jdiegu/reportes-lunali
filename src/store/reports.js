@@ -127,7 +127,9 @@ export const useReportsStore = defineStore("reports", () => {
 
   async function updateReport(id, payload) {
     try {
-      const { data } = await reportsApi.update(id, payload);
+      const isFormData = payload instanceof FormData;
+      const config = isFormData ? { headers: { "Content-Type": "multipart/form-data" } } : {};
+      const { data } = await reportsApi.update(id, payload, config);
       updateLocal(data);
       return { success: true, data };
     } catch (err) {

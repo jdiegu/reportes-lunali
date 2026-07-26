@@ -8,7 +8,7 @@ export const useToastStore = defineStore('toast', () => {
   function add(msg, type = 'info', duration = 4000) {
     const id = ++nextId
     const toast = typeof msg === 'string' ? { title: msg } : msg
-    toasts.value.push({ id, type, ...toast })
+    toasts.value.push({ id, type, _duration: duration, ...toast })
     if (duration > 0) setTimeout(() => remove(id), duration)
     return id
   }

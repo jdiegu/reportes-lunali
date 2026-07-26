@@ -5,13 +5,6 @@
         <h1 class="text-xl sm:text-2xl">Inicio</h1>
         <p class="text-xs sm:text-sm mt-0.5" style="color: var(--text-muted);">Bienvenido, {{ authStore.user?.name || authStore.user?.username }}</p>
       </div>
-      <RouterLink v-if="!authStore.isAdmin" to="/app/reports/new" class="btn-primary text-xs sm:text-sm !py-2 !px-3 sm:!px-4 shrink-0">
-        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-        </svg>
-        <span class="hidden sm:inline">Nuevo reporte</span>
-        <span class="sm:hidden">Nuevo</span>
-      </RouterLink>
     </div>
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">

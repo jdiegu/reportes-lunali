@@ -6,43 +6,42 @@
 
         <div class="relative rounded-2xl border shadow-xl w-full max-w-lg p-5 sm:p-6 max-h-[90vh] overflow-y-auto"
              style="background: var(--bg-card); border-color: var(--border-color); box-shadow: var(--shadow-lg);">
+
           <div class="flex items-center justify-between mb-5 sm:mb-6">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--success-bg);">
-                <svg class="w-5 h-5" style="color: var(--success);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
+                <CheckCircle class="w-5 h-5" style="color: var(--success);" />
               </div>
               <div>
-                <h3 class="text-base sm:text-lg font-semibold" style="color: var(--text-primary);">Resolver Reporte</h3>
-                <p class="text-xs" style="color: var(--text-muted);">Se resolveran todos los reportes con la misma cuenta</p>
+                <h3 class="text-base sm:text-lg font-semibold" style="color: var(--text-primary);">{{ editingResolution ? 'Editar Resolución' : 'Resolver Reporte' }}</h3>
+                <p class="text-xs" style="color: var(--text-muted);">{{ editingResolution ? 'Modifica los datos de la resolucion' : 'Se resolveran todos los reportes con la misma cuenta' }}</p>
               </div>
             </div>
             <button @click="cancel" class="btn-icon w-8 h-8">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-              </svg>
+              <X class="w-4 h-4" />
             </button>
           </div>
 
           <div v-if="report" class="space-y-4">
+
             <div class="rounded-xl p-3.5 sm:p-4 border flex items-center gap-3"
                  style="background: var(--bg-surface); border-color: var(--border-color);">
-              <div class="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold shrink-0"
-                   style="background: var(--rose-gradient); color: white;">
-                {{ report.platform?.charAt(0).toUpperCase() || '?' }}
-              </div>
+               <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 overflow-hidden"
+                    :style="{ background: platformColor + '18' }">
+                 <Icon :icon="platformIconId" class="w-5 h-5" :style="{ color: platformColor }" />
+               </div>
               <div class="min-w-0 flex-1">
                 <p class="text-sm font-medium truncate" style="color: var(--text-primary);">{{ report.mail }}</p>
                 <p class="text-xs" style="color: var(--text-muted);">
                   {{ report.platform }} · {{ report.platform_type === 'profile' ? 'Perfil' : 'Cuenta' }}
+                  <span v-if="report.is_batch && batchCount > 0"> · {{ batchCount + 1 }} cuentas en lote</span>
                 </p>
               </div>
               <span class="badge badge-pending">Pendiente</span>
             </div>
 
             <div>
-              <label class="input-label">Tipo de resolucion</label>
+              <label class="input-label">Tipo de resolución</label>
               <div class="grid grid-cols-3 gap-2 sm:gap-2.5">
                 <button
                   v-for="opt in resolutionOptions" :key="opt.value"
@@ -54,9 +53,9 @@
                 >
                   <div class="w-8 h-8 rounded-lg flex items-center justify-center mx-auto mb-1"
                        :style="{ background: selectedType === opt.value ? 'rgba(255,255,255,0.2)' : 'var(--bg-card)' }">
-                    <svg class="w-4 h-4" :style="{ color: selectedType === opt.value ? 'white' : 'var(--rose-primary)' }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" :d="opt.icon"/>
-                    </svg>
+                    <RefreshCw v-if="opt.value === 'replace'" class="w-4 h-4" :style="{ color: selectedType === opt.value ? 'white' : 'var(--rose-primary)' }" />
+                    <DollarSign v-else-if="opt.value === 'credit'" class="w-4 h-4" :style="{ color: selectedType === opt.value ? 'white' : 'var(--rose-primary)' }" />
+                    <XCircle v-else-if="opt.value === 'reject'" class="w-4 h-4" :style="{ color: selectedType === opt.value ? 'white' : 'var(--rose-primary)' }" />
                   </div>
                   <p class="text-xs font-semibold">{{ opt.label }}</p>
                 </button>
@@ -64,54 +63,62 @@
             </div>
 
             <div v-if="selectedType">
-              <label class="input-label">Texto de resolucion</label>
+              <label class="input-label">Texto de resolución</label>
               <textarea v-model="solutionText" rows="3" class="input-field resize-none"
                 placeholder="Se generara automaticamente segun el tipo"></textarea>
             </div>
 
-            <div v-if="selectedType === 'replace'"
+            <div v-if="selectedType === 'replace' && !report.is_batch"
                  class="rounded-xl border p-4 space-y-3"
                  style="background: var(--bg-surface); border-color: var(--border-color);">
               <p class="text-xs font-semibold flex items-center gap-1.5" style="color: var(--rose-primary);">
-                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
-                </svg>
-                Nuevas credenciales
+                <Lock class="w-3.5 h-3.5" />
+                Nueva cuenta
               </p>
               <input v-model="replaceMail" type="email" class="input-field" placeholder="nuevo_correo@email.com" />
               <input v-model="replacePassword" type="password" class="input-field" placeholder="Nueva contrasena" />
+            </div>
+
+            <div v-if="selectedType === 'replace' && report.is_batch"
+                 class="rounded-xl border p-4 space-y-3"
+                 style="background: var(--bg-surface); border-color: var(--border-color);">
+              <p class="text-xs font-semibold flex items-center gap-1.5" style="color: var(--rose-primary);">
+                <Lock class="w-3.5 h-3.5" />
+                Nuevas cuentas
+              </p>
+              <p class="text-[11px]" style="color: var(--text-muted);">
+                Ingresa un correo por linea. Se asignaran a las {{ batchCount + 1 }} cuentas del lote.
+              </p>
+              <textarea v-model="replaceMailsBatch" rows="4" class="input-field font-mono text-xs resize-none"
+                placeholder="nuevo1@email.com&#10;nuevo2@email.com&#10;nuevo3@email.com"></textarea>
+              <input v-model="replacePassword" type="password" class="input-field" placeholder="Nueva contrasena (misma para todas)" />
             </div>
 
             <div v-if="selectedType === 'credit'"
                  class="rounded-xl border p-4 space-y-3"
                  style="background: var(--bg-surface); border-color: var(--border-color);">
               <p class="text-xs font-semibold flex items-center gap-1.5" style="color: var(--success);">
-                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
+                <DollarSign class="w-3.5 h-3.5" />
                 Saldo a favor
               </p>
               <div>
                 <label class="input-label">Monto ($)</label>
-                <input v-model.number="creditAmount" type="number" min="1" step="0.01" class="input-field text-lg font-mono"
-                       placeholder="0.00" />
+                <input v-model.number="creditAmount" type="number" min="1" step="0.01" class="input-field text-lg font-mono" placeholder="0.00" />
               </div>
             </div>
 
-            <div v-if="error" class="rounded-lg border px-4 py-3 text-sm"
+            <div v-if="error" class="rounded-lg border px-4 py-3 text-sm flex items-center gap-2"
                  style="border-color: rgba(212,74,74,0.25); background: var(--error-bg); color: var(--error);">
-              {{ error }}
+              <AlertTriangle class="w-4 h-4 shrink-0" />
+              <span>{{ error }}</span>
             </div>
 
             <div class="flex justify-end gap-3 pt-3 border-t" :style="{ borderColor: 'var(--border-color)' }">
               <button @click="cancel" class="btn-secondary text-sm !px-5">Cancelar</button>
               <button @click="handleResolve" :disabled="saving || !selectedType" class="btn-primary text-sm !px-5">
-                <svg v-if="saving" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                </svg>
-                <span v-if="saving">Resolviendo...</span>
-                <span v-else>Resolver</span>
+                <RefreshCw v-if="saving" class="w-4 h-4 animate-spin" />
+                <span v-if="saving">{{ editingResolution ? 'Guardando...' : 'Resolviendo...' }}</span>
+                <span v-else>{{ editingResolution ? 'Guardar cambios' : 'Resolver' }}</span>
               </button>
             </div>
           </div>
@@ -122,14 +129,23 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { X, CheckCircle, RefreshCw, DollarSign, XCircle, Lock, Mail, AlertTriangle } from '@lucide/vue'
 import { useToastStore } from '../../store/toast'
 import { useReportsStore } from '../../store/reports'
+import { getPlatformIconId, getPlatformColor } from '../../utils/platformIcons'
+import { usePlatformsStore } from '../../store/platforms'
+import { Icon } from '@iconify/vue'
 
 const toast = useToastStore()
 const reportsStore = useReportsStore()
+const platformsStore = usePlatformsStore()
 
-const props = defineProps({ visible: Boolean, report: Object })
+const props = defineProps({
+  visible: Boolean,
+  report: Object,
+  editingResolution: { type: Object, default: null }
+})
 const emit = defineEmits(['close', 'resolved'])
 
 const saving = ref(false)
@@ -138,28 +154,47 @@ const selectedType = ref(null)
 const solutionText = ref('')
 const replaceMail = ref('')
 const replacePassword = ref('')
+const replaceMailsBatch = ref('')
 const creditAmount = ref(0)
 
+const batchCount = computed(() => (props.report?.batch_emails?.length || 0))
+const platformIconId = computed(() => platformsStore.getIconId(props.report?.platform))
+const platformColor = computed(() => platformsStore.getColor(props.report?.platform))
+
 const resolutionOptions = [
-  { value: 'replace',  label: 'Reemplazo',  icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15', preset: 'Se realizo un reemplazo de credenciales. Se asigno un nuevo correo y contrasena para restablecer el acceso a la cuenta.' },
-  { value: 'credit',   label: 'Saldo',      icon: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', preset: 'Se acredito un saldo a favor como compensacion por el inconveniente presentado.' },
-  { value: 'reject',   label: 'No Procede', icon: 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636', preset: 'El reporte no procede. Despues de revisar la evidencia, no se encontraron anomalias que justifiquen una intervencion.' },
+  { value: 'replace', label: 'Reemplazo', preset: 'Se realizo un reemplazo de cuenta. Se asigno un nuevo correo y contrasena.' },
+  { value: 'credit',  label: 'Saldo',     preset: 'Se acredito un saldo a favor como compensación por el inconveniente presentado.' },
+  { value: 'reject',  label: 'No Procede', preset: 'El reporte no procede. Despues de revisar la evidencia, no se encontraron anomalias que justifiquen una intervención.' },
 ]
 
 function selectType(opt) {
   selectedType.value = opt.value
   solutionText.value = opt.preset
   creditAmount.value = 0
+  replaceMail.value = ''
+  replacePassword.value = ''
+  replaceMailsBatch.value = ''
 }
 
 watch(() => props.visible, (v) => {
   if (v) {
-    selectedType.value = null
-    solutionText.value = ''
-    replaceMail.value = ''
-    replacePassword.value = ''
-    creditAmount.value = 0
     error.value = ''
+    if (props.editingResolution) {
+      const res = props.editingResolution
+      selectedType.value = res.type || null
+      solutionText.value = res.text || ''
+      replaceMail.value = res.replaced_mail || ''
+      replacePassword.value = res.replaced_password || ''
+      replaceMailsBatch.value = (res.replaced_mails || []).join('\n')
+      creditAmount.value = res.credit_amount || 0
+    } else {
+      selectedType.value = null
+      solutionText.value = ''
+      replaceMail.value = ''
+      replacePassword.value = ''
+      replaceMailsBatch.value = ''
+      creditAmount.value = 0
+    }
   }
 })
 
@@ -171,19 +206,36 @@ async function handleResolve() {
     error.value = 'Debes ingresar un monto valido para el saldo a favor.'
     return
   }
+  if (selectedType.value === 'replace' && props.report?.is_batch) {
+    const mails = replaceMailsBatch.value.split('\n').map(m => m.trim()).filter(Boolean)
+    if (mails.length < batchCount.value + 1) {
+      error.value = `Se necesitan al menos ${batchCount.value + 1} correos para el lote.`
+      return
+    }
+  }
   saving.value = true
   try {
     const payload = { text: solutionText.value, type: selectedType.value }
     if (selectedType.value === 'replace') {
-      payload.replaced_mail = replaceMail.value
+      if (props.report?.is_batch) {
+        payload.replaced_mails = replaceMailsBatch.value.split('\n').map(m => m.trim()).filter(Boolean)
+      } else {
+        payload.replaced_mail = replaceMail.value
+      }
       payload.replaced_password = replacePassword.value
     }
     if (selectedType.value === 'credit') {
       payload.credit_amount = creditAmount.value
     }
-    await reportsStore.resolveReport(props.report._id, payload)
-    const typeLabel = resolutionOptions.find(o => o.value === selectedType.value)?.label || selectedType.value
-    toast.success('Reporte resuelto', `Resolucion: ${typeLabel}`)
+
+    if (props.editingResolution) {
+      await reportsStore.updateReport(props.report._id, { resolution: payload })
+      toast.success('Resolucion actualizada', 'Los cambios se guardaron correctamente')
+    } else {
+      await reportsStore.resolveReport(props.report._id, payload)
+      const typeLabel = resolutionOptions.find(o => o.value === selectedType.value)?.label || selectedType.value
+      toast.success('Reporte resuelto', `Resolucion: ${typeLabel}`)
+    }
     emit('resolved')
     emit('close')
   } catch (e) {

@@ -8,15 +8,11 @@
           <div class="flex items-start gap-4">
             <div v-if="type === 'danger'" class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                  style="background: var(--error-bg);">
-              <svg class="w-5 h-5" style="color: var(--error);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
-              </svg>
+              <AlertTriangle class="w-5 h-5" style="color: var(--error);" />
             </div>
             <div v-else class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                  style="background: var(--rose-lighter);">
-              <svg class="w-5 h-5" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
+              <Info class="w-5 h-5" style="color: var(--rose-primary);" />
             </div>
             <div class="flex-1 min-w-0">
               <h3 class="font-semibold text-base sm:text-lg" style="color: var(--text-primary);">{{ title }}</h3>
@@ -27,10 +23,7 @@
             <button @click="cancel" class="btn-secondary text-sm !px-5">Cancelar</button>
             <button @click="confirm" :disabled="loading"
                     :class="[type === 'danger' ? 'btn-danger' : 'btn-primary', 'text-sm !px-5']">
-              <svg v-if="loading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-              </svg>
+              <Loader2 v-if="loading" class="w-4 h-4 animate-spin" />
               <span v-if="loading">Procesando...</span>
               <span v-else>{{ confirmText }}</span>
             </button>
@@ -42,6 +35,8 @@
 </template>
 
 <script setup>
+import { AlertTriangle, Info, Loader2 } from '@lucide/vue'
+
 defineProps({
   visible: Boolean,
   title: String,

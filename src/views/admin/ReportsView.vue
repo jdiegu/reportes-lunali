@@ -8,9 +8,7 @@
         </p>
       </div>
       <button @click="sortAsc = !sortAsc" class="btn-ghost text-xs !px-3 !py-2 gap-1.5 shrink-0" :title="sortAsc ? 'Mas antiguos primero' : 'Mas recientes primero'" style="color: var(--rose-primary);">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"/>
-        </svg>
+        <ArrowUpDown class="w-4 h-4" />
         {{ sortAsc ? 'Antiguos' : 'Recientes' }}
       </button>
     </div>
@@ -18,9 +16,7 @@
     <div class="card p-3 sm:p-4">
       <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2.5">
         <div class="relative flex-1 min-w-0">
-          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
+          <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--rose-primary);" />
           <input v-model="filters.search" @input="onSearch" type="text" placeholder="Buscar..."
                  class="input-field pl-9 text-sm" />
         </div>
@@ -33,12 +29,10 @@
           </select>
           <select v-model="filters.platform" @change="onFilterChange" class="input-field text-sm !w-auto flex-1 sm:flex-initial">
             <option value="">Plataformas</option>
-            <option v-for="p in platforms" :key="p" :value="p">{{ p }}</option>
+            <option v-for="p in platformsStore.platformNames" :key="p" :value="p">{{ p }}</option>
           </select>
           <button @click="onFilterChange" class="btn-secondary text-xs !h-[38px] !px-3 shrink-0" style="color: var(--rose-primary);">
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-            </svg>
+            <RefreshCw class="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -58,9 +52,7 @@
       <template v-else>
         <div v-if="sortedReports.length === 0" class="card py-12 sm:py-16 text-center px-4">
           <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style="background: var(--rose-lighter);">
-            <svg class="w-7 h-7" style="color: var(--rose-primary);" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-            </svg>
+            <FileText class="w-7 h-7" style="color: var(--rose-primary);" />
           </div>
           <p class="text-sm font-medium" style="color: var(--text-muted);">No se encontraron reportes</p>
           <p v-if="hasFilters" class="text-xs mt-1" style="color: var(--text-muted); opacity: 0.7;">Intenta ajustar los filtros</p>
@@ -85,17 +77,19 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../../store/auth'
 import { useReportsStore } from '../../store/reports'
+import { usePlatformsStore } from '../../store/platforms'
 import ReportRow from '../../components/reports/ReportRow.vue'
+import { ArrowUpDown, Search, RefreshCw, FileText } from '@lucide/vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
 const reportsStore = useReportsStore()
+const platformsStore = usePlatformsStore()
 const loading = ref(true)
 const searchTimer = ref(null)
 const sortAsc = ref(false)
 const filters = ref({ search: '', status: '', platform: '' })
 
-const platforms = ['Netflix', 'Spotify', 'HBO', 'Disney+', 'Prime Video', 'Crunchyroll', 'YouTube Premium', 'Otro']
 const hasFilters = computed(() => filters.value.search || filters.value.status || filters.value.platform)
 
 const sortedReports = computed(() => {
@@ -139,6 +133,7 @@ onMounted(async () => {
   reportsStore.resetFilters()
   loading.value = true
   try {
+    await platformsStore.fetch()
     if (authStore.isAdmin) {
       await reportsStore.fetchReports({})
     } else {
