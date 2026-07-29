@@ -33,6 +33,30 @@
       <div class="shape s22"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
       <div class="shape s23"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
       <div class="shape s24"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s25"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s26"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s27"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s28"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s29"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s30"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s31"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s32"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s33"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s34"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s35"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s36"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s37"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s38"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s39"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s40"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s41"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s42"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s43"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s44"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s45"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s46"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s47"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s48"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
     </div>
 
     <div class="grid-dots pointer-events-none" aria-hidden="true"></div>
@@ -324,33 +348,56 @@ async function handleRegister() {
 
 .floating-shapes .shape {
   position: absolute;
-  opacity: 0.1;
 }
 .floating-shapes .shape svg { width: 100%; height: 100%; }
-.s1 { width: 28px; height: 28px; top: 5%; left: 3%; animation: star-drift 16s ease-in-out infinite; color: var(--rose-primary); }
-.s2 { width: 18px; height: 18px; top: 8%; left: 30%; animation: star-drift 20s ease-in-out infinite 2s; color: var(--warning); }
-.s3 { width: 34px; height: 34px; top: 2%; left: 55%; animation: star-drift 22s ease-in-out infinite 4s; color: var(--rose-primary); }
-.s4 { width: 14px; height: 14px; top: 6%; left: 78%; animation: star-drift 18s ease-in-out infinite 1s; color: var(--info); }
-.s5 { width: 22px; height: 22px; top: 15%; left: 15%; animation: star-drift 24s ease-in-out infinite 3s; color: var(--success); }
-.s6 { width: 16px; height: 16px; top: 22%; left: 92%; animation: star-drift 15s ease-in-out infinite 5s; color: var(--rose-primary); }
-.s7 { width: 30px; height: 30px; top: 30%; left: 1%; animation: star-drift 19s ease-in-out infinite 2s; color: var(--warning); }
-.s8 { width: 12px; height: 12px; top: 38%; left: 40%; animation: star-drift 21s ease-in-out infinite 6s; color: var(--rose-primary); }
-.s9 { width: 24px; height: 24px; top: 45%; left: 70%; animation: star-drift 17s ease-in-out infinite 1s; color: var(--success); }
-.s10 { width: 15px; height: 15px; top: 52%; left: 88%; animation: star-drift 23s ease-in-out infinite 4s; color: var(--info); }
-.s11 { width: 20px; height: 20px; top: 58%; left: 22%; animation: star-drift 14s ease-in-out infinite 3s; color: var(--rose-primary); }
-.s12 { width: 32px; height: 32px; top: 65%; left: 5%; animation: star-drift 25s ease-in-out infinite 5s; color: var(--warning); }
-.s13 { width: 10px; height: 10px; top: 70%; left: 50%; animation: star-drift 18s ease-in-out infinite 2s; color: var(--rose-primary); }
-.s14 { width: 26px; height: 26px; top: 75%; left: 35%; animation: star-drift 16s ease-in-out infinite 7s; color: var(--success); }
-.s15 { width: 17px; height: 17px; top: 80%; left: 68%; animation: star-drift 22s ease-in-out infinite 1s; color: var(--info); }
-.s16 { width: 36px; height: 36px; top: 85%; left: 85%; animation: star-drift 20s ease-in-out infinite 4s; color: var(--rose-primary); }
-.s17 { width: 13px; height: 13px; top: 12%; left: 45%; animation: star-drift 19s ease-in-out infinite 6s; color: var(--warning); }
-.s18 { width: 21px; height: 21px; top: 28%; left: 60%; animation: star-drift 15s ease-in-out infinite 3s; color: var(--success); }
-.s19 { width: 11px; height: 11px; top: 42%; left: 12%; animation: star-drift 24s ease-in-out infinite 5s; color: var(--rose-primary); }
-.s20 { width: 25px; height: 25px; top: 50%; left: 55%; animation: star-drift 17s ease-in-out infinite 2s; color: var(--info); }
-.s21 { width: 8px; height: 8px; top: 62%; left: 80%; animation: star-drift 21s ease-in-out infinite 4s; color: var(--rose-primary); }
-.s22 { width: 19px; height: 19px; top: 72%; left: 15%; animation: star-drift 18s ease-in-out infinite 6s; color: var(--warning); }
-.s23 { width: 23px; height: 23px; top: 88%; left: 45%; animation: star-drift 23s ease-in-out infinite 1s; color: var(--success); }
-.s24 { width: 14px; height: 14px; top: 95%; left: 10%; animation: star-drift 16s ease-in-out infinite 5s; color: var(--rose-primary); }
+.s1  { width: 28px; height: 28px; top: 2%;  left: 3%;  animation: star-drift 16s ease-in-out infinite; opacity: 0.10; color: var(--rose-primary); }
+.s2  { width: 12px; height: 12px; top: 5%;  left: 22%; animation: star-drift 20s ease-in-out infinite 2s;  opacity: 0.06; color: var(--warning); }
+.s3  { width: 34px; height: 34px; top: 1%;  left: 45%; animation: star-drift 22s ease-in-out infinite 4s;  opacity: 0.12; color: var(--rose-primary); }
+.s4  { width: 10px; height: 10px; top: 4%;  left: 68%; animation: star-drift 18s ease-in-out infinite 1s;  opacity: 0.05; color: var(--info); }
+.s5  { width: 18px; height: 18px; top: 8%;  left: 88%; animation: star-drift 24s ease-in-out infinite 3s;  opacity: 0.08; color: var(--success); }
+.s6  { width: 8px;  height: 8px;  top: 12%; left: 12%; animation: star-drift 15s ease-in-out infinite 5s;  opacity: 0.04; color: var(--rose-primary); }
+.s7  { width: 30px; height: 30px; top: 14%; left: 38%; animation: star-drift 19s ease-in-out infinite 2s;  opacity: 0.11; color: var(--warning); }
+.s8  { width: 14px; height: 14px; top: 10%; left: 58%; animation: star-drift 21s ease-in-out infinite 6s;  opacity: 0.07; color: var(--rose-primary); }
+.s9  { width: 22px; height: 22px; top: 17%; left: 78%; animation: star-drift 17s ease-in-out infinite 1s;  opacity: 0.09; color: var(--success); }
+.s10 { width: 40px; height: 40px; top: 20%; left: 95%; animation: star-drift 23s ease-in-out infinite 4s;  opacity: 0.13; color: var(--info); }
+.s11 { width: 16px; height: 16px; top: 25%; left: 6%;  animation: star-drift 14s ease-in-out infinite 3s;  opacity: 0.06; color: var(--rose-primary); }
+.s12 { width: 36px; height: 36px; top: 30%; left: 28%; animation: star-drift 25s ease-in-out infinite 5s;  opacity: 0.12; color: var(--warning); }
+.s13 { width: 6px;  height: 6px;  top: 24%; left: 50%; animation: star-drift 18s ease-in-out infinite 2s;  opacity: 0.03; color: var(--rose-primary); }
+.s14 { width: 26px; height: 26px; top: 35%; left: 72%; animation: star-drift 16s ease-in-out infinite 7s;  opacity: 0.10; color: var(--success); }
+.s15 { width: 11px; height: 11px; top: 28%; left: 85%; animation: star-drift 22s ease-in-out infinite 1s;  opacity: 0.05; color: var(--info); }
+.s16 { width: 32px; height: 32px; top: 40%; left: 15%; animation: star-drift 20s ease-in-out infinite 4s;  opacity: 0.11; color: var(--rose-primary); }
+.s17 { width: 9px;  height: 9px;  top: 44%; left: 40%; animation: star-drift 19s ease-in-out infinite 6s;  opacity: 0.04; color: var(--warning); }
+.s18 { width: 24px; height: 24px; top: 48%; left: 60%; animation: star-drift 15s ease-in-out infinite 3s;  opacity: 0.09; color: var(--success); }
+.s19 { width: 13px; height: 13px; top: 42%; left: 80%; animation: star-drift 24s ease-in-out infinite 5s;  opacity: 0.06; color: var(--rose-primary); }
+.s20 { width: 38px; height: 38px; top: 52%; left: 4%;  animation: star-drift 17s ease-in-out infinite 2s;  opacity: 0.13; color: var(--info); }
+.s21 { width: 7px;  height: 7px;  top: 55%; left: 35%; animation: star-drift 21s ease-in-out infinite 4s;  opacity: 0.03; color: var(--rose-primary); }
+.s22 { width: 20px; height: 20px; top: 58%; left: 55%; animation: star-drift 18s ease-in-out infinite 6s;  opacity: 0.08; color: var(--warning); }
+.s23 { width: 15px; height: 15px; top: 50%; left: 75%; animation: star-drift 23s ease-in-out infinite 1s;  opacity: 0.07; color: var(--success); }
+.s24 { width: 42px; height: 42px; top: 62%; left: 92%; animation: star-drift 16s ease-in-out infinite 5s;  opacity: 0.14; color: var(--rose-primary); }
+.s25 { width: 10px; height: 10px; top: 65%; left: 10%; animation: star-drift 19s ease-in-out infinite 3s;  opacity: 0.05; color: var(--info); }
+.s26 { width: 28px; height: 28px; top: 68%; left: 30%; animation: star-drift 22s ease-in-out infinite 7s;  opacity: 0.10; color: var(--rose-primary); }
+.s27 { width: 5px;  height: 5px;  top: 60%; left: 48%; animation: star-drift 14s ease-in-out infinite 2s;  opacity: 0.02; color: var(--warning); }
+.s28 { width: 17px; height: 17px; top: 72%; left: 65%; animation: star-drift 20s ease-in-out infinite 4s;  opacity: 0.07; color: var(--success); }
+.s29 { width: 33px; height: 33px; top: 78%; left: 82%; animation: star-drift 17s ease-in-out infinite 6s;  opacity: 0.12; color: var(--rose-primary); }
+.s30 { width: 12px; height: 12px; top: 75%; left: 18%; animation: star-drift 24s ease-in-out infinite 1s;  opacity: 0.06; color: var(--info); }
+.s31 { width: 44px; height: 44px; top: 82%; left: 42%; animation: star-drift 15s ease-in-out infinite 5s;  opacity: 0.14; color: var(--warning); }
+.s32 { width: 8px;  height: 8px;  top: 85%; left: 55%; animation: star-drift 21s ease-in-out infinite 3s;  opacity: 0.04; color: var(--rose-primary); }
+.s33 { width: 21px; height: 21px; top: 80%; left: 70%; animation: star-drift 18s ease-in-out infinite 2s;  opacity: 0.09; color: var(--success); }
+.s34 { width: 14px; height: 14px; top: 88%; left: 8%;  animation: star-drift 23s ease-in-out infinite 6s;  opacity: 0.06; color: var(--rose-primary); }
+.s35 { width: 30px; height: 30px; top: 92%; left: 30%; animation: star-drift 16s ease-in-out infinite 4s;  opacity: 0.11; color: var(--info); }
+.s36 { width: 6px;  height: 6px;  top: 86%; left: 48%; animation: star-drift 19s ease-in-out infinite 1s;  opacity: 0.03; color: var(--warning); }
+.s37 { width: 25px; height: 25px; top: 95%; left: 60%; animation: star-drift 22s ease-in-out infinite 5s;  opacity: 0.10; color: var(--rose-primary); }
+.s38 { width: 11px; height: 11px; top: 90%; left: 75%; animation: star-drift 14s ease-in-out infinite 3s;  opacity: 0.05; color: var(--success); }
+.s39 { width: 36px; height: 36px; top: 96%; left: 88%; animation: star-drift 20s ease-in-out infinite 7s;  opacity: 0.13; color: var(--rose-primary); }
+.s40 { width: 9px;  height: 9px;  top: 7%;  left: 75%; animation: star-drift 18s ease-in-out infinite 4s;  opacity: 0.04; color: var(--info); }
+.s41 { width: 19px; height: 19px; top: 22%; left: 46%; animation: star-drift 25s ease-in-out infinite 2s;  opacity: 0.08; color: var(--warning); }
+.s42 { width: 7px;  height: 7px;  top: 37%; left: 90%; animation: star-drift 15s ease-in-out infinite 6s;  opacity: 0.03; color: var(--rose-primary); }
+.s43 { width: 23px; height: 23px; top: 46%; left: 24%; animation: star-drift 21s ease-in-out infinite 1s;  opacity: 0.09; color: var(--success); }
+.s44 { width: 13px; height: 13px; top: 56%; left: 42%; animation: star-drift 17s ease-in-out infinite 5s;  opacity: 0.06; color: var(--info); }
+.s45 { width: 31px; height: 31px; top: 70%; left: 52%; animation: star-drift 23s ease-in-out infinite 3s;  opacity: 0.11; color: var(--rose-primary); }
+.s46 { width: 10px; height: 10px; top: 77%; left: 38%; animation: star-drift 16s ease-in-out infinite 7s;  opacity: 0.05; color: var(--warning); }
+.s47 { width: 16px; height: 16px; top: 84%; left: 22%; animation: star-drift 19s ease-in-out infinite 2s;  opacity: 0.07; color: var(--success); }
+.s48 { width: 27px; height: 27px; top: 93%; left: 50%; animation: star-drift 24s ease-in-out infinite 4s;  opacity: 0.10; color: var(--rose-primary); }
 @keyframes star-drift {
   0% { transform: translateY(0) rotate(0deg) scale(1); }
   20% { transform: translateY(-20px) rotate(72deg) scale(1.1); }
