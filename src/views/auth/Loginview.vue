@@ -9,24 +9,30 @@
     </div>
 
     <div class="floating-shapes pointer-events-none" aria-hidden="true">
-      <div class="shape shape-1">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      </div>
-      <div class="shape shape-2">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      </div>
-      <div class="shape shape-3">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-      </div>
-      <div class="shape shape-4">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-      </div>
-      <div class="shape shape-5">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
-      </div>
-      <div class="shape shape-6">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      </div>
+      <div class="shape s1"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s2"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s3"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s4"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s5"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s6"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s7"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s8"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s9"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s10"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s11"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s12"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s13"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s14"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s15"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s16"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s17"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s18"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s19"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s20"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s21"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s22"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s23"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape s24"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
     </div>
 
     <div class="grid-dots pointer-events-none" aria-hidden="true"></div>
@@ -318,21 +324,40 @@ async function handleRegister() {
 
 .floating-shapes .shape {
   position: absolute;
-  opacity: 0.06;
-  color: var(--rose-primary);
+  opacity: 0.1;
 }
 .floating-shapes .shape svg { width: 100%; height: 100%; }
-.shape-1 { width: 40px; height: 40px; top: 12%; left: 8%; animation: shape-float 12s ease-in-out infinite; }
-.shape-2 { width: 48px; height: 48px; top: 20%; right: 12%; animation: shape-float 16s ease-in-out infinite 2s; }
-.shape-3 { width: 36px; height: 36px; bottom: 25%; left: 15%; animation: shape-float 14s ease-in-out infinite 4s; }
-.shape-4 { width: 32px; height: 32px; bottom: 15%; right: 20%; animation: shape-float 18s ease-in-out infinite 1s; }
-.shape-5 { width: 28px; height: 28px; top: 55%; left: 5%; animation: shape-float 20s ease-in-out infinite 3s; }
-.shape-6 { width: 24px; height: 24px; top: 45%; right: 6%; animation: shape-float 15s ease-in-out infinite 5s; }
-@keyframes shape-float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-15px) rotate(5deg); }
-  50% { transform: translateY(-8px) rotate(-3deg); }
-  75% { transform: translateY(-20px) rotate(8deg); }
+.s1 { width: 28px; height: 28px; top: 5%; left: 3%; animation: star-drift 16s ease-in-out infinite; color: var(--rose-primary); }
+.s2 { width: 18px; height: 18px; top: 8%; left: 30%; animation: star-drift 20s ease-in-out infinite 2s; color: var(--warning); }
+.s3 { width: 34px; height: 34px; top: 2%; left: 55%; animation: star-drift 22s ease-in-out infinite 4s; color: var(--rose-primary); }
+.s4 { width: 14px; height: 14px; top: 6%; left: 78%; animation: star-drift 18s ease-in-out infinite 1s; color: var(--info); }
+.s5 { width: 22px; height: 22px; top: 15%; left: 15%; animation: star-drift 24s ease-in-out infinite 3s; color: var(--success); }
+.s6 { width: 16px; height: 16px; top: 22%; left: 92%; animation: star-drift 15s ease-in-out infinite 5s; color: var(--rose-primary); }
+.s7 { width: 30px; height: 30px; top: 30%; left: 1%; animation: star-drift 19s ease-in-out infinite 2s; color: var(--warning); }
+.s8 { width: 12px; height: 12px; top: 38%; left: 40%; animation: star-drift 21s ease-in-out infinite 6s; color: var(--rose-primary); }
+.s9 { width: 24px; height: 24px; top: 45%; left: 70%; animation: star-drift 17s ease-in-out infinite 1s; color: var(--success); }
+.s10 { width: 15px; height: 15px; top: 52%; left: 88%; animation: star-drift 23s ease-in-out infinite 4s; color: var(--info); }
+.s11 { width: 20px; height: 20px; top: 58%; left: 22%; animation: star-drift 14s ease-in-out infinite 3s; color: var(--rose-primary); }
+.s12 { width: 32px; height: 32px; top: 65%; left: 5%; animation: star-drift 25s ease-in-out infinite 5s; color: var(--warning); }
+.s13 { width: 10px; height: 10px; top: 70%; left: 50%; animation: star-drift 18s ease-in-out infinite 2s; color: var(--rose-primary); }
+.s14 { width: 26px; height: 26px; top: 75%; left: 35%; animation: star-drift 16s ease-in-out infinite 7s; color: var(--success); }
+.s15 { width: 17px; height: 17px; top: 80%; left: 68%; animation: star-drift 22s ease-in-out infinite 1s; color: var(--info); }
+.s16 { width: 36px; height: 36px; top: 85%; left: 85%; animation: star-drift 20s ease-in-out infinite 4s; color: var(--rose-primary); }
+.s17 { width: 13px; height: 13px; top: 12%; left: 45%; animation: star-drift 19s ease-in-out infinite 6s; color: var(--warning); }
+.s18 { width: 21px; height: 21px; top: 28%; left: 60%; animation: star-drift 15s ease-in-out infinite 3s; color: var(--success); }
+.s19 { width: 11px; height: 11px; top: 42%; left: 12%; animation: star-drift 24s ease-in-out infinite 5s; color: var(--rose-primary); }
+.s20 { width: 25px; height: 25px; top: 50%; left: 55%; animation: star-drift 17s ease-in-out infinite 2s; color: var(--info); }
+.s21 { width: 8px; height: 8px; top: 62%; left: 80%; animation: star-drift 21s ease-in-out infinite 4s; color: var(--rose-primary); }
+.s22 { width: 19px; height: 19px; top: 72%; left: 15%; animation: star-drift 18s ease-in-out infinite 6s; color: var(--warning); }
+.s23 { width: 23px; height: 23px; top: 88%; left: 45%; animation: star-drift 23s ease-in-out infinite 1s; color: var(--success); }
+.s24 { width: 14px; height: 14px; top: 95%; left: 10%; animation: star-drift 16s ease-in-out infinite 5s; color: var(--rose-primary); }
+@keyframes star-drift {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  20% { transform: translateY(-20px) rotate(72deg) scale(1.1); }
+  40% { transform: translateY(-8px) rotate(144deg) scale(0.95); }
+  60% { transform: translateY(-25px) rotate(216deg) scale(1.05); }
+  80% { transform: translateY(-12px) rotate(288deg) scale(0.9); }
+  100% { transform: translateY(0) rotate(360deg) scale(1); }
 }
 
 .grid-dots {

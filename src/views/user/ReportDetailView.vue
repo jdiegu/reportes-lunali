@@ -17,16 +17,18 @@
     <template v-else-if="report">
       <!-- Compact header card -->
       <div class="card p-3 sm:p-4">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0"
-               :style="{ background: platformColor + '18', border: '1px solid ' + platformColor + '30' }">
-            <Icon :icon="platformIconId" class="w-5 h-5 sm:w-6 sm:h-6" :style="{ color: platformColor }" />
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+          <div class="flex items-center gap-3 flex-1 min-w-0">
+            <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0"
+                 :style="{ background: platformColor + '18', border: '1px solid ' + platformColor + '30' }">
+              <Icon :icon="platformIconId" class="w-5 h-5 sm:w-6 sm:h-6" :style="{ color: platformColor }" />
+            </div>
+            <div class="min-w-0">
+              <h1 class="text-sm sm:text-base font-bold" style="color: var(--text-primary);">{{ report.platform }}</h1>
+              <p class="text-[11px] sm:text-xs truncate" style="color: var(--text-muted);">{{ report.mail }}</p>
+            </div>
           </div>
-          <div class="flex-1 min-w-0">
-            <h1 class="text-sm sm:text-base font-bold" style="color: var(--text-primary);">{{ report.platform }}</h1>
-            <p class="text-[11px] sm:text-xs truncate" style="color: var(--text-muted);">{{ report.mail }}</p>
-          </div>
-          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <div class="flex flex-wrap items-center justify-center sm:justify-end gap-1.5 sm:gap-2">
             <button v-if="authStore.isAdmin && report.status !== 'resolved'" @click="openResolveModal"
                     class="btn-primary text-[11px] sm:text-xs !py-1.5 !px-2.5 sm:!px-3">
               <CheckCircle class="w-3.5 h-3.5" />

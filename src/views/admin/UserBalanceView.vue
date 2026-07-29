@@ -22,9 +22,10 @@
             </div>
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2">
-                <h1 class="text-xl sm:text-2xl">{{ user.username }}</h1>
+                <h1 class="text-xl sm:text-2xl" :style="!user.active ? 'opacity:0.5;text-decoration:line-through;' : ''">{{ user.username }}</h1>
                 <span v-if="user.role === 'boss'" class="text-[10px] px-2 py-0.5 rounded-full font-bold" style="background: var(--rose-gradient); color: white;">BOSS</span>
                 <span v-else-if="user.role === 'admin'" class="text-[10px] px-2 py-0.5 rounded-full font-semibold" style="background: var(--info-bg); color: var(--info);">ADMIN</span>
+                <span v-if="!user.active" class="text-[10px] px-2 py-0.5 rounded-full font-semibold" style="background: var(--error-bg); color: var(--error);">INACTIVO</span>
               </div>
               <p class="text-xs sm:text-sm" style="color: var(--text-muted);">
                 {{ user.phone || 'Sin telefono' }} · Registrado {{ formatDate(user.createdAt) }}
@@ -91,25 +92,85 @@
             </div>
           </div>
 
-          <!-- Role toggle (boss only) -->
-          <div v-if="isBoss && user.role !== 'boss'" class="rounded-xl border p-5" :style="{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }">
+          <!-- Role toggle (boss only, not for self) -->
+          <div v-if="isBoss && user._id !== authStore.user?._id" class="rounded-xl border p-5" :style="{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }">
             <p class="text-sm font-semibold mb-4 flex items-center gap-2" style="color: var(--text-primary);">
-              <Shield class="w-4 h-4" style="color: var(--rose-primary);" />
+              <ShieldCheck class="w-4 h-4" style="color: var(--rose-primary);" />
               Cambiar rol
             </p>
             <div class="flex gap-2">
-              <button @click="setRole('user')"
+              <button @click="confirmRoleChange('user')"
                       class="flex-1 rounded-xl border px-4 py-3 text-sm font-medium transition-all text-center"
                       :style="user.role === 'user' ? { background: 'var(--rose-gradient)', borderColor: 'var(--rose-primary)', color: 'white' } : { background: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }">
                 <User class="w-4 h-4 mx-auto mb-1" />
                 Usuario
               </button>
-              <button @click="setRole('admin')"
+              <button @click="confirmRoleChange('admin')"
                       class="flex-1 rounded-xl border px-4 py-3 text-sm font-medium transition-all text-center"
                       :style="user.role === 'admin' ? { background: 'var(--rose-gradient)', borderColor: 'var(--rose-primary)', color: 'white' } : { background: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }">
-                <Shield class="w-4 h-4 mx-auto mb-1" />
+                <ShieldCheck class="w-4 h-4 mx-auto mb-1" />
                 Admin
               </button>
+              <button @click="confirmRoleChange('boss')"
+                      class="flex-1 rounded-xl border px-4 py-3 text-sm font-medium transition-all text-center"
+                      :style="user.role === 'boss' ? { background: 'var(--rose-gradient)', borderColor: 'var(--rose-primary)', color: 'white' } : { background: 'var(--bg-card)', borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }">
+                <Crown class="w-4 h-4 mx-auto mb-1" />
+                Boss
+              </button>
+            </div>
+          </div>
+
+          <!-- Danger zone (boss only, not for self) -->
+          <div v-if="isBoss && user._id !== authStore.user?._id" class="rounded-xl border p-5 space-y-4" :style="{ background: 'var(--bg-surface)', borderColor: 'rgba(239,68,68,0.15)' }">
+            <p class="text-sm font-semibold flex items-center gap-2" style="color: var(--error);">
+              <Trash2 class="w-4 h-4" />
+              Zona de peligro
+            </p>
+
+            <!-- Toggle activate/deactivate -->
+            <div v-if="user.active" class="rounded-lg p-4" style="background: rgba(239,68,68,0.04); border: 1px solid rgba(239,68,68,0.1);">
+              <div class="flex items-start sm:items-center justify-between gap-3 flex-col sm:flex-row">
+                <div>
+                  <p class="text-sm font-semibold" style="color: var(--text-primary);">Desactivar cuenta</p>
+                  <p class="text-xs mt-0.5" style="color: var(--text-muted);">El usuario no podra acceder al sistema, pero sus datos se conservan.</p>
+                </div>
+                <button @click="confirmToggleActive(false)"
+                        class="btn-danger text-sm !px-4 !py-2 shrink-0">
+                  <Trash2 class="w-4 h-4" />
+                  Desactivar
+                </button>
+              </div>
+            </div>
+
+            <div v-else class="rounded-lg p-4" style="background: rgba(75,181,116,0.04); border: 1px solid rgba(75,181,116,0.15);">
+              <div class="flex items-start sm:items-center justify-between gap-3 flex-col sm:flex-row">
+                <div>
+                  <p class="text-sm font-semibold" style="color: var(--success);">Reactivar cuenta</p>
+                  <p class="text-xs mt-0.5" style="color: var(--text-muted);">El usuario volvera a tener acceso al sistema.</p>
+                </div>
+                <button @click="confirmToggleActive(true)"
+                        class="text-sm !px-4 !py-2 inline-flex items-center gap-1.5 rounded-xl font-semibold transition-all"
+                        style="background: var(--success-bg); color: var(--success); border: 1px solid var(--success);">
+                  <UserCheck class="w-4 h-4" />
+                  Reactivar
+                </button>
+              </div>
+            </div>
+
+            <!-- Permanent delete (only for inactive users) -->
+            <div v-if="!user.active" class="rounded-lg p-4" :style="{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.18)' }">
+              <div class="flex items-start sm:items-center justify-between gap-3 flex-col sm:flex-row">
+                <div>
+                  <p class="text-sm font-semibold" style="color: var(--error);">Eliminar permanentemente</p>
+                  <p class="text-xs mt-0.5" style="color: var(--text-muted);">Borra al usuario de la base de datos. No se puede deshacer.</p>
+                </div>
+                <button @click="confirmHardDelete"
+                        class="text-sm !px-4 !py-2 inline-flex items-center gap-1.5 rounded-xl font-semibold transition-all"
+                        style="background: var(--error-bg); color: var(--error); border: 1px solid var(--error);">
+                  <Trash2 class="w-4 h-4" />
+                  Eliminar
+                </button>
+              </div>
             </div>
           </div>
 
@@ -126,19 +187,57 @@
     <div v-else class="text-center py-16 sm:py-20">
       <p class="text-sm" style="color: var(--text-muted);">Usuario no encontrado</p>
     </div>
+
+    <!-- Role change confirm dialog -->
+    <ConfirmDialog
+      :visible="showRoleConfirm"
+      :title="roleConfirmTitle"
+      :message="roleConfirmMessage"
+      :confirmText="roleConfirmButton"
+      :type="roleConfirmType"
+      :loading="roleLoading"
+      @confirm="executeRoleChange"
+      @cancel="showRoleConfirm = false"
+    />
+
+    <!-- Toggle active confirm dialog -->
+    <ConfirmDialog
+      :visible="showToggleActiveConfirm"
+      :title="toggleActiveTitle"
+      :message="toggleActiveMessage"
+      :confirmText="toggleActiveButton"
+      :type="toggleActiveType"
+      :loading="toggleActiveLoading"
+      @confirm="executeToggleActive"
+      @cancel="showToggleActiveConfirm = false"
+    />
+
+    <!-- Hard delete confirm dialog -->
+    <ConfirmDialog
+      :visible="showHardDeleteConfirm"
+      title="Eliminar permanentemente"
+      :message="hardDeleteConfirmMessage"
+      confirmText="Eliminar"
+      type="danger"
+      :loading="hardDeleteLoading"
+      @confirm="executeHardDelete"
+      @cancel="showHardDeleteConfirm = false"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../../store/auth'
 import { useToastStore } from '../../store/toast'
 import { usersApi } from '../../api/axios'
 import { LOCALE } from '../../config/constants'
-import { ArrowLeft, DollarSign, Loader2, Plus, Minus, User, Shield } from '@lucide/vue'
+import { ArrowLeft, DollarSign, Loader2, Plus, Minus, User, ShieldCheck, Crown, Trash2, UserCheck } from '@lucide/vue'
+import ConfirmDialog from '../../components/ui/ConfirmDialog.vue'
 
 const route = useRoute()
+const router = useRouter()
 const authStore = useAuthStore()
 const toast = useToastStore()
 
@@ -149,6 +248,29 @@ const user = ref(null)
 const balanceAmount = ref(null)
 const msg = ref('')
 const msgSuccess = ref(false)
+
+// Role confirm
+const showRoleConfirm = ref(false)
+const roleLoading = ref(false)
+const pendingRole = ref(null)
+const roleConfirmTitle = ref('')
+const roleConfirmMessage = ref('')
+const roleConfirmButton = ref('Cambiar')
+const roleConfirmType = ref('info')
+
+// Toggle active confirm
+const showToggleActiveConfirm = ref(false)
+const toggleActiveLoading = ref(false)
+const pendingActivate = ref(null) // true = activate, false = deactivate
+const toggleActiveTitle = ref('')
+const toggleActiveMessage = ref('')
+const toggleActiveButton = ref('')
+const toggleActiveType = ref('warning')
+
+// Hard delete confirm
+const showHardDeleteConfirm = ref(false)
+const hardDeleteLoading = ref(false)
+const hardDeleteConfirmMessage = ref('')
 
 const isBoss = computed(() => authStore.user?.role === 'boss')
 
@@ -209,14 +331,102 @@ async function saveUserData() {
   }
 }
 
-async function setRole(role) {
+const roleLabel = { user: 'Usuario', admin: 'Admin', boss: 'Boss' }
+
+function confirmRoleChange(role) {
   if (user.value.role === role) return
+  pendingRole.value = role
+  const from = roleLabel[user.value.role] || user.value.role
+  const to = roleLabel[role]
+  if (to === 'Boss') {
+    roleConfirmTitle.value = 'Ascender a Boss'
+    roleConfirmMessage.value = `${user.value.username} obtendra control total del sistema: podra gestionar administradores, modificar saldos y eliminar usuarios.`
+    roleConfirmButton.value = 'Ascender a Boss'
+    roleConfirmType.value = 'warning'
+  } else if (from === 'Boss') {
+    roleConfirmTitle.value = 'Descender de Boss'
+    roleConfirmMessage.value = `${user.value.username} perdera el rango Boss y pasara a ser "${to}". Sus datos y reportes se conservan.`
+    roleConfirmButton.value = 'Quitar rango Boss'
+    roleConfirmType.value = 'danger'
+  } else {
+    roleConfirmTitle.value = 'Cambiar rol'
+    roleConfirmMessage.value = `${user.value.username} pasara de "${from}" a "${to}". Se modificaran sus permisos de acceso.`
+    roleConfirmButton.value = 'Cambiar'
+    roleConfirmType.value = 'info'
+  }
+  showRoleConfirm.value = true
+}
+
+async function executeRoleChange() {
+  if (!pendingRole.value) return
+  roleLoading.value = true
   try {
-    await usersApi.updateRole(route.params.id, role)
-    user.value.role = role
-    toast.success('Rol actualizado', `${user.value.username} ahora es ${role}`)
+    await usersApi.updateRole(route.params.id, pendingRole.value)
+    user.value.role = pendingRole.value
+    toast.success('Rol actualizado', `${user.value.username} ahora es ${roleLabel[pendingRole.value]}`)
+    showRoleConfirm.value = false
   } catch (e) {
     toast.error('Error', e.response?.data?.message || 'No se pudo cambiar el rol')
+  } finally {
+    roleLoading.value = false
+    pendingRole.value = null
+  }
+}
+
+function confirmToggleActive(activate) {
+  pendingActivate.value = activate
+  if (activate) {
+    toggleActiveTitle.value = 'Reactivar cuenta'
+    toggleActiveMessage.value = `${user.value.username} podra acceder al sistema nuevamente. Todos sus datos y reportes se conservan.`
+    toggleActiveButton.value = 'Reactivar'
+    toggleActiveType.value = 'warning'
+  } else {
+    toggleActiveTitle.value = 'Desactivar cuenta'
+    toggleActiveMessage.value = `${user.value.username} no podra iniciar sesion, pero sus datos y reportes se conservan. Puedes reactivarlo en cualquier momento.`
+    toggleActiveButton.value = 'Desactivar'
+    toggleActiveType.value = 'danger'
+  }
+  showToggleActiveConfirm.value = true
+}
+
+async function executeToggleActive() {
+  if (pendingActivate.value === null) return
+  toggleActiveLoading.value = true
+  try {
+    if (pendingActivate.value) {
+      await usersApi.activate(route.params.id)
+      user.value.active = true
+      toast.success('Cuenta reactivada', `${user.value.username} puede acceder nuevamente`)
+    } else {
+      await usersApi.deactivate(route.params.id)
+      user.value.active = false
+      toast.success('Cuenta desactivada', `${user.value.username} ha sido desactivado`)
+    }
+    showToggleActiveConfirm.value = false
+  } catch (e) {
+    toast.error('Error', e.response?.data?.message || 'No se pudo cambiar el estado')
+  } finally {
+    toggleActiveLoading.value = false
+    pendingActivate.value = null
+  }
+}
+
+function confirmHardDelete() {
+  hardDeleteConfirmMessage.value = `Se eliminara a ${user.value.username} de la base de datos junto con todos sus reportes e historial. Esta operacion es irreversible.`
+  showHardDeleteConfirm.value = true
+}
+
+async function executeHardDelete() {
+  hardDeleteLoading.value = true
+  try {
+    await usersApi.delete(route.params.id)
+    toast.success('Usuario eliminado', `${user.value.username} ha sido eliminado permanentemente`)
+    showHardDeleteConfirm.value = false
+    router.push('/app/admin')
+  } catch (e) {
+    toast.error('Error', e.response?.data?.message || 'No se pudo eliminar')
+  } finally {
+    hardDeleteLoading.value = false
   }
 }
 

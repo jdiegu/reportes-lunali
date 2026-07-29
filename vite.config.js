@@ -13,11 +13,11 @@ export default defineConfig({
     port: parseInt(process.env.VITE_DEV_PORT || '5172'),
     proxy: {
       '/api': {
-        target: 'http://31.97.136.227:3001',
+        target: 'http://localhost:3001',
         changeOrigin: true
       },
       '/uploads': {
-        target: 'http://31.97.136.227:3001',
+        target: 'http://localhost:3001',
         changeOrigin: true
       }
     }

@@ -54,6 +54,9 @@ export const usersApi = {
   updateBalance: (id, amount, operation) =>
     api.patch(`/users/${id}/balance`, { amount, operation }),
   updateRole: (id, role) => api.patch(`/users/${id}/role`, { role }),
+  delete: (id) => api.delete(`/users/${id}`),
+  deactivate: (id) => api.put(`/users/${id}/deactivate`),
+  activate: (id) => api.put(`/users/${id}/activate`),
 };
 
 export const platformsApi = {
