@@ -57,6 +57,14 @@
       <div class="shape s46"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
       <div class="shape s47"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
       <div class="shape s48"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="shape h1"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+      <div class="shape h2"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+      <div class="shape h3"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+      <div class="shape h4"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+      <div class="shape h5"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+      <div class="shape h6"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+      <div class="shape h7"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+      <div class="shape h8"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
     </div>
 
     <div class="grid-dots pointer-events-none" aria-hidden="true"></div>
@@ -398,6 +406,14 @@ async function handleRegister() {
 .s46 { width: 10px; height: 10px; top: 77%; left: 38%; animation: star-drift 16s ease-in-out infinite 7s;  opacity: 0.05; color: var(--warning); }
 .s47 { width: 16px; height: 16px; top: 84%; left: 22%; animation: star-drift 19s ease-in-out infinite 2s;  opacity: 0.07; color: var(--success); }
 .s48 { width: 27px; height: 27px; top: 93%; left: 50%; animation: star-drift 24s ease-in-out infinite 4s;  opacity: 0.10; color: var(--rose-primary); }
+.h1  { width: 24px; height: 24px; top: 9%;  left: 40%; animation: star-drift 17s ease-in-out infinite 1s;  opacity: 0.12; color: var(--rose-primary); }
+.h2  { width: 16px; height: 16px; top: 18%; left: 68%; animation: star-drift 21s ease-in-out infinite 3s;  opacity: 0.10; color: var(--warning); }
+.h3  { width: 30px; height: 30px; top: 33%; left: 8%;  animation: star-drift 19s ease-in-out infinite 5s;  opacity: 0.12; color: var(--rose-primary); }
+.h4  { width: 14px; height: 14px; top: 44%; left: 88%; animation: star-drift 23s ease-in-out infinite 2s;  opacity: 0.09; color: var(--info); }
+.h5  { width: 20px; height: 20px; top: 58%; left: 33%; animation: star-drift 15s ease-in-out infinite 4s;  opacity: 0.11; color: var(--rose-primary); }
+.h6  { width: 26px; height: 26px; top: 70%; left: 62%; animation: star-drift 22s ease-in-out infinite 6s;  opacity: 0.12; color: var(--success); }
+.h7  { width: 12px; height: 12px; top: 82%; left: 25%; animation: star-drift 18s ease-in-out infinite 2s;  opacity: 0.08; color: var(--rose-primary); }
+.h8  { width: 18px; height: 18px; top: 90%; left: 75%; animation: star-drift 20s ease-in-out infinite 5s;  opacity: 0.10; color: var(--warning); }
 @keyframes star-drift {
   0% { transform: translateY(0) rotate(0deg) scale(1); }
   20% { transform: translateY(-20px) rotate(72deg) scale(1.1); }

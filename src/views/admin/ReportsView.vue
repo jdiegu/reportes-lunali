@@ -17,7 +17,7 @@
       <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2.5">
         <div class="relative flex-1 min-w-0">
           <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--rose-primary);" />
-          <input v-model="filters.search" @input="onSearch" type="text" placeholder="Buscar..."
+          <input v-model="filters.search" @input="onSearch" type="text" placeholder="Buscar cuenta o persona..."
                  class="input-field pl-9 text-sm" />
         </div>
         <div class="flex gap-2">
@@ -73,7 +73,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../../store/auth'
 import { useReportsStore } from '../../store/reports'
@@ -88,7 +88,33 @@ const platformsStore = usePlatformsStore()
 const loading = ref(true)
 const searchTimer = ref(null)
 const sortAsc = ref(false)
-const filters = ref({ search: '', status: '', platform: '' })
+
+const FILTERS_KEY = 'lunali.reportFilters'
+const VALID_STATUS = ['pending', 'in_progress', 'resolved']
+
+function loadSavedFilters() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(FILTERS_KEY) || '{}')
+    return {
+      status: VALID_STATUS.includes(saved.status) ? saved.status : '',
+      platform: typeof saved.platform === 'string' ? saved.platform : '',
+    }
+  } catch {
+    return { status: '', platform: '' }
+  }
+}
+
+const savedFilters = loadSavedFilters()
+const filters = ref({ search: '', status: savedFilters.status, platform: savedFilters.platform })
+
+watch(
+  () => [filters.value.status, filters.value.platform],
+  ([status, platform]) => {
+    try {
+      localStorage.setItem(FILTERS_KEY, JSON.stringify({ status, platform }))
+    } catch { }
+  },
+)
 
 const hasFilters = computed(() => filters.value.search || filters.value.status || filters.value.platform)
 
@@ -98,7 +124,14 @@ const sortedReports = computed(() => {
 
   if (search) {
     const q = search.toLowerCase()
-    list = list.filter(r => r.mail?.toLowerCase().includes(q) || r.platform?.toLowerCase().includes(q))
+    list = list.filter(r => {
+      const mail = (r.mail || '').toLowerCase()
+      const platform = (r.platform || '').toLowerCase()
+      const batchEmails = (r.batch_emails || []).map(e => (e || '').toLowerCase()).join(' ')
+      const username = (r.user?.username || '').toLowerCase()
+      const name = (r.user?.name || '').toLowerCase()
+      return mail.includes(q) || platform.includes(q) || batchEmails.includes(q) || username.includes(q) || name.includes(q)
+    })
   }
   if (status) list = list.filter(r => r.status === status)
   if (platform) list = list.filter(r => r.platform === platform)
