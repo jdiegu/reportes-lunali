@@ -33,6 +33,7 @@ const router = createRouter({
       children: [
         { path: "", name: "Dashboard", component: () => import("../views/admin/DashboardView.vue") },
         { path: "reports", name: "Reports", component: () => import("../views/admin/ReportsView.vue") },
+        { path: "stats", name: "Stats", component: () => import("../views/admin/StatsView.vue"), meta: { adminOnly: true } },
         { path: "reports/new", name: "NewReport", component: () => import("../views/user/NewReportView.vue"), meta: { userOnly: true } },
         { path: "reports/:id", name: "ReportDetail", component: () => import("../views/user/ReportDetailView.vue") },
         { path: "admin", name: "Admin", component: () => import("../views/admin/AdminView.vue"), meta: { adminOnly: true } },

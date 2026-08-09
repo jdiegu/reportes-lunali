@@ -36,6 +36,7 @@ export const authApi = {
 export const reportsApi = {
   list: (params = {}) => api.post("/reports/list", params),
   get: (id) => api.get(`/reports/${id}`),
+  stats: () => api.get("/reports/stats"),
   create: (formData) =>
     api.post("/reports", formData, {
       headers: { "Content-Type": "multipart/form-data" },

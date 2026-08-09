@@ -170,6 +170,7 @@ const pageTitle = computed(() => {
   const map = {
     Dashboard: "Inicio",
     Reports: "Reportes",
+    Stats: "Estadisticas",
     NewReport: "Nuevo Reporte",
     ReportDetail: "Detalle del Reporte",
     Admin: "Administracion",
@@ -191,6 +192,7 @@ const navItems = computed(() => {
     base.push({ to: "/app/balance", label: "Mi saldo", icon: "wallet" });
   }
   if (authStore.isAdmin) {
+    base.push({ to: "/app/stats", label: "Estadisticas", icon: "chart" });
     base.push({ to: "/app/admin", label: "Admin", icon: "shield" });
     base.push({ to: "/app/admin/platforms", label: "Plataformas", icon: "apps" });
   }
