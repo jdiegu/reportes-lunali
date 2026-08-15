@@ -23,7 +23,7 @@
             {{ report.platform_type === 'profile' ? 'Perfil' : 'Cuenta' }}
           </span>
         </div>
-        <p class="text-xs truncate mb-1" style="color: var(--text-muted);">{{ report.is_batch ? `${(report.batch_emails || []).length + 1} cuentas` : report.mail }}</p>
+        <p class="text-xs truncate mb-1" style="color: var(--text-muted);">{{ report.is_batch ? `${batchCount} cuentas` : report.mail }}</p>
         <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
           <span v-if="resolutionChip" :style="resolutionChip.style"
                 class="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-1 rounded-md max-w-full">
@@ -54,7 +54,7 @@
               {{ report.platform_type === 'profile' ? 'Perfil' : 'Cuenta' }}
             </span>
           </div>
-          <p class="text-xs truncate" style="color: var(--text-muted);">{{ report.is_batch ? `${(report.batch_emails || []).length + 1} cuentas en lote` : report.mail }}</p>
+          <p class="text-xs truncate" style="color: var(--text-muted);">{{ report.is_batch ? `${batchCount} cuentas en lote` : report.mail }}</p>
         </div>
 
         <div class="flex items-center gap-3 shrink-0">
@@ -106,6 +106,13 @@ const platformsStore = usePlatformsStore()
 onMounted(() => platformsStore.fetch())
 
 const hover = ref(false)
+
+const batchCount = computed(() => {
+  const emails = props.report.batch_emails || []
+  const mail = props.report.mail
+  if (mail && !emails.includes(mail)) return emails.length + 1
+  return emails.length
+})
 
 const iconId = computed(() => platformsStore.getIconId(props.report.platform))
 const platformColor = computed(() => platformsStore.getColor(props.report.platform))

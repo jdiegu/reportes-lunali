@@ -148,19 +148,13 @@
         <template v-else>
           <div class="flex items-center gap-2 mb-3">
             <span class="rounded-xl px-2.5 py-1 text-[10px] sm:text-xs font-semibold" style="background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning);">
-              Lote — {{ (report.batch_emails || []).length + 1 }} cuentas
+              Lote — {{ batchMails.length }} cuentas
             </span>
           </div>
           <div class="rounded-xl p-2.5 mb-2" style="background: var(--bg-surface);">
             <p class="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider mb-1.5" style="color: var(--text-muted);">Emails</p>
             <div class="space-y-1">
-              <div class="flex items-center gap-1.5">
-                <p class="text-xs sm:text-sm font-medium truncate font-mono" style="color: var(--text-primary);">{{ report.mail }}</p>
-                <button @click="copyToClipboard(report.mail)" class="btn-ghost shrink-0 !p-0.5 rounded" style="color: var(--rose-primary);">
-                  <Copy class="w-3.5 h-3.5" />
-                </button>
-              </div>
-              <div v-for="(email, idx) in (report.batch_emails || [])" :key="idx" class="flex items-center gap-1.5">
+              <div v-for="(email, idx) in batchMails" :key="idx" class="flex items-center gap-1.5">
                 <p class="text-xs sm:text-sm font-medium truncate font-mono" style="color: var(--text-primary);">{{ email }}</p>
                 <button @click="copyToClipboard(email)" class="btn-ghost shrink-0 !p-0.5 rounded" style="color: var(--rose-primary);">
                   <Copy class="w-3.5 h-3.5" />
@@ -401,6 +395,15 @@ const deleteLoading = ref(false)
 const report = computed(() => reportsStore.currentReport)
 const platformIconId = computed(() => platformsStore.getIconId(report.value?.platform))
 const platformColor = computed(() => platformsStore.getColor(report.value?.platform))
+
+const batchMails = computed(() => {
+  const r = report.value
+  if (!r?.is_batch) return []
+  const emails = [...(r.batch_emails || [])]
+  const mail = r.mail
+  if (mail && !emails.includes(mail)) emails.unshift(mail)
+  return emails
+})
 
 const statusLabel = computed(() => {
   const s = report.value?.status

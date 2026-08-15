@@ -13,7 +13,7 @@
       </button>
     </div>
 
-    <div class="card p-3 sm:p-4">
+    <div class="card p-3 sm:p-4 space-y-3">
       <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-2.5">
         <div class="relative flex-1 min-w-0">
           <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--rose-primary);" />
@@ -29,20 +29,36 @@
             <X class="w-4 h-4" />
           </button>
         </div>
-        <div class="flex gap-2">
-          <select v-model="filters.status" @change="onFilterChange" class="input-field text-sm !w-auto flex-1 sm:flex-initial">
+        <button @click="onFilterChange" title="Aplicar filtros" class="btn-secondary text-xs !h-[38px] !px-3 shrink-0" style="color: var(--rose-primary);">
+          <RefreshCw class="w-4 h-4" />
+          <span class="hidden md:inline">Aplicar</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+        <div class="min-w-0">
+          <p class="input-label !text-[10px] !mb-1.5">Estado</p>
+          <select v-model="filters.status" @change="onFilterChange" class="input-field text-sm">
             <option value="">Todos</option>
             <option value="pending">Pendiente</option>
             <option value="in_progress">En proceso</option>
             <option value="resolved">Resuelto</option>
           </select>
-          <select v-model="filters.platform" @change="onFilterChange" class="input-field text-sm !w-auto flex-1 sm:flex-initial">
-            <option value="">Plataformas</option>
+        </div>
+        <div class="min-w-0">
+          <p class="input-label !text-[10px] !mb-1.5">Plataforma</p>
+          <select v-model="filters.platform" @change="onFilterChange" class="input-field text-sm">
+            <option value="">Todas</option>
             <option v-for="p in platformsStore.platformNames" :key="p" :value="p">{{ p }}</option>
           </select>
-          <button @click="onFilterChange" class="btn-secondary text-xs !h-[38px] !px-3 shrink-0" style="color: var(--rose-primary);">
-            <RefreshCw class="w-4 h-4" />
-          </button>
+        </div>
+        <div class="min-w-0">
+          <p class="input-label !text-[10px] !mb-1.5">Creado desde</p>
+          <input v-model="filters.dateFrom" type="date" :max="filters.dateTo || undefined" @change="onFilterChange" class="input-field text-sm" />
+        </div>
+        <div class="min-w-0">
+          <p class="input-label !text-[10px] !mb-1.5">Creado hasta</p>
+          <input v-model="filters.dateTo" type="date" :min="filters.dateFrom || undefined" @change="onFilterChange" class="input-field text-sm" />
         </div>
       </div>
     </div>
@@ -108,29 +124,37 @@ function loadSavedFilters() {
       search: typeof saved.search === 'string' ? saved.search : '',
       status: VALID_STATUS.includes(saved.status) ? saved.status : '',
       platform: typeof saved.platform === 'string' ? saved.platform : '',
+      dateFrom: typeof saved.dateFrom === 'string' ? saved.dateFrom : '',
+      dateTo: typeof saved.dateTo === 'string' ? saved.dateTo : '',
     }
   } catch {
-    return { search: '', status: '', platform: '' }
+    return { search: '', status: '', platform: '', dateFrom: '', dateTo: '' }
   }
 }
 
 const savedFilters = loadSavedFilters()
-const filters = ref({ search: savedFilters.search, status: savedFilters.status, platform: savedFilters.platform })
+const filters = ref({
+  search: savedFilters.search,
+  status: savedFilters.status,
+  platform: savedFilters.platform,
+  dateFrom: savedFilters.dateFrom,
+  dateTo: savedFilters.dateTo,
+})
 
 watch(
-  () => [filters.value.search, filters.value.status, filters.value.platform],
-  ([search, status, platform]) => {
+  () => [filters.value.search, filters.value.status, filters.value.platform, filters.value.dateFrom, filters.value.dateTo],
+  ([search, status, platform, dateFrom, dateTo]) => {
     try {
-      localStorage.setItem(FILTERS_KEY, JSON.stringify({ search, status, platform }))
+      localStorage.setItem(FILTERS_KEY, JSON.stringify({ search, status, platform, dateFrom, dateTo }))
     } catch { }
   },
 )
 
-const hasFilters = computed(() => filters.value.search || filters.value.status || filters.value.platform)
+const hasFilters = computed(() => filters.value.search || filters.value.status || filters.value.platform || filters.value.dateFrom || filters.value.dateTo)
 
 const sortedReports = computed(() => {
   let list = [...(reportsStore.reports || [])]
-  const { search, status, platform } = filters.value
+  const { search, status, platform, dateFrom, dateTo } = filters.value
 
   if (search) {
     const q = search.toLowerCase()
@@ -149,6 +173,14 @@ const sortedReports = computed(() => {
   }
   if (status) list = list.filter(r => r.status === status)
   if (platform) list = list.filter(r => r.platform === platform)
+  if (dateFrom) {
+    const from = new Date(`${dateFrom}T00:00:00`)
+    list = list.filter(r => new Date(r.createdAt) >= from)
+  }
+  if (dateTo) {
+    const to = new Date(`${dateTo}T23:59:59.999`)
+    list = list.filter(r => new Date(r.createdAt) <= to)
+  }
 
   list.sort((a, b) => sortAsc.value
     ? new Date(a.createdAt) - new Date(b.createdAt)
