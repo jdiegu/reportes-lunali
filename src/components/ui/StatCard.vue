@@ -1,17 +1,17 @@
 <template>
-  <div class="card p-4 sm:p-5 flex items-center gap-3 sm:gap-4">
-    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0"
+  <div class="card p-3 sm:p-5 flex items-center gap-2.5 sm:gap-4 min-w-0">
+    <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0"
          :style="{ background: colorMap[stat.color]?.bg || 'var(--rose-lighter)' }">
-      <svg class="w-5 h-5" :style="{ color: colorMap[stat.color]?.text || 'var(--rose-primary)' }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5" :style="{ color: colorMap[stat.color]?.text || 'var(--rose-primary)' }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" :d="iconPaths[stat.icon] || iconPaths.list" />
       </svg>
     </div>
-    <div class="min-w-0">
+    <div class="min-w-0 flex-1">
       <div v-if="loading" class="skeleton h-6 sm:h-7 w-10 sm:w-12 rounded mb-1"></div>
-      <p v-else class="text-xl sm:text-2xl font-display font-bold" :style="{ color: colorMap[stat.color]?.text || 'var(--rose-primary)' }">
+      <p v-else class="text-lg sm:text-2xl font-display font-bold leading-tight tabular-nums [overflow-wrap:anywhere]" :style="{ color: colorMap[stat.color]?.text || 'var(--rose-primary)' }">
         {{ stat.value }}
       </p>
-      <p class="text-[11px] sm:text-xs" style="color: var(--text-muted);">{{ stat.label }}</p>
+      <p class="text-[10px] sm:text-xs truncate mt-0.5" style="color: var(--text-muted);">{{ stat.label }}</p>
     </div>
   </div>
 </template>

@@ -24,7 +24,12 @@
           </span>
         </div>
         <p class="text-xs truncate mb-1" style="color: var(--text-muted);">{{ report.is_batch ? `${(report.batch_emails || []).length + 1} cuentas` : report.mail }}</p>
-        <div class="flex items-center gap-2 flex-wrap">
+        <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <span v-if="resolutionChip" :style="resolutionChip.style"
+                class="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-1 rounded-md max-w-full">
+            <component :is="resolutionChip.icon" class="w-3.5 h-3.5 shrink-0" />
+            <span class="truncate">{{ resolutionChip.label }}</span>
+          </span>
           <span :class="statusBadgeClass">{{ statusLabel }}</span>
           <p v-if="showUser && report.user" class="text-[11px] flex items-center gap-1" style="color: var(--text-muted);">
             <User class="w-3 h-3 shrink-0" />
@@ -32,7 +37,7 @@
           </p>
           <p class="text-[11px] flex items-center gap-1" style="color: var(--text-muted);">
             <Calendar class="w-3 h-3 shrink-0" />
-            {{ deliveryDate }}
+            {{ createdDate }}
           </p>
         </div>
       </div>
@@ -59,11 +64,16 @@
           </p>
           <p class="text-xs flex items-center gap-1.5 whitespace-nowrap" style="color: var(--text-muted);">
             <Calendar class="w-3.5 h-3.5 shrink-0" />
-            {{ deliveryDate }}
+            {{ createdDate }}
           </p>
         </div>
 
-        <div class="flex items-center gap-3 shrink-0">
+        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+          <span v-if="resolutionChip" :style="resolutionChip.style"
+                class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2 py-1 rounded-md max-w-[150px]">
+            <component :is="resolutionChip.icon" class="w-3.5 h-3.5 shrink-0" />
+            <span class="truncate">{{ resolutionChip.label }}</span>
+          </span>
           <span :class="statusBadgeClass">{{ statusLabel }}</span>
           <div class="flex items-center gap-2">
             <span class="text-[11px] font-medium whitespace-nowrap" style="color: var(--text-muted);">{{ relativeDate }}</span>
@@ -80,7 +90,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { ChevronRight, User, Calendar } from '@lucide/vue'
+import { ChevronRight, User, Calendar, ArrowRight, DollarSign, XCircle } from '@lucide/vue'
 import { Icon } from '@iconify/vue'
 import { LOCALE } from '../../config/constants'
 import { getPlatformIconId, getPlatformColor } from '../../utils/platformIcons'
@@ -146,10 +156,44 @@ const relativeDate = computed(() => {
   return date.toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' })
 })
 
-const deliveryDate = computed(() => {
-  if (!props.report.delivery_date) return ''
-  const d = new Date(props.report.delivery_date)
-  return d.toLocaleDateString(LOCALE, { day: 'numeric', month: 'short', year: 'numeric' })
+const createdDate = computed(() => {
+  if (!props.report.createdAt) return ''
+  const d = new Date(props.report.createdAt)
+  if (isNaN(d.getTime())) return ''
+  const now = new Date()
+  const opts = { day: 'numeric', month: 'short' }
+  if (d.getFullYear() !== now.getFullYear()) opts.year = 'numeric'
+  return d.toLocaleDateString(LOCALE, opts)
+})
+
+const resolutionChip = computed(() => {
+  const res = props.report.resolution
+  if (props.report.status !== 'resolved' || !res || !res.type) return null
+
+  let icon, label
+  if (res.type === 'replace') {
+    icon = ArrowRight
+    if (res.replaced_mail) label = res.replaced_mail
+    else if (res.replaced_mails && res.replaced_mails.length > 0) {
+      label = res.replaced_mails.length === 1
+        ? res.replaced_mails[0]
+        : `${res.replaced_mails.length} nuevos correos`
+    } else {
+      label = 'Reemplazo'
+    }
+    return { icon, label, style: { background: 'var(--info-bg)', color: 'var(--info)' } }
+  }
+  if (res.type === 'credit') {
+    icon = DollarSign
+    label = `$${Number(res.credit_amount || 0).toFixed(2)}`
+    return { icon, label, style: { background: 'var(--success-bg)', color: 'var(--success)' } }
+  }
+  if (res.type === 'reject') {
+    icon = XCircle
+    label = 'No procede'
+    return { icon, label, style: { background: 'var(--error-bg)', color: 'var(--error)' } }
+  }
+  return null
 })
 </script>
 

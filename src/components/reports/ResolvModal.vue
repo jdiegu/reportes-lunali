@@ -14,7 +14,7 @@
               </div>
               <div>
                 <h3 class="text-base sm:text-lg font-semibold" style="color: var(--text-primary);">{{ editingResolution ? 'Editar Resolución' : 'Resolver Reporte' }}</h3>
-                <p class="text-xs" style="color: var(--text-muted);">{{ editingResolution ? 'Modifica los datos de la resolucion' : 'Se resolveran todos los reportes con la misma cuenta' }}</p>
+                <p class="text-xs" style="color: var(--text-muted);">{{ editingResolution ? 'Modifica los datos de la resolucion' : (selectedType === 'credit' ? 'Solo se resolvera este reporte' : 'Se resolveran todos los reportes con la misma cuenta') }}</p>
               </div>
             </div>
             <button @click="cancel" class="btn-icon w-8 h-8">

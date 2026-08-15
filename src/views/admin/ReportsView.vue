@@ -18,7 +18,16 @@
         <div class="relative flex-1 min-w-0">
           <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style="color: var(--rose-primary);" />
           <input v-model="filters.search" @input="onSearch" type="text" placeholder="Buscar cuenta o persona..."
-                 class="input-field pl-9 text-sm" />
+                 class="input-field pl-9 pr-9 text-sm" />
+          <button
+            v-if="filters.search"
+            @click="clearSearch"
+            title="Limpiar busqueda"
+            class="absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full transition-colors"
+            style="color: var(--text-muted);"
+          >
+            <X class="w-4 h-4" />
+          </button>
         </div>
         <div class="flex gap-2">
           <select v-model="filters.status" @change="onFilterChange" class="input-field text-sm !w-auto flex-1 sm:flex-initial">
@@ -79,7 +88,7 @@ import { useAuthStore } from '../../store/auth'
 import { useReportsStore } from '../../store/reports'
 import { usePlatformsStore } from '../../store/platforms'
 import ReportRow from '../../components/reports/ReportRow.vue'
-import { ArrowUpDown, Search, RefreshCw, FileText } from '@lucide/vue'
+import { ArrowUpDown, Search, RefreshCw, FileText, X } from '@lucide/vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -96,22 +105,23 @@ function loadSavedFilters() {
   try {
     const saved = JSON.parse(localStorage.getItem(FILTERS_KEY) || '{}')
     return {
+      search: typeof saved.search === 'string' ? saved.search : '',
       status: VALID_STATUS.includes(saved.status) ? saved.status : '',
       platform: typeof saved.platform === 'string' ? saved.platform : '',
     }
   } catch {
-    return { status: '', platform: '' }
+    return { search: '', status: '', platform: '' }
   }
 }
 
 const savedFilters = loadSavedFilters()
-const filters = ref({ search: '', status: savedFilters.status, platform: savedFilters.platform })
+const filters = ref({ search: savedFilters.search, status: savedFilters.status, platform: savedFilters.platform })
 
 watch(
-  () => [filters.value.status, filters.value.platform],
-  ([status, platform]) => {
+  () => [filters.value.search, filters.value.status, filters.value.platform],
+  ([search, status, platform]) => {
     try {
-      localStorage.setItem(FILTERS_KEY, JSON.stringify({ status, platform }))
+      localStorage.setItem(FILTERS_KEY, JSON.stringify({ search, status, platform }))
     } catch { }
   },
 )
@@ -128,9 +138,13 @@ const sortedReports = computed(() => {
       const mail = (r.mail || '').toLowerCase()
       const platform = (r.platform || '').toLowerCase()
       const batchEmails = (r.batch_emails || []).map(e => (e || '').toLowerCase()).join(' ')
+      const replacedMail = (r.resolution?.replaced_mail || '').toLowerCase()
+      const replacedMails = (r.resolution?.replaced_mails || []).map(e => (e || '').toLowerCase()).join(' ')
       const username = (r.user?.username || '').toLowerCase()
       const name = (r.user?.name || '').toLowerCase()
-      return mail.includes(q) || platform.includes(q) || batchEmails.includes(q) || username.includes(q) || name.includes(q)
+      return mail.includes(q) || platform.includes(q) || batchEmails.includes(q)
+        || replacedMail.includes(q) || replacedMails.includes(q)
+        || username.includes(q) || name.includes(q)
     })
   }
   if (status) list = list.filter(r => r.status === status)
@@ -148,6 +162,11 @@ function onSearch() {
   searchTimer.value = setTimeout(() => {
     filterReports()
   }, 300)
+}
+
+function clearSearch() {
+  filters.value.search = ''
+  onSearch()
 }
 
 function onFilterChange() {
