@@ -166,7 +166,7 @@ const roleLabel = computed(() => {
   return "Usuario";
 });
 
-const pageTitle = computed(() => {
+  const pageTitle = computed(() => {
   const map = {
     Dashboard: "Inicio",
     Reports: "Reportes",
@@ -177,6 +177,7 @@ const pageTitle = computed(() => {
     UserDetail: "Detalle del Usuario",
     Balance: "Mi saldo",
     Platforms: "Plataformas",
+    Settings: "Configuracion",
     Profile: "Mi perfil",
   };
   return map[route.name] || "Lunali";
@@ -195,6 +196,9 @@ const navItems = computed(() => {
     base.push({ to: "/app/stats", label: "Estadisticas", icon: "chart" });
     base.push({ to: "/app/admin", label: "Admin", icon: "shield" });
     base.push({ to: "/app/admin/platforms", label: "Plataformas", icon: "apps" });
+  }
+  if (authStore.user?.role === 'boss') {
+    base.push({ to: "/app/settings", label: "Configuracion", icon: "settings" });
   }
   base.push({ to: "/app/profile", label: "Mi perfil", icon: "user" });
   return base;

@@ -75,4 +75,10 @@ export const notificationsApi = {
   markAllRead: () => api.patch("/notifications/read-all"),
 };
 
+export const siteSettingsApi = {
+  status: () => api.get("/site-settings/status"),
+  get: () => api.get("/site-settings"),
+  update: (data) => api.put("/site-settings", data),
+};
+
 export default api;
