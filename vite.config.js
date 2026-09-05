@@ -10,17 +10,25 @@ export default defineConfig({
     }
   },
   server: {
-    port: parseInt(process.env.VITE_DEV_PORT || '5172'),
+    port: parseInt(process.env.VITE_DEV_PORT || '5174'),
     allowedHosts: [
-         'lunali-reportscare.jdiegu.online'
+         'saritashop-reportes.jdiegu.online'
     ],
     proxy: {
       '/api': {
-        target: 'https://lunali-api.jdiegu.online',
+<<<<<<< HEAD
+        target: process.env.VITE_API_TARGET || 'http://localhost:3000',
         changeOrigin: true
       },
       '/uploads': {
-        target: 'https://lunali-api.jdiegu.online',
+        target: process.env.VITE_API_TARGET || 'http://localhost:3000',
+=======
+        target: 'https://sarita-api.jdiegu.online',
+        changeOrigin: true
+      },
+      '/uploads': {
+        target: 'https://sarita-api.jdiegu.online/',
+>>>>>>> bf530a5a88f02069f1f777d49e5f97bb5ce6f434
         changeOrigin: true
       }
     }

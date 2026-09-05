@@ -265,14 +265,15 @@
 
           <div class="flex items-center gap-2 mb-3">
             <div class="rounded-lg px-2.5 py-1.5 flex items-center gap-1.5 text-xs font-semibold" :style="{
-              background: report.resolution.type === 'replace' ? 'var(--info-bg)' : report.resolution.type === 'credit' ? 'var(--success-bg)' : 'var(--error-bg)',
-              color: report.resolution.type === 'replace' ? 'var(--info)' : report.resolution.type === 'credit' ? 'var(--success)' : 'var(--error)',
-              border: '1px solid ' + (report.resolution.type === 'replace' ? 'var(--info)' : report.resolution.type === 'credit' ? 'var(--success)' : 'var(--error)'),
+              background: report.resolution.type === 'replace' ? 'var(--info-bg)' : report.resolution.type === 'credit' || report.resolution.type === 'reactivated' ? 'var(--success-bg)' : 'var(--error-bg)',
+              color: report.resolution.type === 'replace' ? 'var(--info)' : report.resolution.type === 'credit' || report.resolution.type === 'reactivated' ? 'var(--success)' : 'var(--error)',
+              border: '1px solid ' + (report.resolution.type === 'replace' ? 'var(--info)' : report.resolution.type === 'credit' || report.resolution.type === 'reactivated' ? 'var(--success)' : 'var(--error)'),
             }">
               <CheckCircle v-if="report.resolution.type === 'replace'" class="w-3.5 h-3.5" />
               <Package v-else-if="report.resolution.type === 'credit'" class="w-3.5 h-3.5" />
+              <RotateCcw v-else-if="report.resolution.type === 'reactivated'" class="w-3.5 h-3.5" />
               <AlertTriangle v-else class="w-3.5 h-3.5" />
-              {{ report.resolution.type === 'replace' ? 'Reemplazo' : report.resolution.type === 'credit' ? 'Credito' : 'Rechazado' }}
+              {{ report.resolution.type === 'replace' ? 'Reemplazo' : report.resolution.type === 'credit' ? 'Credito' : report.resolution.type === 'reactivated' ? 'Reactivada' : 'Rechazado' }}
             </div>
           </div>
 
@@ -371,7 +372,7 @@ import { useToastStore } from '../../store/toast'
 import { LOCALE } from '../../config/constants'
 import { usePlatformsStore } from '../../store/platforms'
 import { Icon } from '@iconify/vue'
-import { ArrowLeft, Check, Info, Clock, FileText, Image, Shield, Edit, Trash2, Eye, EyeOff, Copy, Users, Phone, Calendar, Key, AlertTriangle, Package, CheckCircle } from '@lucide/vue'
+import { ArrowLeft, Check, Info, Clock, FileText, Image, Shield, Edit, Trash2, Eye, EyeOff, Copy, Users, Phone, Calendar, Key, AlertTriangle, Package, CheckCircle, RotateCcw } from '@lucide/vue'
 import ResolvModal from '../../components/reports/ResolvModal.vue'
 import ConfirmDialog from '../../components/ui/ConfirmDialog.vue'
 

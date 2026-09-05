@@ -36,14 +36,18 @@
       </div>
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
-        <div class="min-w-0">
+        <div class="min-w-0 col-span-2 lg:col-span-1">
           <p class="input-label !text-[10px] !mb-1.5">Estado</p>
-          <select v-model="filters.status" @change="onFilterChange" class="input-field text-sm">
-            <option value="">Todos</option>
-            <option value="pending">Pendiente</option>
-            <option value="in_progress">En proceso</option>
-            <option value="resolved">Resuelto</option>
-          </select>
+          <div class="flex flex-wrap gap-1.5">
+            <button
+              v-for="opt in STATUS_OPTIONS" :key="opt.value" type="button"
+              @click="toggleStatus(opt.value)"
+              class="px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer"
+              :style="filters.status.includes(opt.value)
+                ? { background: 'var(--rose-lighter)', borderColor: 'var(--rose-primary)', color: 'var(--rose-primary)' }
+                : { borderColor: 'var(--border-color)', color: 'var(--text-muted)' }"
+            >{{ opt.label }}</button>
+          </div>
         </div>
         <div class="min-w-0">
           <p class="input-label !text-[10px] !mb-1.5">Plataforma</p>
@@ -114,21 +118,32 @@ const loading = ref(true)
 const searchTimer = ref(null)
 const sortAsc = ref(false)
 
-const FILTERS_KEY = 'lunali.reportFilters'
+const FILTERS_KEY = 'sarita.reportFilters'
 const VALID_STATUS = ['pending', 'in_progress', 'resolved']
+const STATUS_OPTIONS = [
+  { value: 'pending', label: 'Pendiente' },
+  { value: 'in_progress', label: 'En proceso' },
+  { value: 'resolved', label: 'Resuelto' },
+]
+
+function normalizeStatuses(value) {
+  if (Array.isArray(value)) return value.filter(s => VALID_STATUS.includes(s))
+  if (VALID_STATUS.includes(value)) return [value]
+  return []
+}
 
 function loadSavedFilters() {
   try {
     const saved = JSON.parse(localStorage.getItem(FILTERS_KEY) || '{}')
     return {
       search: typeof saved.search === 'string' ? saved.search : '',
-      status: VALID_STATUS.includes(saved.status) ? saved.status : '',
+      status: normalizeStatuses(saved.status),
       platform: typeof saved.platform === 'string' ? saved.platform : '',
       dateFrom: typeof saved.dateFrom === 'string' ? saved.dateFrom : '',
       dateTo: typeof saved.dateTo === 'string' ? saved.dateTo : '',
     }
   } catch {
-    return { search: '', status: '', platform: '', dateFrom: '', dateTo: '' }
+    return { search: '', status: [], platform: '', dateFrom: '', dateTo: '' }
   }
 }
 
@@ -142,15 +157,15 @@ const filters = ref({
 })
 
 watch(
-  () => [filters.value.search, filters.value.status, filters.value.platform, filters.value.dateFrom, filters.value.dateTo],
+  () => [filters.value.search, filters.value.status.join(','), filters.value.platform, filters.value.dateFrom, filters.value.dateTo],
   ([search, status, platform, dateFrom, dateTo]) => {
     try {
-      localStorage.setItem(FILTERS_KEY, JSON.stringify({ search, status, platform, dateFrom, dateTo }))
+      localStorage.setItem(FILTERS_KEY, JSON.stringify({ search, status: filters.value.status, platform, dateFrom, dateTo }))
     } catch { }
   },
 )
 
-const hasFilters = computed(() => filters.value.search || filters.value.status || filters.value.platform || filters.value.dateFrom || filters.value.dateTo)
+const hasFilters = computed(() => filters.value.search || filters.value.status.length > 0 || filters.value.platform || filters.value.dateFrom || filters.value.dateTo)
 
 const sortedReports = computed(() => {
   let list = [...(reportsStore.reports || [])]
@@ -171,7 +186,7 @@ const sortedReports = computed(() => {
         || username.includes(q) || name.includes(q)
     })
   }
-  if (status) list = list.filter(r => r.status === status)
+  if (status.length) list = list.filter(r => status.includes(r.status))
   if (platform) list = list.filter(r => r.platform === platform)
   if (dateFrom) {
     const from = new Date(`${dateFrom}T00:00:00`)
@@ -201,15 +216,23 @@ function clearSearch() {
   onSearch()
 }
 
+function toggleStatus(value) {
+  const i = filters.value.status.indexOf(value)
+  if (i === -1) filters.value.status.push(value)
+  else filters.value.status.splice(i, 1)
+  filterReports()
+}
+
 function onFilterChange() {
   filterReports()
 }
 
 async function filterReports() {
+  const status = filters.value.status.join(',')
   if (authStore.isAdmin) {
-    await reportsStore.fetchReports({ search: filters.value.search, status: filters.value.status })
+    await reportsStore.fetchReports({ search: filters.value.search, status })
   } else {
-    await reportsStore.fetchMyReports({ search: filters.value.search, status: filters.value.status })
+    await reportsStore.fetchMyReports({ search: filters.value.search, status })
   }
 }
 

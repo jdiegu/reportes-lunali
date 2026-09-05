@@ -30,6 +30,11 @@
             <component :is="resolutionChip.icon" class="w-3.5 h-3.5 shrink-0" />
             <span class="truncate">{{ resolutionChip.label }}</span>
           </span>
+          <span v-if="isStale" class="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md shrink-0 uppercase tracking-wide"
+                style="background: var(--error-bg); color: var(--error); border: 1px solid rgba(212, 74, 74, 0.3);">
+            <AlertTriangle class="w-3 h-3 shrink-0" />
+            {{ staleDays }}d sin resolver
+          </span>
           <span :class="statusBadgeClass">{{ statusLabel }}</span>
           <p v-if="showUser && report.user" class="text-[11px] flex items-center gap-1" style="color: var(--text-muted);">
             <User class="w-3 h-3 shrink-0" />
@@ -74,6 +79,11 @@
             <component :is="resolutionChip.icon" class="w-3.5 h-3.5 shrink-0" />
             <span class="truncate">{{ resolutionChip.label }}</span>
           </span>
+          <span v-if="isStale" class="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md shrink-0 uppercase tracking-wide"
+                style="background: var(--error-bg); color: var(--error); border: 1px solid rgba(212, 74, 74, 0.3);">
+            <AlertTriangle class="w-3 h-3 shrink-0" />
+            {{ staleDays }}d sin resolver
+          </span>
           <span :class="statusBadgeClass">{{ statusLabel }}</span>
           <div class="flex items-center gap-2">
             <span class="text-[11px] font-medium whitespace-nowrap" style="color: var(--text-muted);">{{ relativeDate }}</span>
@@ -90,7 +100,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { ChevronRight, User, Calendar, ArrowRight, DollarSign, XCircle } from '@lucide/vue'
+import { ChevronRight, User, Calendar, ArrowRight, DollarSign, XCircle, AlertTriangle, RotateCcw } from '@lucide/vue'
 import { Icon } from '@iconify/vue'
 import { LOCALE } from '../../config/constants'
 import { getPlatformIconId, getPlatformColor } from '../../utils/platformIcons'
@@ -136,9 +146,9 @@ const accentColor = computed(() => ({
 }[props.report.status] || 'var(--warning)'))
 
 const typeBg = computed(() => props.report.platform_type === 'profile'
-  ? 'rgba(139,92,246,0.1)' : 'rgba(196,90,122,0.1)')
+  ? 'rgba(216,80,125,0.12)' : 'rgba(196,90,122,0.1)')
 const typeColor = computed(() => props.report.platform_type === 'profile'
-  ? '#8b5cf6' : 'var(--rose-primary)')
+  ? '#D8507D' : 'var(--rose-primary)')
 
 const rowStyle = computed(() => ({
   borderColor: hover.value ? 'rgba(196,90,122,0.15)' : 'var(--border-color)',
@@ -173,6 +183,19 @@ const createdDate = computed(() => {
   return d.toLocaleDateString(LOCALE, opts)
 })
 
+const isStale = computed(() => {
+  if (props.report.status === 'resolved') return false
+  const created = new Date(props.report.createdAt)
+  if (isNaN(created.getTime())) return false
+  return (Date.now() - created.getTime()) > 5 * 24 * 60 * 60 * 1000
+})
+
+const staleDays = computed(() => {
+  if (!isStale.value) return 0
+  const created = new Date(props.report.createdAt)
+  return Math.floor((Date.now() - created.getTime()) / (24 * 60 * 60 * 1000))
+})
+
 const resolutionChip = computed(() => {
   const res = props.report.resolution
   if (props.report.status !== 'resolved' || !res || !res.type) return null
@@ -199,6 +222,11 @@ const resolutionChip = computed(() => {
     icon = XCircle
     label = 'No procede'
     return { icon, label, style: { background: 'var(--error-bg)', color: 'var(--error)' } }
+  }
+  if (res.type === 'reactivated') {
+    icon = RotateCcw
+    label = 'Reactivada'
+    return { icon, label, style: { background: 'var(--success-bg)', color: 'var(--success)' } }
   }
   return null
 })

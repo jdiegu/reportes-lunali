@@ -9,7 +9,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/>
               </svg>
             </div>
-            <span class="font-display text-lg sm:text-xl font-bold" style="color: var(--text-primary);">Lunali</span>
+            <span class="font-display text-lg sm:text-xl font-bold" style="color: var(--text-primary);">Sarita Shop</span>
           </RouterLink>
 
           <nav class="hidden md:flex items-center gap-8">
@@ -173,10 +173,10 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/>
               </svg>
             </div>
-            <span class="font-display font-bold text-sm" style="color: var(--text-primary);">Lunali</span>
+            <span class="font-display font-bold text-sm" style="color: var(--text-primary);">Sarita Shop</span>
           </div>
           <p class="text-xs" style="color: var(--text-muted);">
-            &copy; {{ new Date().getFullYear() }} Lunali Streaming. Todos los derechos reservados.
+            &copy; {{ new Date().getFullYear() }} Sarita Shop. Todos los derechos reservados.
           </p>
           <div class="flex items-center gap-4">
             <a href="#" class="text-xs no-underline transition-colors" style="color: var(--text-muted);">Términos</a>
@@ -206,9 +206,9 @@ const features = [
   { title: 'Reportes Rápidos', description: 'Crea reportes en segundos con nuestra interfaz intuitiva. Adjunta capturas y describe el problema fácilmente.', icon: 'M12 4v16m8-8H4', bg: 'var(--rose-lighter)', color: 'var(--rose-primary)' },
   { title: 'Seguimiento en Tiempo Real', description: 'Da seguimiento a tus reportes con actualizaciones en tiempo real. Sabrás cuando tu problema sea resuelto.', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z', bg: 'var(--success-bg)', color: 'var(--success)' },
   { title: 'Gestión de Credenciales', description: 'Cuando tu cuenta requiera reemplazo, recibe las nuevas credenciales de forma segura y organizada.', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', bg: 'var(--info-bg)', color: 'var(--info)' },
-  { title: 'Multiplataforma', description: 'Soporte para Netflix, Spotify, HBO, Disney+, Prime Video y más plataformas de streaming.', icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z', bg: '#f3e5f5', color: '#9c27b0' },
+  { title: 'Multiplataforma', description: 'Soporte para Netflix, Spotify, HBO, Disney+, Prime Video y más plataformas de streaming.', icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z', bg: 'var(--rose-lighter)', color: 'var(--rose-primary)' },
   { title: 'Panel Administrativo', description: 'Los administradores tienen un panel completo para gestionar todos los reportes y usuarios del sistema.', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z', bg: 'var(--warning-bg)', color: 'var(--warning)' },
-  { title: 'Notificaciones', description: 'Recibe notificaciones instantáneas cuando tu reporte sea actualizado o resuelto por el equipo.', icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9', bg: '#fce4ec', color: '#e91e63' },
+  { title: 'Notificaciones', description: 'Recibe notificaciones instantáneas cuando tu reporte sea actualizado o resuelto por el equipo.', icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9', bg: 'var(--info-bg)', color: 'var(--info)' },
 ]
 
 const steps = [

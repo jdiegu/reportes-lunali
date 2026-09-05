@@ -60,6 +60,11 @@ export const usersApi = {
   activate: (id) => api.put(`/users/${id}/activate`),
 };
 
+export const balanceMovementsApi = {
+  my: () => api.get("/balance-movements/me"),
+  byUser: (id) => api.get(`/balance-movements/user/${id}`),
+};
+
 export const platformsApi = {
   list: () => api.get("/platforms"),
   listAll: () => api.get("/platforms/all"),

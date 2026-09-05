@@ -42,7 +42,7 @@
 
             <div>
               <label class="input-label">Tipo de resolución</label>
-              <div class="grid grid-cols-3 gap-2 sm:gap-2.5">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5">
                 <button
                   v-for="opt in resolutionOptions" :key="opt.value"
                   @click="selectType(opt)"
@@ -56,6 +56,7 @@
                     <RefreshCw v-if="opt.value === 'replace'" class="w-4 h-4" :style="{ color: selectedType === opt.value ? 'white' : 'var(--rose-primary)' }" />
                     <DollarSign v-else-if="opt.value === 'credit'" class="w-4 h-4" :style="{ color: selectedType === opt.value ? 'white' : 'var(--rose-primary)' }" />
                     <XCircle v-else-if="opt.value === 'reject'" class="w-4 h-4" :style="{ color: selectedType === opt.value ? 'white' : 'var(--rose-primary)' }" />
+                    <RotateCcw v-else-if="opt.value === 'reactivated'" class="w-4 h-4" :style="{ color: selectedType === opt.value ? 'white' : 'var(--rose-primary)' }" />
                   </div>
                   <p class="text-xs font-semibold">{{ opt.label }}</p>
                 </button>
@@ -130,7 +131,7 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { X, CheckCircle, RefreshCw, DollarSign, XCircle, Lock, Mail, AlertTriangle } from '@lucide/vue'
+import { X, CheckCircle, RefreshCw, DollarSign, XCircle, RotateCcw, Lock, Mail, AlertTriangle } from '@lucide/vue'
 import { useToastStore } from '../../store/toast'
 import { useReportsStore } from '../../store/reports'
 import { getPlatformIconId, getPlatformColor } from '../../utils/platformIcons'
@@ -165,6 +166,7 @@ const resolutionOptions = [
   { value: 'replace', label: 'Reemplazo', preset: 'Se realizo un reemplazo de cuenta. Se asigno un nuevo correo y contrasena.' },
   { value: 'credit',  label: 'Saldo',     preset: 'Se acredito un saldo a favor como compensación por el inconveniente presentado.' },
   { value: 'reject',  label: 'No Procede', preset: 'El reporte no procede. Despues de revisar la evidencia, no se encontraron anomalias que justifiquen una intervención.' },
+  { value: 'reactivated', label: 'Reactivada', preset: 'Tu cuenta ha sido reactivada, puedes utilizarla con los mismos datos que te fueron entregados desde el principio.' },
 ]
 
 function selectType(opt) {

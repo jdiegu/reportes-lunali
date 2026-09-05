@@ -34,14 +34,12 @@
             <span class="hidden sm:inline">Nuevo</span>
           </button>
 
-          <div class="relative">
+          <div ref="notifContainer" class="relative">
             <button @click="showNotifications = !showNotifications" class="btn-icon relative" style="color: var(--rose-primary)">
               <Bell class="w-5 h-5" />
               <span v-if="unreadCount > 0" class="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full text-[9px] font-bold flex items-center justify-center text-white" style="background: var(--error);">{{ unreadCount > 9 ? '9+' : unreadCount }}</span>
             </button>
-            <Transition name="overlay">
-              <div v-if="showNotifications" class="fixed inset-0 z-[60]" @click="showNotifications = false"></div>
-            </Transition>
+
             <Transition name="slide-down">
               <div v-if="showNotifications" class="absolute right-0 top-full mt-2 w-80 max-h-96 overflow-y-auto rounded-xl border shadow-xl z-[70]"
                    style="background: var(--bg-card); border-color: var(--border-color);">
@@ -92,26 +90,75 @@
         </div>
       </header>
 
+      <!-- Banner: página de reportes cerrada -->
+      <Transition name="banner">
+        <div v-if="showClosedBanner" class="shrink-0 border-b px-4 lg:px-6 py-2.5 flex items-start sm:items-center gap-2.5"
+             style="background: var(--error-bg); border-color: rgba(212,74,74,0.2);">
+          <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 sm:mt-0" style="background: var(--error);">
+            <svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="text-xs sm:text-sm font-semibold" style="color: var(--error);">Reportes temporalmente cerrados</p>
+            <p class="text-[11px] sm:text-xs mt-0.5" style="color: var(--text-secondary);">
+              {{ closedBannerMessage }}
+            </p>
+          </div>
+          <a :href="whatsappGroupLink" target="_blank" rel="noopener" class="hidden sm:flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-lg no-underline shrink-0 transition-all hover:scale-105"
+             style="background: var(--error); color: white;">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            WhatsApp
+          </a>
+        </div>
+      </Transition>
+
       <main class="flex-1 overflow-y-auto flex flex-col">
         <div class="flex-1">
           <RouterView />
         </div>
         <footer class="border-t shrink-0" :style="{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }">
-          <div class="px-4 py-4 sm:py-5">
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
-              <div class="flex items-center gap-2.5">
-                <div class="w-5 h-5 rounded-full overflow-hidden shrink-0 ring-2" :style="{ '--tw-ring-color': 'var(--rose-primary)' }">
-                  <img src="/icon.png" alt="Lunali" class="w-full h-full object-cover" />
+          <div class="px-4 py-4 sm:px-6">
+            <div class="max-w-md mx-auto">
+              <!-- Seccion superior: marca + grupo -->
+              <div class="flex flex-col items-center gap-2.5">
+                <div class="flex items-center gap-2">
+                  <img src="/icon.png" alt="Sarita Shop" class="w-6 h-6 rounded-md object-cover" style="border-radius: 0.375rem" />
+                  <span class="font-bold text-[13px] tracking-tight" style="color: var(--text-primary)">Sarita Shop</span>
                 </div>
-                <span class="font-semibold text-xs" style="color: var(--rose-primary)">Lunali Streaming</span>
+                <a :href="whatsappGroupLink" target="_blank" rel="noopener" class="group flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-lg no-underline transition-all hover:scale-105 active:scale-95"
+                   :style="{ background: 'var(--rose-gradient)', color: 'white', boxShadow: '0 3px 10px rgba(196,90,122,0.3)' }">
+                  <svg class="w-3 h-3 transition-transform group-hover:rotate-6" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                  Grupo de WhatsApp
+                </a>
               </div>
-              <a :href="whatsappLink" target="_blank" rel="noopener" class="flex items-center gap-2 text-xs px-3 py-1.5 rounded-full no-underline transition-all hover:scale-105"
-                 :style="{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }">
-                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+
+              <!-- Separador -->
+              <div class="flex items-center gap-3 my-3.5">
+                <div class="flex-1 h-px" :style="{ background: 'var(--border-color)' }"></div>
+                <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" :style="{ color: 'var(--rose-primary)', opacity: 0.7 }">
+                  <path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8L12 2z" fill="currentColor" />
                 </svg>
-                Contacto por WhatsApp
-              </a>
+                <div class="flex-1 h-px" :style="{ background: 'var(--border-color)' }"></div>
+              </div>
+
+              <!-- Seccion inferior: desarrollador -->
+              <div class="flex flex-col items-center gap-2.5">
+                <span class="text-[12px]" style="color: var(--text-muted)">
+                  Página desarrollada por <span class="font-semibold" style="color: var(--text-secondary)">jdiegu</span>
+                </span>
+                <a :href="`https://wa.me/${WHATSAPP_PHONE}`" target="_blank" rel="noopener" class="group flex items-center gap-1.5 text-[11px] font-medium px-3 py-1.5 rounded-full no-underline transition-all hover:scale-105 active:scale-95"
+                   :style="{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }">
+                  <svg class="w-3 h-3 transition-transform group-hover:scale-110" style="color: #25D366" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
+                  Mensaje a jdiegu
+                </a>
+              </div>
             </div>
           </div>
         </footer>
@@ -128,14 +175,16 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter, RouterView } from "vue-router";
 import { useAuthStore } from "../../store/auth";
+import { useSiteSettingsStore } from "../../store/siteSettings";
 import { useTheme } from "../../composables/useTheme";
 import { useToastStore } from "../../store/toast";
-import { WHATSAPP_PHONE } from "../../config/constants";
+import { WHATSAPP_PHONE, WHATSAPP_GROUP } from "../../config/constants";
 import { notificationsApi } from "../../api/axios";
 import SidebarContent from "./SidebarContent.vue";
 import { Menu, Plus, Bell, Sun, Moon, X, CheckCircle, Info, ChevronRight, LogOut } from "@lucide/vue";
 
 const authStore = useAuthStore();
+const siteSettingsStore = useSiteSettingsStore();
 const router = useRouter();
 const route = useRoute();
 const { isDark, toggleTheme } = useTheme();
@@ -147,8 +196,42 @@ const showNotifications = ref(false);
 const notifications = ref([]);
 const unreadCount = ref(0);
 const prevUnreadCount = ref(0);
+const notifContainer = ref(null);
 
-const whatsappLink = computed(() => `https://wa.me/${WHATSAPP_PHONE}`);
+function handleClickOutside(e) {
+  if (showNotifications.value && notifContainer.value && !notifContainer.value.contains(e.target)) {
+    showNotifications.value = false;
+  }
+}
+
+const whatsappGroupLink = WHATSAPP_GROUP;
+
+const DAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+const showClosedBanner = computed(() => {
+  if (authStore.isAdmin) return false;
+  if (!siteSettingsStore.settings) return false;
+  if (!siteSettingsStore.restrictAccess && !siteSettingsStore.siteClosed) return false;
+  return !siteSettingsStore.allowedRoles.includes(authStore.user?.role);
+});
+
+const closedBannerMessage = computed(() => {
+  const s = siteSettingsStore.settings;
+  if (!s) return '';
+  let msg = '';
+  if (s.closureReason) msg = s.closureReason;
+  if (s.closureMode === 'scheduled' && s.scheduledOpenAt) {
+    const d = new Date(s.scheduledOpenAt);
+    const formatted = d.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' }) + ' a las ' + d.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+    msg += msg ? ` · Reapertura: ${formatted}` : `Reapertura programada para ${formatted}.`;
+  } else if (s.closureMode === 'recurring' && s.recurringDays?.length) {
+    const days = s.recurringDays.map(i => DAY_NAMES[i]?.toLowerCase()).filter(Boolean).join(', ');
+    msg += msg ? ` · Cerrado los ${days}.` : `Cerramos los ${days}.`;
+  } else if (!msg) {
+    msg = 'El sistema de reportes no se encuentra disponible en este momento.';
+  }
+  return msg;
+});
 
 function toggleSidebar() {
   if (window.innerWidth < 1024) {
@@ -180,7 +263,7 @@ const roleLabel = computed(() => {
     Settings: "Configuracion",
     Profile: "Mi perfil",
   };
-  return map[route.name] || "Lunali";
+  return map[route.name] || "Sarita Shop";
 });
 
 const navItems = computed(() => {
@@ -253,10 +336,15 @@ function formatNotifDate(d) {
 
 let notifInterval;
 onMounted(() => {
+  siteSettingsStore.fetchStatus();
   loadNotifications();
   notifInterval = setInterval(loadNotifications, 30000);
+  document.addEventListener('click', handleClickOutside, true);
 });
-onUnmounted(() => clearInterval(notifInterval));
+onUnmounted(() => {
+  clearInterval(notifInterval);
+  document.removeEventListener('click', handleClickOutside, true);
+});
 
 function logout() {
   mobileOpen.value = false;
@@ -277,4 +365,9 @@ function logout() {
 .slide-down-enter-active { transition: all 0.2s cubic-bezier(0.21, 1.02, 0.73, 1); }
 .slide-down-leave-active { transition: all 0.15s ease; }
 .slide-down-enter-from, .slide-down-leave-to { opacity: 0; transform: translateY(-8px); }
+
+.banner-enter-active { transition: all 0.3s cubic-bezier(0.21, 1.02, 0.73, 1); }
+.banner-leave-active { transition: all 0.2s ease; }
+.banner-enter-from, .banner-leave-to { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; }
+.banner-enter-active, .banner-leave-active { overflow: hidden; }
 </style>

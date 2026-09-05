@@ -99,7 +99,9 @@ router.beforeEach(async (to) => {
     const shouldBlock =
       (status.restrictAccess || status.siteClosed) && !allowedRoles.includes(userRole)
 
-    if (shouldBlock) return "/unavailable"
+    if (shouldBlock && to.path.startsWith('/app/reports/new')) {
+      return "/unavailable"
+    }
   }
 
   return true;

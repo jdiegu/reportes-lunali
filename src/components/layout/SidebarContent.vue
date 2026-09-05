@@ -4,12 +4,12 @@
       <div class="sidebar-logo min-w-[2.5rem]">
         <div class="sidebar-logo-ring">
           <div class="sidebar-logo-inner">
-            <img src="/icon.png" alt="Lunali" class="sidebar-logo-img" />
+            <img src="/icon.png" alt="Sarita Shop" class="sidebar-logo-img" />
           </div>
         </div>
       </div>
       <Transition name="fade-text">
-        <span v-show="expanded" class="font-display font-semibold text-lg whitespace-nowrap" style="color: var(--text-primary);">Lunali</span>
+        <span v-show="expanded" class="font-display font-semibold text-lg whitespace-nowrap" style="color: var(--text-primary);">Sarita Shop</span>
       </Transition>
     </div>
 

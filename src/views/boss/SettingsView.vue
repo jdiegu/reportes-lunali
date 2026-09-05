@@ -176,16 +176,21 @@ function syncForm() {
 
   if (s.scheduledCloseAt) {
     const d = new Date(s.scheduledCloseAt)
-    form.scheduledCloseAt = d.toISOString().slice(0, 16)
+    form.scheduledCloseAt = formatLocalDatetime(d)
   } else {
     form.scheduledCloseAt = ''
   }
   if (s.scheduledOpenAt) {
     const d = new Date(s.scheduledOpenAt)
-    form.scheduledOpenAt = d.toISOString().slice(0, 16)
+    form.scheduledOpenAt = formatLocalDatetime(d)
   } else {
     form.scheduledOpenAt = ''
   }
+}
+
+function formatLocalDatetime(d) {
+  const pad = (n) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 
 function toggleRestrictAccess() {
@@ -236,8 +241,8 @@ async function doSave() {
       siteClosed: form.siteClosed,
       closureReason: form.closureReason,
       closureMode: form.closureMode,
-      scheduledCloseAt: form.scheduledCloseAt || null,
-      scheduledOpenAt: form.scheduledOpenAt || null,
+      scheduledCloseAt: form.scheduledCloseAt ? new Date(form.scheduledCloseAt).toISOString() : null,
+      scheduledOpenAt: form.scheduledOpenAt ? new Date(form.scheduledOpenAt).toISOString() : null,
       recurringDays: form.recurringDays,
     })
     lastSaved.value = true
