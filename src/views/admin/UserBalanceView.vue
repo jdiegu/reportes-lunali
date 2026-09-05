@@ -68,6 +68,9 @@
             </div>
           </div>
 
+          <!-- Balance movements graph & table -->
+          <BalanceMovementsCard :key="movementsKey" :userId="user._id" />
+
           <!-- Edit data -->
           <div class="rounded-xl border p-5" :style="{ background: 'var(--bg-surface)', borderColor: 'var(--border-color)' }">
             <p class="text-sm font-semibold mb-4 flex items-center gap-2" style="color: var(--text-primary);">
@@ -235,6 +238,7 @@ import { usersApi } from '../../api/axios'
 import { LOCALE } from '../../config/constants'
 import { ArrowLeft, DollarSign, Loader2, Plus, Minus, User, ShieldCheck, Crown, Trash2, UserCheck } from '@lucide/vue'
 import ConfirmDialog from '../../components/ui/ConfirmDialog.vue'
+import BalanceMovementsCard from '../../components/balance/BalanceMovementsCard.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -248,6 +252,7 @@ const user = ref(null)
 const balanceAmount = ref(null)
 const msg = ref('')
 const msgSuccess = ref(false)
+const movementsKey = ref(0)
 
 // Role confirm
 const showRoleConfirm = ref(false)
@@ -302,6 +307,7 @@ async function handleBalance(operation) {
     msg.value = data.message
     msgSuccess.value = true
     balanceAmount.value = null
+    movementsKey.value++
     toast.success('Saldo actualizado', data.message)
   } catch (e) {
     msg.value = e.response?.data?.message || 'Error al actualizar saldo'

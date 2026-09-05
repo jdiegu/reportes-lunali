@@ -68,6 +68,8 @@
         </div>
       </div>
     </div>
+
+    <BalanceMovementsCard :userId="authStore.user?._id" />
   </div>
 </template>
 
@@ -77,6 +79,7 @@ import { useAuthStore } from '../../store/auth'
 import { useToastStore } from '../../store/toast'
 import { usersApi } from '../../api/axios'
 import { Phone, Lock, Loader2 } from '@lucide/vue'
+import BalanceMovementsCard from '../../components/balance/BalanceMovementsCard.vue'
 
 const authStore = useAuthStore()
 const toast = useToastStore()

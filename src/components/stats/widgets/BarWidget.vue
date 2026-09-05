@@ -41,7 +41,12 @@ const opts = computed(() => {
       axisBorder: { show: false },
       axisTicks: { show: false },
     },
-    yaxis: { labels: { ...t.axisLabels, formatter: (v) => Number(v).toLocaleString("es-MX") } },
+    yaxis: {
+      labels: {
+        ...t.axisLabels,
+        formatter: props.horizontal ? undefined : (v) => Number(v).toLocaleString("es-MX"),
+      },
+    },
     dataLabels: { enabled: false },
     legend: { show: false },
     tooltip: {

@@ -12,15 +12,15 @@ export default defineConfig({
   server: {
     port: parseInt(process.env.VITE_DEV_PORT || '5172'),
     allowedHosts: [
-         'lunali-reportscare.jdiegu.online'
+      'lunali-reportscare.jdiegu.online'
     ],
     proxy: {
       '/api': {
-        target: 'https://lunali-api.jdiegu.online',
+        target: 'http://localhost:3001',
         changeOrigin: true
       },
       '/uploads': {
-        target: 'https://lunali-api.jdiegu.online',
+        target: 'http://localhost:3001',
         changeOrigin: true
       }
     }

@@ -33,10 +33,7 @@
       <div class="p-4 sm:p-5 border-b flex items-center justify-between" :style="{ borderColor: 'var(--border-color)' }">
         <div class="flex items-center gap-2.5">
           <h2 class="text-base sm:text-lg">{{ authStore.isAdmin ? 'Reportes sin resolver' : 'Tus reportes pendientes' }}</h2>
-          <span v-if="pendingList.length > 0" class="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-bold"
-                style="background: var(--rose-lighter); color: var(--rose-primary);">
-            {{ pendingList.length }}
-          </span>
+          
         </div>
         <RouterLink to="/app/reports" class="text-xs font-medium no-underline transition-colors" style="color: var(--rose-primary);">
           Ver todos &rarr;
