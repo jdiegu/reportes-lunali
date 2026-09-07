@@ -136,9 +136,9 @@ const accentColor = computed(() => ({
 }[props.report.status] || 'var(--warning)'))
 
 const typeBg = computed(() => props.report.platform_type === 'profile'
-  ? 'rgba(139,92,246,0.1)' : 'rgba(196,90,122,0.1)')
+  ? 'rgba(216,80,125,0.12)' : 'rgba(196,90,122,0.1)')
 const typeColor = computed(() => props.report.platform_type === 'profile'
-  ? '#8b5cf6' : 'var(--rose-primary)')
+  ? '#D8507D' : 'var(--rose-primary)')
 
 const rowStyle = computed(() => ({
   borderColor: hover.value ? 'rgba(196,90,122,0.15)' : 'var(--border-color)',

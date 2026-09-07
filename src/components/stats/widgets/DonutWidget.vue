@@ -15,14 +15,14 @@ const props = defineProps({
 const theme = useApexTheme();
 
 const PALETTE = [
-  "#e88aac",
-  "#60a0d0",
-  "#3cb870",
-  "#e8b030",
-  "#a78bfa",
-  "#fb7185",
-  "#2dd4bf",
-  "#f97316",
+  "#e85c8c",
+  "#f4b1c8",
+  "#d8507d",
+  "#eda2b9",
+  "#f08aae",
+  "#c03968",
+  "#f0a2bd",
+  "#e97b9f",
 ];
 
 const series = computed(() => props.items.map((i) => i.value));

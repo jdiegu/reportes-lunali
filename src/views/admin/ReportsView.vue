@@ -114,7 +114,7 @@ const loading = ref(true)
 const searchTimer = ref(null)
 const sortAsc = ref(false)
 
-const FILTERS_KEY = 'lunali.reportFilters'
+const FILTERS_KEY = 'sarita.reportFilters'
 const VALID_STATUS = ['pending', 'in_progress', 'resolved']
 
 function loadSavedFilters() {

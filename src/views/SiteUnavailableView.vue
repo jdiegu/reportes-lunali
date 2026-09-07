@@ -13,9 +13,9 @@
         <div class="flex items-center justify-between h-14 sm:h-16">
           <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden shrink-0 ring-2 header-logo-ring">
-              <img src="/icon.png" alt="Lunali" class="w-full h-full object-cover" />
+              <img src="/icon.png" alt="Sarita Shop" class="w-full h-full object-cover" />
             </div>
-            <span class="font-display text-lg sm:text-xl font-bold" style="color: var(--text-primary);">Lunali</span>
+            <span class="font-display text-lg sm:text-xl font-bold" style="color: var(--text-primary);">Sarita Shop</span>
           </div>
           <div class="flex items-center gap-2">
             <button @click="toggleTheme" class="icon-btn" :title="isDark ? 'Modo claro' : 'Modo oscuro'">
@@ -49,7 +49,7 @@
           <div class="logo-container mx-auto my-6 sm:my-7">
             <div class="logo-ring">
               <div class="logo-inner">
-                <img src="/icon.png" alt="Lunali" class="logo-img" />
+                <img src="/icon.png" alt="Sarita Shop" class="logo-img" />
               </div>
             </div>
             <div class="logo-glow"></div>
@@ -106,8 +106,8 @@
       <div class="max-w-5xl mx-auto px-5 py-3.5 sm:py-4">
         <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
           <div class="flex items-center gap-2">
-            <img src="/icon.png" alt="Lunali" class="w-5 h-5 rounded object-cover" style="border-radius: 0.25rem" />
-            <span class="text-[13px] font-bold tracking-tight footer-brand">Lunali Studio</span>
+            <img src="/icon.png" alt="Sarita Shop" class="w-5 h-5 rounded object-cover" style="border-radius: 0.25rem" />
+            <span class="text-[13px] font-bold tracking-tight footer-brand">Sarita Shop</span>
           </div>
           <div class="w-px h-4" :style="{ background: 'var(--border-color)' }"></div>
           <span class="text-xs footer-dot">Sistema de reportes</span>

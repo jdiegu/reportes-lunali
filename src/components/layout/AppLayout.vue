@@ -100,8 +100,8 @@
               <!-- Seccion superior: marca + grupo -->
               <div class="flex flex-col items-center gap-2.5">
                 <div class="flex items-center gap-2">
-                  <img src="/icon.png" alt="Lunali" class="w-6 h-6 rounded-md object-cover" style="border-radius: 0.375rem" />
-                  <span class="font-bold text-[13px] tracking-tight" style="color: var(--text-primary)">Lunali Studio</span>
+                  <img src="/icon.png" alt="Sarita Shop" class="w-6 h-6 rounded-md object-cover" style="border-radius: 0.375rem" />
+                  <span class="font-bold text-[13px] tracking-tight" style="color: var(--text-primary)">Sarita Shop</span>
                 </div>
                 <a :href="whatsappGroupLink" target="_blank" rel="noopener" class="group flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-lg no-underline transition-all hover:scale-105 active:scale-95"
                    :style="{ background: 'var(--rose-gradient)', color: 'white', boxShadow: '0 3px 10px rgba(196,90,122,0.3)' }">
@@ -209,7 +209,7 @@ const roleLabel = computed(() => {
     Settings: "Configuracion",
     Profile: "Mi perfil",
   };
-  return map[route.name] || "Lunali";
+  return map[route.name] || "Sarita Shop";
 });
 
 const navItems = computed(() => {

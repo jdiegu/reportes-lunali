@@ -78,6 +78,7 @@ import { reactive, computed, ref } from 'vue'
 import { useAuthStore } from '../../store/auth'
 import { useToastStore } from '../../store/toast'
 import { usersApi } from '../../api/axios'
+import { STORAGE_KEYS } from '../../config/constants'
 import { Phone, Lock, Loader2 } from '@lucide/vue'
 import BalanceMovementsCard from '../../components/balance/BalanceMovementsCard.vue'
 
@@ -128,7 +129,7 @@ async function saveProfile() {
     }
     const { data } = await usersApi.updateOwn(payload)
     authStore.user.phone = data.phone || data.user?.phone
-    localStorage.setItem('lunali_user', JSON.stringify(authStore.user))
+    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(authStore.user))
     form.currentPassword = ''
     form.newPassword = ''
     form.confirmPassword = ''

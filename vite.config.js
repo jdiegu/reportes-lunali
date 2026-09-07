@@ -10,17 +10,17 @@ export default defineConfig({
     }
   },
   server: {
-    port: parseInt(process.env.VITE_DEV_PORT || '5172'),
+    port: parseInt(process.env.VITE_DEV_PORT || '5174'),
     allowedHosts: [
-      'lunali-reportscare.jdiegu.online'
+         'saritashop-reportes.jdiegu.online'
     ],
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'https://sarita-api.jdiegu.online',
         changeOrigin: true
       },
       '/uploads': {
-        target: 'http://localhost:3001',
+        target: 'https://sarita-api.jdiegu.online/',
         changeOrigin: true
       }
     }

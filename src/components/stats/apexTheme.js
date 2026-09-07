@@ -13,10 +13,10 @@ export function useApexTheme() {
       muted: css("--text-muted") || "#9ca3af",
       border: css("--border-color") || "#e5e7eb",
       card: css("--bg-card") || "#ffffff",
-      rose: css("--rose-primary") || "#c45a7a",
+      rose: css("--rose-primary") || "#e85c8c",
       success: css("--success") || "#2d9d5c",
       warning: css("--warning") || "#d4940a",
-      info: css("--info") || "#4a80b8",
+      info: css("--info") || "#e85c8c",
       error: css("--error") || "#d44a4a",
     };
 

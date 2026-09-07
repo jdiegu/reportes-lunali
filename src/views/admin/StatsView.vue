@@ -118,8 +118,8 @@ import { RefreshCw, RotateCcw, LayoutGrid } from "@lucide/vue";
 import StatWidget from "../../components/stats/StatWidget.vue";
 import { useStatsStore } from "../../store/stats";
 
-const LAYOUT_KEY = "lunali.statsLayout.v2";
-const LEGACY_LAYOUT_KEY = "lunali.statsLayout";
+const LAYOUT_KEY = "sarita.statsLayout.v2";
+  const LEGACY_LAYOUT_KEY = "sarita.statsLayout";
 const BASE_COLUMN = 12;
 const BREAKPOINTS = [
   { width: 1200, column: 12 },
