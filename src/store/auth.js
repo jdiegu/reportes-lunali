@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { authApi } from '../api/axios'
+import { authApi, balanceMovementsApi } from '../api/axios'
 import { STORAGE_KEYS } from '../config/constants'
 
 function safeParseJSON(key) {
@@ -49,6 +49,25 @@ export const useAuthStore = defineStore('auth', () => {
       user.value.balance = newBalance
       localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user.value))
     }
+  }
+
+  const monthlyBalance = ref(0)
+  const monthlyBalanceLoaded = ref(false)
+
+  async function fetchMonthlyBalance() {
+    try {
+      const { data } = await balanceMovementsApi.my()
+      const movements = Array.isArray(data) ? data : []
+      const now = new Date()
+      const start = new Date(now.getFullYear(), now.getMonth(), 1)
+      monthlyBalance.value = movements
+        .filter(m => new Date(m.createdAt) >= start)
+        .reduce((sum, m) => sum + (Number(m.amount) || 0), 0)
+      monthlyBalanceLoaded.value = true
+    } catch {
+      monthlyBalance.value = 0
+    }
+    return monthlyBalance.value
   }
 
   async function login(credentials) {
@@ -104,10 +123,13 @@ export const useAuthStore = defineStore('auth', () => {
     isAdmin,
     userRole,
     balance,
+    monthlyBalance,
+    monthlyBalanceLoaded,
 
     login,
     register,
     logout,
     updateBalance,
+    fetchMonthlyBalance,
   }
 })

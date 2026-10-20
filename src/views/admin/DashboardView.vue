@@ -17,8 +17,11 @@
     </div>
 
     <!-- KPI -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-      <StatWaveCard v-for="stat in stats" :key="stat.key" :stat="stat" :loading="loading" />
+    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+      <StatWaveCard
+        v-for="stat in stats" :key="stat.key" :stat="stat" :loading="loading"
+        :class="{ 'col-span-2 lg:col-span-1': stat.key === 'resolved' }"
+      />
     </div>
 
     <!-- ==================== ADMIN ==================== -->
@@ -326,6 +329,7 @@ import { Trophy, Users } from '@lucide/vue'
 import { useAuthStore } from '../../store/auth'
 import { useReportsStore } from '../../store/reports'
 import { getPlatformIconId, getPlatformColor } from '../../utils/platformIcons'
+import { toDateKey } from '../../utils/dates'
 import StatWaveCard from '../../components/ui/StatWaveCard.vue'
 import QuickAction from '../../components/ui/QuickAction.vue'
 import dashboardBgImage from '../../assets/dashboard-bg.png'
@@ -443,21 +447,32 @@ const recentReports = computed(() => {
 })
 
 const stats = computed(() => {
-  const total = allReports.value.length
-  const pending = allReports.value.filter(r => r.status === 'pending').length
-  const inProgress = allReports.value.filter(r => r.status === 'in_progress').length
-  const resolved = allReports.value.filter(r => r.status === 'resolved').length
+  const start = startOfMonth()
+  const monthReports = allReports.value.filter(r => new Date(r.createdAt) >= start)
+  const total = monthReports.length
+  const pending = monthReports.filter(r => r.status === 'pending').length
+  const inProgress = monthReports.filter(r => r.status === 'in_progress').length
+  const resolved = monthReports.filter(r => r.status === 'resolved').length
+  const overdue = allReports.value.filter(r => {
+    if (r.status === 'resolved') return false
+    const created = new Date(r.createdAt)
+    return !isNaN(created.getTime()) && (Date.now() - created.getTime()) > 4 * 24 * 60 * 60 * 1000
+  }).length
+  const unresolved = allReports.value.filter(r => r.status !== 'resolved').length
+  const pctOf = (n, base) => (base > 0 ? (n / base) * 100 : 0)
 
   const totalLastMonth = allReports.value.filter(r => {
     const d = new Date(r.createdAt)
     return d >= startOfLastMonth() && d <= endOfLastMonth()
   }).length
 
+  const monthName = new Date().toLocaleDateString('es-ES', { month: 'long' })
   return [
-    { key: 'total', label: 'Total de reportes', value: total, sub: `+${total - totalLastMonth} desde el mes pasado`, trend: totalLastMonth > 0 ? Math.round(((total - totalLastMonth) / totalLastMonth) * 100) : 0, trendUp: total >= totalLastMonth, icon: 'list', color: 'rose' },
-    { key: 'pending', label: 'Pendientes', value: pending, sub: 'Requieren atención', trend: 5, trendUp: true, icon: 'clock', color: 'amber' },
-    { key: 'in_progress', label: 'En proceso', value: inProgress, sub: 'En revisión', trend: 18, trendUp: false, icon: 'refresh', color: 'blue' },
-    { key: 'resolved', label: 'Resueltos', value: resolved, sub: 'Completados', trend: 21, trendUp: true, icon: 'check', color: 'emerald' },
+    { key: 'total', label: `Total de reportes (${monthName})`, value: total, sub: `${total - totalLastMonth} vs. mes pasado`, trend: totalLastMonth > 0 ? Math.round(((total - totalLastMonth) / totalLastMonth) * 100) : 0, trendUp: total >= totalLastMonth, icon: 'list', color: 'rose', pct: 100 },
+    { key: 'overdue', label: 'Atrasados', value: overdue, sub: '+4 días sin resolver', trend: 0, trendUp: false, icon: 'alert', color: 'red', pct: pctOf(overdue, unresolved) },
+    { key: 'pending', label: 'Pendientes', value: pending, sub: 'Este mes', trend: 0, trendUp: true, icon: 'clock', color: 'amber', pct: pctOf(pending, total) },
+    { key: 'in_progress', label: 'En proceso', value: inProgress, sub: 'Este mes', trend: 0, trendUp: false, icon: 'refresh', color: 'blue', pct: pctOf(inProgress, total) },
+    { key: 'resolved', label: 'Resueltos', value: resolved, sub: `Este mes`, trend: 0, trendUp: true, icon: 'check', color: 'emerald', pct: pctOf(resolved, total) },
   ]
 })
 
@@ -475,7 +490,7 @@ const platformCards = computed(() => {
   for (const r of allReports.value) {
     const pKey = PLATFORM_KEYS.find(p => (r.platform || '').toLowerCase().includes(p.match))?.key
     if (!pKey) continue
-    const day = new Date(r.createdAt).toISOString().slice(0, 10)
+    const day = toDateKey(new Date(r.createdAt))
     if (!byPlatformDay[pKey]) byPlatformDay[pKey] = {}
     byPlatformDay[pKey][day] = (byPlatformDay[pKey][day] || 0) + 1
   }

@@ -1,7 +1,7 @@
 export const STORAGE_KEYS = {
-  TOKEN: 'sarita_token',
-  USER: 'sarita_user',
-  THEME: 'sarita_theme',
+  TOKEN: 'lunali_token',
+  USER: 'lunali_user',
+  THEME: 'lunali_theme',
 }
 
 export const LOCALE = import.meta.env.VITE_APP_LOCALE || 'es-MX'

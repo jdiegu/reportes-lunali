@@ -40,6 +40,6 @@ import { LOCALE } from '../../config/constants'
 import { DollarSign, CheckCircle, Info } from '@lucide/vue'
 
 const authStore = useAuthStore()
-const balance = computed(() => authStore.balance)
+const balance = computed(() => Number(authStore.balance || 0))
 const today = computed(() => new Date().toLocaleDateString(LOCALE))
 </script>

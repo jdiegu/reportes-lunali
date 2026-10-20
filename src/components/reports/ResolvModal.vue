@@ -102,6 +102,45 @@
                 <DollarSign class="w-3.5 h-3.5" />
                 Saldo a favor
               </p>
+              <button @click="showCalculator = !showCalculator" class="text-xs sm:text-sm font-medium no-underline flex items-center gap-1.5 transition-colors" style="color: var(--rose-primary);">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+                <span>{{ showCalculator ? 'Ocultar' : 'Calculador' }} de crédito</span>
+              </button>
+
+              <div v-if="showCalculator" class="space-y-3 pt-3 border-t" :style="{ borderColor: 'var(--border-color)' }">
+                <div class="flex items-center justify-between gap-2">
+                  <label class="input-label">Duración de la cuenta</label>
+                  <span class="text-xs font-medium" style="color: var(--text-muted);">{{ accountDuration }} mes{{ accountDuration > 1 ? 'es' : '' }} ({{ getTotalDays(accountDuration) }} días)</span>
+                </div>
+                <div>
+                  <label class="input-label">Costo de la cuenta ($)</label>
+                  <input v-model.number="accountCost" type="number" min="0" step="0.01" class="input-field" placeholder="0.00" />
+                </div>
+                <div>
+                  <label class="input-label">Fecha de reporte</label>
+                  <input v-model="reportDate" type="date" class="input-field" />
+                </div>
+                <div>
+                  <label class="input-label">Fecha de entrega</label>
+                  <input v-model="deliveryDate" type="date" class="input-field" />
+                </div>
+                <button @click="calculateCredit" class="btn-primary w-full text-sm !px-5">
+                  Calcular crédito
+                </button>
+                <div v-if="calcPreview" class="rounded-lg border px-3 py-2 text-xs flex flex-wrap items-center justify-between gap-x-3 gap-y-1"
+                     style="border-color: color-mix(in srgb, var(--success) 22%, var(--border-color)); background: var(--success-bg); color: var(--success);">
+                  <span>Días restantes: <strong>{{ calcPreview.days }}</strong></span>
+                  <span>Crédito calculado: <strong>${{ calcPreview.credit.toFixed(2) }}</strong></span>
+                </div>
+                <div v-if="error" class="rounded-lg border px-3 py-2 text-sm flex items-center gap-2"
+                     style="border-color: rgba(212,74,74,0.25); background: var(--error-bg); color: var(--error);">
+                  <AlertTriangle class="w-4 h-4 shrink-0" />
+                  <span>{{ error }}</span>
+                </div>
+              </div>
+
               <div>
                 <label class="input-label">Monto ($)</label>
                 <input v-model.number="creditAmount" type="number" min="1" step="0.01" class="input-field text-lg font-mono" placeholder="0.00" />
@@ -135,6 +174,7 @@ import { X, CheckCircle, RefreshCw, DollarSign, XCircle, RotateCcw, Lock, Mail, 
 import { useToastStore } from '../../store/toast'
 import { useReportsStore } from '../../store/reports'
 import { getPlatformIconId, getPlatformColor } from '../../utils/platformIcons'
+import { parseDateOnly } from '../../utils/dates'
 import { usePlatformsStore } from '../../store/platforms'
 import { Icon } from '@iconify/vue'
 
@@ -157,6 +197,11 @@ const replaceMail = ref('')
 const replacePassword = ref('')
 const replaceMailsBatch = ref('')
 const creditAmount = ref(0)
+const showCalculator = ref(false)
+const accountCost = ref(0)
+const reportDate = ref('')
+const deliveryDate = ref('')
+const accountDuration = ref(1)
 
 const batchCount = computed(() => (props.report?.batch_emails?.length || 0))
 const platformIconId = computed(() => platformsStore.getIconId(props.report?.platform))
@@ -181,6 +226,7 @@ function selectType(opt) {
 watch(() => props.visible, (v) => {
   if (v) {
     error.value = ''
+    showCalculator.value = false
     if (props.editingResolution) {
       const res = props.editingResolution
       selectedType.value = res.type || null
@@ -197,10 +243,53 @@ watch(() => props.visible, (v) => {
       replaceMailsBatch.value = ''
       creditAmount.value = 0
     }
+    if (props.report?.createdAt) {
+      const d = new Date(props.report.createdAt)
+      const pad = (n) => String(n).padStart(2, '0')
+      reportDate.value = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+      accountDuration.value = props.report?.account_duration || 1
+      if (props.report?.delivery_date) {
+        const dd = parseDateOnly(props.report.delivery_date)
+        deliveryDate.value = `${dd.getFullYear()}-${pad(dd.getMonth() + 1)}-${pad(dd.getDate())}`
+      } else {
+        const totalDays = getTotalDays(accountDuration.value)
+        const delivery = new Date(d)
+        delivery.setDate(delivery.getDate() + totalDays)
+        deliveryDate.value = `${delivery.getFullYear()}-${pad(delivery.getMonth() + 1)}-${pad(delivery.getDate())}`
+      }
+    }
+  }
+})
+
+function getTotalDays(months) {
+  if (months === 3) return 90
+  if (months >= 12) return 365
+  return months * 30
+}
+
+const calcPreview = computed(() => {
+  if (!reportDate.value || !deliveryDate.value || !accountCost.value || accountCost.value <= 0) return null
+  const start = new Date(reportDate.value)
+  const end = new Date(deliveryDate.value)
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) return null
+  const days = Math.abs(Math.ceil((end - start) / (1000 * 60 * 60 * 24)))
+  const totalDays = getTotalDays(accountDuration.value)
+  return {
+    days,
+    credit: Math.round(((accountCost.value / totalDays) * days) * 100) / 100,
   }
 })
 
 function cancel() { emit('close') }
+
+function calculateCredit() {
+  error.value = ''
+  if (!calcPreview.value) {
+    error.value = 'Completa el costo y ambas fechas'
+    return
+  }
+  creditAmount.value = calcPreview.value.credit
+}
 
 async function handleResolve() {
   error.value = ''

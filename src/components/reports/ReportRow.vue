@@ -31,9 +31,14 @@
             <span class="truncate">{{ resolutionChip.label }}</span>
           </span>
           <span v-if="isStale" class="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md shrink-0 uppercase tracking-wide"
-                style="background: var(--error-bg); color: var(--error); border: 1px solid rgba(212, 74, 74, 0.3);">
+                style="background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(234, 179, 8, 0.3);">
             <AlertTriangle class="w-3 h-3 shrink-0" />
             {{ staleDays }}d sin resolver
+          </span>
+          <span v-else class="inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded-md shrink-0"
+                style="background: rgba(124, 58, 237, 0.12); color: #7C3AED;">
+            <Clock class="w-3 h-3 shrink-0" />
+            {{ ageLabel }}
           </span>
           <span :class="statusBadgeClass">{{ statusLabel }}</span>
           <p v-if="showUser && report.user" class="text-[11px] flex items-center gap-1" style="color: var(--text-muted);">
@@ -80,9 +85,14 @@
             <span class="truncate">{{ resolutionChip.label }}</span>
           </span>
           <span v-if="isStale" class="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md shrink-0 uppercase tracking-wide"
-                style="background: var(--error-bg); color: var(--error); border: 1px solid rgba(212, 74, 74, 0.3);">
+                style="background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(234, 179, 8, 0.3);">
             <AlertTriangle class="w-3 h-3 shrink-0" />
             {{ staleDays }}d sin resolver
+          </span>
+          <span v-else class="inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded-md shrink-0"
+                style="background: rgba(124, 58, 237, 0.12); color: #7C3AED;">
+            <Clock class="w-3 h-3 shrink-0" />
+            {{ ageLabel }}
           </span>
           <span :class="statusBadgeClass">{{ statusLabel }}</span>
           <div class="flex items-center gap-2">
@@ -100,7 +110,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { ChevronRight, User, Calendar, ArrowRight, DollarSign, XCircle, AlertTriangle, RotateCcw } from '@lucide/vue'
+import { ChevronRight, User, Calendar, ArrowRight, DollarSign, XCircle, AlertTriangle, RotateCcw, Clock } from '@lucide/vue'
 import { Icon } from '@iconify/vue'
 import { LOCALE } from '../../config/constants'
 import { getPlatformIconId, getPlatformColor } from '../../utils/platformIcons'
@@ -187,13 +197,24 @@ const isStale = computed(() => {
   if (props.report.status === 'resolved') return false
   const created = new Date(props.report.createdAt)
   if (isNaN(created.getTime())) return false
-  return (Date.now() - created.getTime()) > 5 * 24 * 60 * 60 * 1000
+  return (Date.now() - created.getTime()) > 4 * 24 * 60 * 60 * 1000
 })
 
 const staleDays = computed(() => {
   if (!isStale.value) return 0
   const created = new Date(props.report.createdAt)
   return Math.floor((Date.now() - created.getTime()) / (24 * 60 * 60 * 1000))
+})
+
+const ageDays = computed(() => {
+  const created = new Date(props.report.createdAt)
+  if (isNaN(created.getTime())) return 0
+  return Math.floor((Date.now() - created.getTime()) / (24 * 60 * 60 * 1000))
+})
+
+const ageLabel = computed(() => {
+  if (ageDays.value === 0) return 'Hoy'
+  return `Hace ${ageDays.value} ${ageDays.value === 1 ? 'día' : 'días'}`
 })
 
 const resolutionChip = computed(() => {
